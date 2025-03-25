@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Copy } from 'lucide-react';
@@ -51,7 +51,7 @@ const BLOG_CONTENT: Record<string, {
     readTime: '8 min',
     author: 'Michael Simoneau',
     tags: ['Quantum Computing', 'Cryptography', 'Security'],
-    heroImage: '/blog/quantum-crypto.jpg',
+    heroImage: '/blog/quantum-crypto.svg',
     content: [
       {
         type: 'paragraph',
@@ -153,7 +153,80 @@ const generateQuantumResistantKeys = () => {
       }
     ]
   },
-  // Other blog posts would be defined here in a similar structure
+  'legacy-system-massacre': {
+    title: 'How I Terminated a $2M Legacy Nightmare in 90 Days',
+    date: 'March 15, 2024',
+    readTime: '12 min',
+    author: 'Michael Simoneau',
+    tags: ['Case Study', 'Legacy Systems', 'Cost Reduction'],
+    heroImage: '/blog/legacy-termination.svg',
+    content: [
+      {
+        type: 'paragraph',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In enterprise settings, legacy systems often represent the most significant barrier to digital transformation.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The $2M Problem'
+      },
+      {
+        type: 'paragraph',
+        content: 'A Fortune 500 financial services firm was struggling with a 15-year-old trading platform that was causing $2M in monthly losses due to downtime, maintenance costs, and missed market opportunities.'
+      },
+      {
+        type: 'list',
+        items: [
+          '**94.5% uptime** (compared to industry standard 99.99%)',
+          '**8-hour deployment windows** requiring weekend overtime',
+          '**$350,000** monthly maintenance costs',
+          '**Zero** documentation for critical components'
+        ]
+      }
+    ]
+  },
+  'react-native-scaling': {
+    title: 'Scaling React Native to 50+ White Label Clients',
+    date: 'March 10, 2024',
+    readTime: '10 min',
+    author: 'Michael Simoneau',
+    tags: ['React Native', 'Architecture', 'Performance'],
+    heroImage: '/blog/react-native-scaling.svg',
+    content: [
+      {
+        type: 'paragraph',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. When StoneX approached me about their mobile strategy, they had a complex challenge.'
+      }
+    ]
+  },
+  'ai-model-security': {
+    title: 'The Hidden Security Gap in Modern AI Deployments',
+    date: 'March 3, 2024',
+    readTime: '7 min',
+    author: 'Michael Simoneau',
+    tags: ['AI', 'Security', 'Risk Management'],
+    heroImage: '/blog/ai-security.svg',
+    content: [
+      {
+        type: 'paragraph',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. As AI systems become more prevalent, they introduce unique security challenges.'
+      }
+    ]
+  },
+  'cto-negotiation': {
+    title: 'How to Negotiate a $500K+ CTO Package',
+    date: 'February 25, 2024',
+    readTime: '9 min',
+    author: 'Michael Simoneau',
+    tags: ['Career', 'Negotiation', 'Leadership'],
+    heroImage: '/blog/negotiation.svg',
+    content: [
+      {
+        type: 'paragraph',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. The difference between a $300K and $500K+ compensation package often comes down to strategic positioning.'
+      }
+    ]
+  }
 };
 
 const CodeBlock: React.FC<{ language: string; content: string }> = ({ language, content }) => {
@@ -227,22 +300,56 @@ const ShareButton: React.FC<{ platform: string; url: string; title: string }> = 
 export const BlogPost: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
-  const post = postId && BLOG_CONTENT[postId as keyof typeof BLOG_CONTENT];
+  const shareOptionsRef = useRef<HTMLDivElement>(null);
+  const [showShareOptions, setShowShareOptions] = useState(false);
   
+  // Find the blog post data
+  const post = BLOG_CONTENT[postId as string];
+  
+  // Redirect to 404 if post not found
+  useEffect(() => {
+    if (!post && postId) {
+      navigate('/404');
+    }
+  }, [post, postId, navigate]);
+  
+  // Set page title
   useEffect(() => {
     if (post) {
       document.title = `${post.title} | Michael Simoneau`;
-    } else if (postId) {
-      // If post doesn't exist, redirect to blog index
-      navigate('/blog');
     }
-  }, [post, postId, navigate]);
-
+  }, [post]);
+  
+  // Handle clicks outside of share options panel
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareOptionsRef.current && !shareOptionsRef.current.contains(event.target as Node)) {
+        setShowShareOptions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
+  // If no post data (and we haven't redirected yet), show loading state
   if (!post) {
-    return null; // Will redirect via useEffect
+    return (
+      <>
+        <MainNav />
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-8 w-64 bg-gray-700 rounded mb-4"></div>
+            <div className="h-4 w-40 bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      </>
+    );
   }
-
-  // Generate a unique gradient for each post based on postId
+  
+  // Function to generate a gradient fallback for the hero image
   const getGradientForPost = (id: string) => {
     // Simple hash function to get a number from a string
     const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -252,6 +359,13 @@ export const BlogPost: React.FC = () => {
     const hue2 = ((hash * 2) % 360).toString();
     
     return `linear-gradient(135deg, hsl(${hue1}, 70%, 30%) 0%, hsl(${hue2}, 70%, 20%) 100%)`;
+  };
+
+  // Fix for Type 'number' is not assignable to type 'string' by adding specific type
+  const renderHeading = (block: HeadingBlock, index: number) => {
+    const level = block.level;
+    const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+    return <HeadingTag key={index.toString()} className="text-white font-bold mt-10 mb-6">{block.content}</HeadingTag>;
   };
 
   return (
@@ -272,12 +386,26 @@ export const BlogPost: React.FC = () => {
               Back to all articles
             </Link>
 
+            {/* Hero image section with SVG object */}
             <div className="w-full h-56 md:h-80 mb-8 rounded-xl overflow-hidden relative">
               <div 
-                className="w-full h-full absolute inset-0" 
+                className="w-full h-full absolute inset-0 transition-all duration-500" 
                 style={{ background: getGradientForPost(postId || '') }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+              
+              {/* SVG Object with fallback */}
+              <object 
+                data={post.heroImage}
+                type="image/svg+xml"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                {/* Fallback content */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h2 className="text-white text-3xl font-bold">{post.title}</h2>
+                </div>
+              </object>
+              
               <div className="absolute bottom-0 left-0 w-full p-6">
                 <div className="flex flex-wrap gap-2 mb-3">
                   {post.tags.map(tag => (
@@ -298,11 +426,26 @@ export const BlogPost: React.FC = () => {
                 <span>{post.readTime}</span>
               </div>
               
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400 mr-2">Share:</span>
-                <ShareButton platform="twitter" url={window.location.href} title={post.title} />
-                <ShareButton platform="linkedin" url={window.location.href} title={post.title} />
-                <ShareButton platform="facebook" url={window.location.href} title={post.title} />
+              <div className="relative" ref={shareOptionsRef}>
+                <button 
+                  onClick={() => setShowShareOptions(!showShareOptions)}
+                  className="flex items-center space-x-1 text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  <Share2 size={18} />
+                  <span className="text-sm">Share</span>
+                </button>
+                
+                {showShareOptions && (
+                  <motion.div 
+                    className="absolute right-0 top-full mt-2 p-3 bg-gray-800 rounded-lg shadow-xl z-20 flex space-x-2"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <ShareButton platform="twitter" url={window.location.href} title={post.title} />
+                    <ShareButton platform="linkedin" url={window.location.href} title={post.title} />
+                    <ShareButton platform="facebook" url={window.location.href} title={post.title} />
+                  </motion.div>
+                )}
               </div>
             </div>
 
@@ -316,11 +459,8 @@ export const BlogPost: React.FC = () => {
             <div className="prose prose-lg prose-invert max-w-none">
               {post.content.map((block, index) => {
                 switch (block.type) {
-                  case 'heading': {
-                    // Define heading tag in a block scope to avoid lexical declaration issues
-                    const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
-                    return <HeadingTag key={index} className="text-white font-bold mt-10 mb-6">{block.content}</HeadingTag>;
-                  }
+                  case 'heading':
+                    return renderHeading(block, index);
                   
                   case 'paragraph':
                     return <p key={index} className="mb-6 text-gray-300">{block.content}</p>;

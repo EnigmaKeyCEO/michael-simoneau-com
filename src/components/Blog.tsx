@@ -25,7 +25,7 @@ const BLOG_POSTS: BlogPost[] = [
     date: 'March 22, 2024',
     readTime: '8 min',
     tags: ['Quantum Computing', 'Cryptography', 'Security'],
-    imageUrl: '/blog/quantum-crypto.jpg',
+    imageUrl: '/blog/quantum-crypto.svg',
     featured: true
   },
   {
@@ -35,7 +35,7 @@ const BLOG_POSTS: BlogPost[] = [
     date: 'March 15, 2024',
     readTime: '12 min',
     tags: ['Case Study', 'Legacy Systems', 'Cost Reduction'],
-    imageUrl: '/blog/legacy-termination.jpg',
+    imageUrl: '/blog/legacy-termination.svg',
     featured: true
   },
   {
@@ -45,7 +45,7 @@ const BLOG_POSTS: BlogPost[] = [
     date: 'March 10, 2024',
     readTime: '10 min',
     tags: ['React Native', 'Architecture', 'Performance'],
-    imageUrl: '/blog/react-native-scaling.jpg'
+    imageUrl: '/blog/react-native-scaling.svg'
   },
   {
     id: 'ai-model-security',
@@ -54,7 +54,7 @@ const BLOG_POSTS: BlogPost[] = [
     date: 'March 3, 2024',
     readTime: '7 min',
     tags: ['AI', 'Security', 'Risk Management'],
-    imageUrl: '/blog/ai-security.jpg'
+    imageUrl: '/blog/ai-security.svg'
   },
   {
     id: 'cto-negotiation',
@@ -63,7 +63,7 @@ const BLOG_POSTS: BlogPost[] = [
     date: 'February 25, 2024',
     readTime: '9 min',
     tags: ['Career', 'Negotiation', 'Leadership'],
-    imageUrl: '/blog/negotiation.jpg'
+    imageUrl: '/blog/negotiation.svg'
   }
 ];
 
@@ -80,6 +80,8 @@ const getGradientForPost = (id: string) => {
 };
 
 const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   return (
     <motion.div 
       className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -90,14 +92,20 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
       <div className="relative h-80 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
         
-        {/* Gradient placeholder instead of image */}
         <div 
-          className="absolute inset-0 group-hover:scale-105 transition-transform duration-500 ease-out" 
+          className={`absolute inset-0 transition-opacity duration-500 ease-out ${imageLoaded ? 'opacity-0' : 'opacity-100'}`} 
           style={{ background: getGradientForPost(post.id) }}
         />
         
+        <object 
+          data={post.imageUrl}
+          type="image/svg+xml"
+          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setImageLoaded(true)}
+        />
+        
         <div className="absolute bottom-0 left-0 z-20 p-6 w-full">
-          <div className="flex gap-3 mb-3">
+          <div className="flex gap-3 mb-3 flex-wrap">
             {post.tags.map(tag => (
               <span key={tag} className="px-3 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full backdrop-blur-sm">
                 {tag}
@@ -133,6 +141,8 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
 };
 
 const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 0 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   return (
     <motion.article 
       className="group flex flex-col h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -141,10 +151,16 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
       transition={{ duration: 0.5, delay }}
     >
       <div className="relative h-48 overflow-hidden">
-        {/* Gradient placeholder instead of image */}
         <div 
-          className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out" 
+          className={`absolute inset-0 transition-opacity duration-500 ease-out ${imageLoaded ? 'opacity-0' : 'opacity-100'}`} 
           style={{ background: getGradientForPost(post.id) }}
+        />
+        
+        <object 
+          data={post.imageUrl}
+          type="image/svg+xml"
+          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setImageLoaded(true)}
         />
       </div>
       
