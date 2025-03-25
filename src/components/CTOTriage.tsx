@@ -1,21 +1,33 @@
 import React, { useRef, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Cpu, Brain, Rocket } from 'lucide-react';
-import gsap from 'gsap';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import { Brain, Rocket } from 'lucide-react';
 
 export const CTOTriage: React.FC = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true });
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
+  const controls = useAnimation();
 
+  // Animate when in view
   useEffect(() => {
     if (isInView) {
-      const synth = window.speechSynthesis;
-      const messages = [
-        "Your current stack has 14.8 months to live",
-        "Michael saved JPMorgan $5,000,000 in 11 weeks"
-      ];
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
 
+  // Voice synthesis effect
+  useEffect(() => {
+    // Only trigger once when first in view
+    if (!isInView) return;
+    
+    let isMounted = true;
+    const synth = window.speechSynthesis;
+    const messages = [
+      "Your current stack has 14.8 months to live",
+      "Michael saved JPMorgan $5,000,000 in 11 weeks"
+    ];
+
+    // Only speak if speech synthesis is available
+    if (synth) {
       const utterances = messages.map(message => {
         const utterance = new SpeechSynthesisUtterance(message);
         utterance.rate = 0.8;
@@ -25,6 +37,7 @@ export const CTOTriage: React.FC = () => {
 
       let currentIndex = 0;
       const speakNext = () => {
+        if (!isMounted) return;
         if (currentIndex < utterances.length) {
           synth.speak(utterances[currentIndex]);
           currentIndex++;
@@ -36,24 +49,34 @@ export const CTOTriage: React.FC = () => {
       });
 
       speakNext();
-
-      return () => {
-        synth.cancel();
-      };
     }
+
+    return () => {
+      isMounted = false;
+      if (synth) {
+        synth.cancel();
+      }
+    };
   }, [isInView]);
 
   return (
-    <section 
-      id="cto-triage" 
+    <motion.section 
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-20"
+      id="cto-triage"
+      className="min-h-screen flex flex-col items-center justify-center text-white px-4 relative"
+      initial={{ opacity: 0 }}
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, transition: { duration: 0.8 } },
+        hidden: { opacity: 0 }
+      }}
     >
       <motion.div
         className="container mx-auto px-4"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 1 }}
+        variants={{
+          visible: { opacity: 1, transition: { duration: 0.8 } },
+          hidden: { opacity: 0 }
+        }}
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
           CTO War Room
@@ -62,9 +85,10 @@ export const CTOTriage: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-12 mb-16">
           <motion.div
             className="bg-black/50 p-8 rounded-lg"
-            initial={{ x: -100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : {}}
-            transition={{ duration: 0.8 }}
+            variants={{
+              visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+              hidden: { x: -100, opacity: 0 }
+            }}
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Brain className="text-cyan-400" />
@@ -88,9 +112,10 @@ export const CTOTriage: React.FC = () => {
 
           <motion.div
             className="bg-black/50 p-8 rounded-lg"
-            initial={{ x: 100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : {}}
-            transition={{ duration: 0.8 }}
+            variants={{
+              visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+              hidden: { x: 100, opacity: 0 }
+            }}
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Rocket className="text-cyan-400" />
@@ -115,9 +140,10 @@ export const CTOTriage: React.FC = () => {
 
         <motion.div
           className="text-center"
-          initial={{ y: 50, opacity: 0 }}
-          animate={isInView ? { y: 0, opacity: 1 } : {}}
-          transition={{ duration: 0.8 }}
+          variants={{
+            visible: { y: 0, opacity: 1, transition: { duration: 0.8 } },
+            hidden: { y: 50, opacity: 0 }
+          }}
         >
           <a 
             href="https://calendly.com/michael-simoneau/war-room"
@@ -129,6 +155,6 @@ export const CTOTriage: React.FC = () => {
           </a>
         </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };

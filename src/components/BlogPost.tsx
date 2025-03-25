@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Copy } from 'lucide-react';
+import { MainNav } from './MainNav';
 
 // Define types for content blocks
 type ParagraphBlock = {
@@ -241,124 +242,147 @@ export const BlogPost: React.FC = () => {
     return null; // Will redirect via useEffect
   }
 
+  // Generate a unique gradient for each post based on postId
+  const getGradientForPost = (id: string) => {
+    // Simple hash function to get a number from a string
+    const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    
+    // Generate colors based on the hash
+    const hue1 = (hash % 360).toString();
+    const hue2 = ((hash * 2) % 360).toString();
+    
+    return `linear-gradient(135deg, hsl(${hue1}, 70%, 30%) 0%, hsl(${hue2}, 70%, 20%) 100%)`;
+  };
+
   return (
-    <section className="min-h-screen bg-black text-white py-20 px-4">
-      <div className="container mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Link 
-            to="/blog" 
-            className="inline-flex items-center text-cyan-400 mb-8 hover:text-cyan-300 transition-colors"
+    <>
+      <MainNav />
+      <section className="min-h-screen bg-black text-white py-20 px-4 pt-24">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <ArrowLeft size={16} className="mr-2" />
-            Back to all articles
-          </Link>
+            <Link 
+              to="/blog" 
+              className="inline-flex items-center text-cyan-400 mb-8 hover:text-cyan-300 transition-colors"
+            >
+              <ArrowLeft size={16} className="mr-2" />
+              Back to all articles
+            </Link>
 
-          <div className="mb-6">
-            {post.tags.map(tag => (
-              <span key={tag} className="inline-block mr-2 mb-2 px-3 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{post.title}</h1>
-
-          <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-800">
-            <div className="flex items-center text-gray-400">
-              <Calendar size={16} className="mr-1" />
-              <span className="mr-4">{post.date}</span>
-              <Clock size={16} className="mr-1" />
-              <span>{post.readTime}</span>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-400 mr-2">Share:</span>
-              <ShareButton platform="twitter" url={window.location.href} title={post.title} />
-              <ShareButton platform="linkedin" url={window.location.href} title={post.title} />
-              <ShareButton platform="facebook" url={window.location.href} title={post.title} />
-            </div>
-          </div>
-
-          {/* Hero image */}
-          <div className="h-80 mb-10 rounded-xl overflow-hidden">
-            {/* This would be a real image in production */}
-            <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900" />
-          </div>
-
-          {/* Content */}
-          <div className="prose prose-lg prose-invert max-w-none">
-            {post.content.map((block, index) => {
-              switch (block.type) {
-                case 'heading': {
-                  // Define heading tag in a block scope to avoid lexical declaration issues
-                  const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
-                  return <HeadingTag key={index} className="text-white font-bold mt-10 mb-6">{block.content}</HeadingTag>;
-                }
-                
-                case 'paragraph':
-                  return <p key={index} className="mb-6 text-gray-300">{block.content}</p>;
-                
-                case 'code':
-                  return <CodeBlock key={index} language={block.language} content={block.content} />;
-                
-                case 'list':
-                  return (
-                    <ul key={index} className="list-disc pl-6 mb-6 space-y-2">
-                      {block.items.map((item, i) => (
-                        <li key={i} className="text-gray-300" dangerouslySetInnerHTML={{ __html: item }} />
-                      ))}
-                    </ul>
-                  );
-                
-                case 'callout':
-                  return (
-                    <div key={index} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg">
-                      <p className="text-cyan-300 italic">{block.content}</p>
-                    </div>
-                  );
-                
-                default:
-                  return null;
-              }
-            })}
-          </div>
-
-          {/* Author bio */}
-          <div className="mt-16 pt-10 border-t border-gray-800">
-            <h3 className="text-2xl font-bold mb-4">About the Author</h3>
-            <div className="flex items-start space-x-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex-shrink-0" />
-              <div>
-                <h4 className="text-lg font-bold">{post.author}</h4>
-                <p className="text-gray-300">
-                  Michael Simoneau is a CTO Advisor specializing in AI integration, quantum cryptography, and legacy system modernization. 
-                  He has transformed multiple enterprise systems, including a $200M rebuild at StoneX.
-                </p>
+            <div className="w-full h-56 md:h-80 mb-8 rounded-xl overflow-hidden relative">
+              <div 
+                className="w-full h-full absolute inset-0" 
+                style={{ background: getGradientForPost(postId || '') }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+              <div className="absolute bottom-0 left-0 w-full p-6">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {post.tags.map(tag => (
+                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full backdrop-blur-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h1 className="text-3xl md:text-5xl font-bold text-white">{post.title}</h1>
               </div>
             </div>
-          </div>
 
-          {/* Next steps */}
-          <div className="mt-16 pt-10 border-t border-gray-800">
-            <h3 className="text-2xl font-bold mb-6 text-center">Ready to quantum-proof your systems?</h3>
-            <div className="text-center">
-              <a 
-                href="https://calendly.com/michael-simoneau/war-room"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
-              >
-                SCHEDULE A CONSULTATION
-              </a>
+            <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-800">
+              <div className="flex items-center text-gray-400">
+                <Calendar size={16} className="mr-1" />
+                <span className="mr-4">{post.date}</span>
+                <Clock size={16} className="mr-1" />
+                <span>{post.readTime}</span>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-400 mr-2">Share:</span>
+                <ShareButton platform="twitter" url={window.location.href} title={post.title} />
+                <ShareButton platform="linkedin" url={window.location.href} title={post.title} />
+                <ShareButton platform="facebook" url={window.location.href} title={post.title} />
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+
+            {/* Hero image */}
+            <div className="h-80 mb-10 rounded-xl overflow-hidden">
+              {/* This would be a real image in production */}
+              <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900" />
+            </div>
+
+            {/* Content */}
+            <div className="prose prose-lg prose-invert max-w-none">
+              {post.content.map((block, index) => {
+                switch (block.type) {
+                  case 'heading': {
+                    // Define heading tag in a block scope to avoid lexical declaration issues
+                    const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
+                    return <HeadingTag key={index} className="text-white font-bold mt-10 mb-6">{block.content}</HeadingTag>;
+                  }
+                  
+                  case 'paragraph':
+                    return <p key={index} className="mb-6 text-gray-300">{block.content}</p>;
+                  
+                  case 'code':
+                    return <CodeBlock key={index} language={block.language} content={block.content} />;
+                  
+                  case 'list':
+                    return (
+                      <ul key={index} className="list-disc pl-6 mb-6 space-y-2">
+                        {block.items.map((item, i) => (
+                          <li key={i} className="text-gray-300" dangerouslySetInnerHTML={{ __html: item }} />
+                        ))}
+                      </ul>
+                    );
+                  
+                  case 'callout':
+                    return (
+                      <div key={index} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg">
+                        <p className="text-cyan-300 italic">{block.content}</p>
+                      </div>
+                    );
+                  
+                  default:
+                    return null;
+                }
+              })}
+            </div>
+
+            {/* Author bio */}
+            <div className="mt-16 pt-10 border-t border-gray-800">
+              <h3 className="text-2xl font-bold mb-4">About the Author</h3>
+              <div className="flex items-start space-x-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex-shrink-0" />
+                <div>
+                  <h4 className="text-lg font-bold">{post.author}</h4>
+                  <p className="text-gray-300">
+                    Michael Simoneau is a CTO Advisor specializing in AI integration, quantum cryptography, and legacy system modernization. 
+                    He has transformed multiple enterprise systems, including a $200M rebuild at StoneX.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Next steps */}
+            <div className="mt-16 pt-10 border-t border-gray-800">
+              <h3 className="text-2xl font-bold mb-6 text-center">Ready to quantum-proof your systems?</h3>
+              <div className="text-center">
+                <a 
+                  href="https://calendly.com/michael-simoneau/war-room"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
+                >
+                  SCHEDULE A CONSULTATION
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 };
 

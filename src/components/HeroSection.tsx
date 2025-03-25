@@ -40,35 +40,46 @@ const CTAButton: React.FC<{ text: string; icon: React.ReactNode; targetId: strin
     config: { tension: 200, friction: 20 }
   });
 
+  // Get appropriate abbreviation for mobile display
+  const getAbbreviation = () => {
+    if (text === "Security Audit") return "Se";
+    if (text === "Demo Massacre") return "Ma";
+    if (text === "CTO Triage") return "T";
+    return text.substring(0, 2);
+  };
+  
+  const abbreviation = getAbbreviation();
+
   return (
     <animated.button
       style={{
         ...buttonSpring,
         ...glowSpring
       }}
-      onClick={() => {
-        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-      }}
+      data-target={targetId}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="w-64 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold 
-                 rounded-lg flex items-center justify-center gap-2 overflow-hidden relative group"
+      className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold 
+                 rounded-lg flex items-center justify-center gap-2 overflow-hidden relative group
+                 w-40 md:w-64 h-12"
     >
       <motion.div
-        className="full-size-cta inset-0 bg-gradient-to-r from-blue-600 to-cyan-600"
+        className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600"
         initial={{ x: '100%' }}
         whileHover={{ x: 0 }}
         transition={{ duration: 0.3 }}
-        style={{
-          width: '256px',
-          height: '48px',
-          flex: 'none' // Prevent any size changes
-        }}
       />
-      <motion.span className="relative flex items-center gap-2" whileHover={{ scale: 0.98 }}>
-        {icon}
-        <GlowingText>{text}</GlowingText>
-      </motion.span>
+      
+      <motion.div className="relative z-10 flex items-center justify-center w-full">
+        <div className="flex items-center justify-center gap-2 md:hidden">
+          {icon}
+          <span>{abbreviation}</span>
+        </div>
+        <div className="hidden md:flex items-center justify-center gap-2">
+          {icon}
+          <GlowingText>{text}</GlowingText>
+        </div>
+      </motion.div>
     </animated.button>
   );
 };
@@ -81,6 +92,7 @@ export const HeroSection: React.FC = () => {
   return (
     <motion.section 
       style={{ y, opacity }}
+      id="hero-section"
       className="min-h-screen flex flex-col items-center justify-center text-white px-4 relative"
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -115,7 +127,7 @@ export const HeroSection: React.FC = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <CTAButton text="Audit Security" icon={<Shield size={20} />} targetId="security-audit" />
+        <CTAButton text="Security Audit" icon={<Shield size={20} />} targetId="security-audit" />
         <CTAButton text="Demo Massacre" icon={<Zap size={20} />} targetId="demo-massacre" />
         <CTAButton text="CTO Triage" icon={<Cpu size={20} />} targetId="cto-triage" />
       </motion.div>

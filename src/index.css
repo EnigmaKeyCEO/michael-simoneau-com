@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scroll snap styles */
+html, body {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none; /* Prevent overscroll bounce */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.snap-container {
+  height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+}
+
+.snap-container > section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .fixed-size-cta {
   min-width: 256px !important;
   max-width: 256px !important;

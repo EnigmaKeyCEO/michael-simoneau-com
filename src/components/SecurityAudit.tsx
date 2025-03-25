@@ -1,15 +1,22 @@
 import React, { useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import gsap from 'gsap';
+import { motion, useInView, useAnimation } from 'framer-motion';
 import { Shield, Lock, Key } from 'lucide-react';
 
 export const SecurityAudit: React.FC = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true });
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const controls = useAnimation();
+  
+  // Animate when in view
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
 
   useEffect(() => {
-    if (!canvasRef.current || !isInView) return;
+    if (!canvasRef.current) return;
 
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
@@ -48,13 +55,23 @@ export const SecurityAudit: React.FC = () => {
     };
 
     animate();
-  }, [isInView]);
+
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
 
   return (
-    <section 
-      id="security-audit" 
+    <motion.section 
       ref={sectionRef}
-      className="min-h-screen bg-black/90 text-white py-20 relative overflow-hidden"
+      id="security-audit"
+      className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-20 relative"
+      initial={{ opacity: 0 }}
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, transition: { duration: 0.8 } },
+        hidden: { opacity: 0 }
+      }}
     >
       <canvas 
         ref={canvasRef} 
@@ -63,9 +80,10 @@ export const SecurityAudit: React.FC = () => {
       
       <motion.div
         className="container mx-auto px-4"
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
+        variants={{
+          visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+          hidden: { opacity: 0, y: 50 }
+        }}
       >
         <h2 className="text-5xl font-bold mb-12 text-center">
           Security Audit Protocol
@@ -92,9 +110,14 @@ export const SecurityAudit: React.FC = () => {
             <motion.div
               key={index}
               className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg"
-              initial={{ opacity: 0, x: -50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
+              variants={{
+                visible: { 
+                  opacity: 1, 
+                  x: 0, 
+                  transition: { duration: 0.5, delay: index * 0.2 } 
+                },
+                hidden: { opacity: 0, x: -50 }
+              }}
             >
               {item.icon}
               <h3 className="text-2xl font-bold mt-4 mb-2">{item.title}</h3>
@@ -104,15 +127,18 @@ export const SecurityAudit: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <motion.button
-            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-lg"
+          <motion.a
+            href="https://calendly.com/michael-simoneau/security-assessment"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Request Security Assessment
-          </motion.button>
+          </motion.a>
         </div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };

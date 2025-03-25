@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ChevronRight, Search } from 'lucide-react';
+import { MainNav } from './MainNav';
 
 // Define blog post type
 type BlogPost = {
@@ -66,6 +67,18 @@ const BLOG_POSTS: BlogPost[] = [
   }
 ];
 
+// Utility function to generate a unique gradient for each post
+const getGradientForPost = (id: string) => {
+  // Simple hash function to get a number from a string
+  const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  
+  // Generate colors based on the hash
+  const hue1 = (hash % 360).toString();
+  const hue2 = ((hash * 2) % 360).toString();
+  
+  return `linear-gradient(135deg, hsl(${hue1}, 70%, 30%) 0%, hsl(${hue2}, 70%, 20%) 100%)`;
+};
+
 const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
   return (
     <motion.div 
@@ -77,8 +90,11 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
       <div className="relative h-80 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
         
-        {/* Image placeholder - would use real images in production */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-purple-900 group-hover:scale-105 transition-transform duration-500 ease-out" />
+        {/* Gradient placeholder instead of image */}
+        <div 
+          className="absolute inset-0 group-hover:scale-105 transition-transform duration-500 ease-out" 
+          style={{ background: getGradientForPost(post.id) }}
+        />
         
         <div className="absolute bottom-0 left-0 z-20 p-6 w-full">
           <div className="flex gap-3 mb-3">
@@ -125,8 +141,11 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
       transition={{ duration: 0.5, delay }}
     >
       <div className="relative h-48 overflow-hidden">
-        {/* Image placeholder - would use real images in production */}
-        <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 group-hover:scale-105 transition-transform duration-500 ease-out" />
+        {/* Gradient placeholder instead of image */}
+        <div 
+          className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out" 
+          style={{ background: getGradientForPost(post.id) }}
+        />
       </div>
       
       <div className="p-5 flex flex-col flex-grow">
@@ -186,95 +205,98 @@ export const Blog: React.FC = () => {
   }, []);
 
   return (
-    <section 
-      id="blog"
-      ref={sectionRef}
-      className="min-h-screen bg-black text-white py-20 px-4"
-    >
-      <div className="container mx-auto max-w-7xl">
-        <motion.div
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: -20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-        >
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-              Quantum Insights
-            </span>
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Strategic perspectives on technology transformation, AI integration, and legacy system termination from CTO advisor Michael Simoneau.
-          </p>
-        </motion.div>
-        
-        {/* Search Bar */}
-        <motion.div 
-          className="mb-12 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 text-white py-3 px-5 pl-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            />
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-          </div>
-        </motion.div>
-        
-        {/* Featured Posts */}
-        {featuredPosts.length > 0 && (
+    <>
+      <MainNav />
+      <section 
+        id="blog"
+        ref={sectionRef}
+        className="min-h-screen bg-black text-white py-20 px-4 pt-24"
+      >
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            className="mb-16 text-center"
+            initial={{ opacity: 0, y: -20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7 }}
+          >
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+                Quantum Insights
+              </span>
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Strategic perspectives on technology transformation, AI integration, and legacy system termination from CTO advisor Michael Simoneau.
+            </p>
+          </motion.div>
+          
+          {/* Search Bar */}
           <motion.div 
-            className="mb-16"
+            className="mb-12 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-700 text-white py-3 px-5 pl-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            </div>
+          </motion.div>
+          
+          {/* Featured Posts */}
+          {featuredPosts.length > 0 && (
+            <motion.div 
+              className="mb-16"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.7, delay: 0.3 }}
+            >
+              <h2 className="text-2xl font-bold mb-6 flex items-center">
+                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+                  Featured Articles
+                </span>
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {featuredPosts.map(post => (
+                  <FeaturedPost key={post.id} post={post} />
+                ))}
+              </div>
+            </motion.div>
+          )}
+          
+          {/* All Posts */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.4 }}
           >
             <h2 className="text-2xl font-bold mb-6 flex items-center">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                Featured Articles
+                All Articles
               </span>
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {featuredPosts.map(post => (
-                <FeaturedPost key={post.id} post={post} />
-              ))}
-            </div>
+            {filteredPosts.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {regularPosts.map((post, index) => (
+                  <BlogCard key={post.id} post={post} delay={0.1 * index} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-xl text-gray-400">No articles found matching your search.</p>
+              </div>
+            )}
           </motion.div>
-        )}
-        
-        {/* All Posts */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.4 }}
-        >
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-              All Articles
-            </span>
-          </h2>
-          
-          {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {regularPosts.map((post, index) => (
-                <BlogCard key={post.id} post={post} delay={0.1 * index} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-xl text-gray-400">No articles found matching your search.</p>
-            </div>
-          )}
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 };
 

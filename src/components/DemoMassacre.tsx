@@ -1,12 +1,44 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useAnimation } from 'framer-motion';
 import { Zap, TrendingDown, Timer } from 'lucide-react';
+
+// Define proper types for metrics and project data
+type Metric = {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+};
+
+type ProjectData = {
+  title: string;
+  description: string;
+  metrics: Metric[];
+  before?: {
+    performance: string;
+    cost: string;
+    uptime: string;
+  };
+  after?: {
+    performance: string;
+    cost: string;
+    uptime: string;
+  };
+};
 
 export const DemoMassacre: React.FC = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true });
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
+  const controls = useAnimation();
 
-  const projects = [
+  // Animate when in view
+  React.useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  // Define with proper typing
+  const projects: ProjectData[] = [
     {
       title: "PROJECT YACHTOFFICE",
       description: "AI-powered legacy system obliteration",
@@ -19,6 +51,7 @@ export const DemoMassacre: React.FC = () => {
     {
       title: "STONEX BLOODBATH",
       description: "Complete system resurrection and optimization",
+      metrics: [], // Empty metrics for the second project
       before: {
         performance: "2.3s load time",
         cost: "$1.2M monthly",
@@ -32,17 +65,28 @@ export const DemoMassacre: React.FC = () => {
     }
   ];
 
+  // Get references to the projects
+  const project1 = projects[0];
+  const project2 = projects[1];
+
   return (
-    <section 
-      id="demo-massacre" 
+    <motion.section 
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-black/90 to-gray-900 text-white py-20"
+      id="demo-massacre"
+      className="min-h-screen flex flex-col items-center justify-center text-white px-4 relative"
+      initial={{ opacity: 0 }}
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, transition: { duration: 0.8 } },
+        hidden: { opacity: 0 }
+      }}
     >
       <motion.div
         className="container mx-auto px-4"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 1 }}
+        variants={{
+          visible: { opacity: 1, transition: { duration: 1 } },
+          hidden: { opacity: 0 }
+        }}
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
           System Massacre Gallery
@@ -51,23 +95,29 @@ export const DemoMassacre: React.FC = () => {
         {/* YachtOffice Project */}
         <motion.div
           className="mb-20 bg-black/50 p-8 rounded-lg"
-          initial={{ x: -100, opacity: 0 }}
-          animate={isInView ? { x: 0, opacity: 1 } : {}}
-          transition={{ duration: 0.8 }}
+          variants={{
+            visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+            hidden: { x: -100, opacity: 0 }
+          }}
         >
           <h3 className="text-3xl font-bold mb-6 text-cyan-400">
-            {projects[0].title}
+            {project1.title}
           </h3>
-          <p className="text-xl mb-8 text-gray-300">{projects[0].description}</p>
+          <p className="text-xl mb-8 text-gray-300">{project1.description}</p>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {projects[0].metrics.map((metric, index) => (
+            {project1.metrics.map((metric, index) => (
               <motion.div
                 key={index}
                 className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg"
-                initial={{ y: 50, opacity: 0 }}
-                animate={isInView ? { y: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
+                variants={{
+                  visible: { 
+                    y: 0, 
+                    opacity: 1,
+                    transition: { duration: 0.5, delay: index * 0.2 }
+                  },
+                  hidden: { y: 50, opacity: 0 }
+                }}
               >
                 <div className="flex items-center gap-3 mb-2">
                   {metric.icon}
@@ -82,35 +132,40 @@ export const DemoMassacre: React.FC = () => {
         {/* StoneX Bloodbath */}
         <motion.div
           className="bg-black/50 p-8 rounded-lg"
-          initial={{ x: 100, opacity: 0 }}
-          animate={isInView ? { x: 0, opacity: 1 } : {}}
-          transition={{ duration: 0.8 }}
+          variants={{
+            visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+            hidden: { x: 100, opacity: 0 }
+          }}
         >
           <h3 className="text-3xl font-bold mb-6 text-red-500">
-            {projects[1].title}
+            {project2.title}
           </h3>
           
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <h4 className="text-2xl font-semibold mb-4">Before Execution</h4>
-              <div className="space-y-4">
-                <p className="text-xl text-gray-400">Performance: {projects[1].before.performance}</p>
-                <p className="text-xl text-gray-400">Monthly Cost: {projects[1].before.cost}</p>
-                <p className="text-xl text-gray-400">Uptime: {projects[1].before.uptime}</p>
+            {project2.before && (
+              <div className="space-y-6">
+                <h4 className="text-2xl font-semibold mb-4">Before Execution</h4>
+                <div className="space-y-4">
+                  <p className="text-xl text-gray-400">Performance: {project2.before.performance}</p>
+                  <p className="text-xl text-gray-400">Monthly Cost: {project2.before.cost}</p>
+                  <p className="text-xl text-gray-400">Uptime: {project2.before.uptime}</p>
+                </div>
               </div>
-            </div>
+            )}
             
-            <div className="space-y-6">
-              <h4 className="text-2xl font-semibold mb-4">After Resurrection</h4>
-              <div className="space-y-4">
-                <p className="text-xl text-green-400">Performance: {projects[1].after.performance}</p>
-                <p className="text-xl text-green-400">Monthly Cost: {projects[1].after.cost}</p>
-                <p className="text-xl text-green-400">Uptime: {projects[1].after.uptime}</p>
+            {project2.after && (
+              <div className="space-y-6">
+                <h4 className="text-2xl font-semibold mb-4">After Resurrection</h4>
+                <div className="space-y-4">
+                  <p className="text-xl text-green-400">Performance: {project2.after.performance}</p>
+                  <p className="text-xl text-green-400">Monthly Cost: {project2.after.cost}</p>
+                  <p className="text-xl text-green-400">Uptime: {project2.after.uptime}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };
