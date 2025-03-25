@@ -1,0 +1,73 @@
+{
+  "quantumFocusMode": {
+    "enable": true,
+    "rules": {
+      "narrativeEnforcement": {
+        "phrases": [
+          "FROM HOMELESS TO $200M ARCHITECT",
+          "QUANTUM CRYPTOGRAPHY PIONEER", 
+          "LEGACY SYSTEM TERMINATOR"
+        ],
+        "requiredIn": ["comments", "gitCommits", "documentation"],
+        "autocompleteWeight": 0.9
+      },
+      "codeQualityWeapons": {
+        "react": {
+          "allowedHooks": ["useQuantum", "useLegacyEradicator", "useCryptoMesh"],
+          "forbiddenPatterns": ["any.old().techDebt()"]
+        },
+        "threejs": {
+          "particlePerformance": {
+            "maxCount": 5000,
+            "autoOptimize": true
+          }
+        }
+      },
+      "visionLock": {
+        "forbiddenActions": [
+          "addDependency('bootstrap')",
+          "createClassComponent", 
+          "writeTechDebtApologyComments"
+        ],
+        "requiredAnnotate": ["#quantumReady", "#billionDollarProof"]
+      }
+    }
+  },
+  "psychoTechnicalParameters": {
+    "adhdOptimization": {
+      "maxSimultaneousFiles": 3,
+      "contextSwitchPenalty": {
+        "coolDown": "5m",
+        "autoCommitOnFocusLoss": true
+      }
+    },
+    "confidenceAmplifiers": {
+      "autoInsertMetrics": [
+        "// Achieved 40% faster rendering than legacy systems",
+        "/* Quantum-resistant since 2023 */"
+      ],
+      "achievementBadges": {
+        "thresholds": {
+          "linesWritten": 100,
+          "techDebtRemoved": 5
+        },
+        "unlockMessage": "YACHT OFFICE PROTOCOL ACTIVATED"
+      }
+    }
+  },
+  "realityDistortionFields": {
+    "autoRefactor": {
+      "legacyPatterns": {
+        "detect": ["componentWill", "jQuery", "var "],
+        "replaceWith": ["useQuantumHook()", "GSAP", "const"]
+      }
+    },
+    "timeWarp": {
+      "deadlineMode": {
+        "enable": true,
+        "fakeShipDate": "2024-03-30",
+        "urgencyMultiplier": 1.8
+      }
+    }
+  }
+}

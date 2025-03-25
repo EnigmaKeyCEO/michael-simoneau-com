@@ -1,0 +1,118 @@
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import gsap from 'gsap';
+import { Shield, Lock, Key } from 'lucide-react';
+
+export const SecurityAudit: React.FC = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (!canvasRef.current || !isInView) return;
+
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvasRef.current.width = window.innerWidth;
+    const height = canvasRef.current.height = 200;
+
+    const particles: Array<{ x: number; y: number; vx: number; vy: number }> = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2
+      });
+    }
+
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      particles.forEach(particle => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        if (particle.x < 0 || particle.x > width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > height) particle.vy *= -1;
+
+        ctx.fillStyle = '#00ff88';
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }, [isInView]);
+
+  return (
+    <section 
+      id="security-audit" 
+      ref={sectionRef}
+      className="min-h-screen bg-black/90 text-white py-20 relative overflow-hidden"
+    >
+      <canvas 
+        ref={canvasRef} 
+        className="absolute top-0 left-0 w-full pointer-events-none opacity-30"
+      />
+      
+      <motion.div
+        className="container mx-auto px-4"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+      >
+        <h2 className="text-5xl font-bold mb-12 text-center">
+          Security Audit Protocol
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {[
+            {
+              icon: <Shield className="w-12 h-12 text-cyan-400" />,
+              title: "Legacy System Analysis",
+              description: "Deep-dive vulnerability assessment of your current infrastructure"
+            },
+            {
+              icon: <Lock className="w-12 h-12 text-cyan-400" />,
+              title: "Quantum-Ready Architecture",
+              description: "Future-proof security implementations for next-gen systems"
+            },
+            {
+              icon: <Key className="w-12 h-12 text-cyan-400" />,
+              title: "Zero-Trust Implementation",
+              description: "Military-grade security protocols for enterprise systems"
+            }
+          ].map((item, index) => (
+            <motion.div
+              key={index}
+              className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg"
+              initial={{ opacity: 0, x: -50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            >
+              {item.icon}
+              <h3 className="text-2xl font-bold mt-4 mb-2">{item.title}</h3>
+              <p className="text-gray-400">{item.description}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <motion.button
+            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Request Security Assessment
+          </motion.button>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
