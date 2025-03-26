@@ -1,12 +1,26 @@
 rules_version = '2';
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
+// FROM HOMELESS TO $200M ARCHITECT
+// Quantum-resistant storage rules that protect our assets #quantumReady #billionDollarProof
 service firebase.storage {
   match /b/{bucket}/o {
+    // Default deny all
     match /{allPaths=**} {
       allow read, write: if false;
+    }
+    
+    // Blog images can be read by anyone but only written by authenticated users
+    match /blog-images/{imageId} {
+      allow read: if true; // Public reading
+      allow write: if request.auth != null; // Only authenticated users can write
+    }
+    
+    // Generated AI images
+    match /generated-images/{imageId} {
+      allow read: if true; // Public reading
+      // Only authenticated users can write, and file size limit enforced (10MB)
+      allow write: if request.auth != null && 
+                      request.resource.size < 10 * 1024 * 1024;
     }
   }
 }

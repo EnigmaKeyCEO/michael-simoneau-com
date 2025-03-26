@@ -1,6 +1,7 @@
 // Import the Genkit core libraries and plugins.
 import {genkit, z} from "genkit";
 import {googleAI} from "@genkit-ai/googleai";
+import { UserRecord } from "firebase-admin/auth";
 
 // Import models from the Google AI plugin. The Google AI API provides access to
 // several generative models. Here, we import Gemini 1.5 Flash.
@@ -28,7 +29,7 @@ export const menuSuggestionFlow = onFlow(
     name: "menuSuggestionFlow",
     inputSchema: z.string(),
     outputSchema: z.string(),
-    authPolicy: firebaseAuth((user) => {
+    authPolicy: firebaseAuth((user: UserRecord) => {
       // By default, the firebaseAuth policy requires that all requests have an
       // `Authorization: Bearer` header containing the user's Firebase
       // Authentication ID token. All other requests are rejected with error
@@ -43,7 +44,7 @@ export const menuSuggestionFlow = onFlow(
       // }
     }),
   },
-  async (subject) => {
+  async (subject: string) => {
     // Construct a request and send it to the model API.
     const prompt =
       `Suggest an item for the menu of a ${subject} themed restaurant`;

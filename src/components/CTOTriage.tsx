@@ -22,8 +22,8 @@ export const CTOTriage: React.FC = () => {
     let isMounted = true;
     const synth = window.speechSynthesis;
     const messages = [
-      "Your current stack has 14.8 months to live",
-      "Michael saved JPMorgan $5,000,000 in 11 weeks"
+      "Quantum vulnerability detected in your infrastructure",
+      "Initiating enterprise mesh transformation protocol"
     ];
 
     // Only speak if speech synthesis is available
@@ -79,7 +79,8 @@ export const CTOTriage: React.FC = () => {
         }}
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
-          CTO War Room
+          <span className="block text-cyan-400">QUANTUM CRYPTOGRAPHY PIONEER</span>
+          <span className="text-3xl block mt-4">Enterprise War Room</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 mb-16">
@@ -92,20 +93,24 @@ export const CTOTriage: React.FC = () => {
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Brain className="text-cyan-400" />
-              Strategic Analysis
+              Quantum Strategy Analysis
             </h3>
             <ul className="space-y-4 text-lg">
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                Technical Debt Assessment
+                Post-Quantum Readiness Assessment
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                Architecture Evolution Planning
+                Self-Evolving Architecture Design
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                Risk Mitigation Strategy
+                Enterprise Mesh Implementation
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-cyan-400">→</span>
+                Fortune 500 Value Proposition
               </li>
             </ul>
           </motion.div>
@@ -119,20 +124,24 @@ export const CTOTriage: React.FC = () => {
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Rocket className="text-cyan-400" />
-              Execution Protocol
+              Quantum Transformation Protocol
             </h3>
             <ul className="space-y-4 text-lg">
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                90-Day Transformation Roadmap
+                60-Day Quantum Evolution Roadmap
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                Team Augmentation Strategy
+                Quantum-Ready Team Development
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-cyan-400">→</span>
-                Success Metrics Definition
+                Self-Healing System Implementation
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-cyan-400">→</span>
+                ROI-Driven Success Metrics
               </li>
             </ul>
           </motion.div>

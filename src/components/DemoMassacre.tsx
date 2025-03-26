@@ -89,7 +89,8 @@ export const DemoMassacre: React.FC = () => {
         }}
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
-          System Massacre Gallery
+          <span className="block text-cyan-400">FROM HOMELESS TO $200M ARCHITECT</span>
+          <span className="text-3xl block mt-4">Enterprise Transformation Gallery</span>
         </h2>
 
         {/* YachtOffice Project */}
@@ -101,12 +102,16 @@ export const DemoMassacre: React.FC = () => {
           }}
         >
           <h3 className="text-3xl font-bold mb-6 text-cyan-400">
-            {project1.title}
+            QUANTUM MESH TRANSFORMATION
           </h3>
-          <p className="text-xl mb-8 text-gray-300">{project1.description}</p>
+          <p className="text-xl mb-8 text-gray-300">Fortune 500 Financial Institution - Complete System Evolution</p>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {project1.metrics.map((metric, index) => (
+            {[
+              { label: "Processing Speed", value: "40,000x", icon: <Zap /> },
+              { label: "Cost Reduction", value: "$4.2M → $180K", icon: <TrendingDown /> },
+              { label: "Implementation", value: "8 Weeks", icon: <Timer /> }
+            ].map((metric, index) => (
               <motion.div
                 key={index}
                 className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg"
@@ -138,31 +143,27 @@ export const DemoMassacre: React.FC = () => {
           }}
         >
           <h3 className="text-3xl font-bold mb-6 text-red-500">
-            {project2.title}
+            LEGACY SYSTEM TERMINATION
           </h3>
           
           <div className="grid md:grid-cols-2 gap-8">
-            {project2.before && (
-              <div className="space-y-6">
-                <h4 className="text-2xl font-semibold mb-4">Before Execution</h4>
-                <div className="space-y-4">
-                  <p className="text-xl text-gray-400">Performance: {project2.before.performance}</p>
-                  <p className="text-xl text-gray-400">Monthly Cost: {project2.before.cost}</p>
-                  <p className="text-xl text-gray-400">Uptime: {project2.before.uptime}</p>
-                </div>
+            <div className="space-y-6">
+              <h4 className="text-2xl font-semibold mb-4">Legacy Infrastructure</h4>
+              <div className="space-y-4">
+                <p className="text-xl text-gray-400">Performance: 4.5s quantum vulnerability window</p>
+                <p className="text-xl text-gray-400">Monthly Cost: $3.8M operational overhead</p>
+                <p className="text-xl text-gray-400">Security: Classical encryption only</p>
               </div>
-            )}
+            </div>
             
-            {project2.after && (
-              <div className="space-y-6">
-                <h4 className="text-2xl font-semibold mb-4">After Resurrection</h4>
-                <div className="space-y-4">
-                  <p className="text-xl text-green-400">Performance: {project2.after.performance}</p>
-                  <p className="text-xl text-green-400">Monthly Cost: {project2.after.cost}</p>
-                  <p className="text-xl text-green-400">Uptime: {project2.after.uptime}</p>
-                </div>
+            <div className="space-y-6">
+              <h4 className="text-2xl font-semibold mb-4">Quantum-Ready Architecture</h4>
+              <div className="space-y-4">
+                <p className="text-xl text-green-400">Performance: 50ms quantum-safe processing</p>
+                <p className="text-xl text-green-400">Monthly Cost: $220K with autoscaling</p>
+                <p className="text-xl text-green-400">Security: Post-quantum cryptography</p>
               </div>
-            )}
+            </div>
           </div>
         </motion.div>
       </motion.div>

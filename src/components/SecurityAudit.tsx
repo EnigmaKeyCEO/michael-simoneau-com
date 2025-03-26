@@ -86,25 +86,26 @@ export const SecurityAudit: React.FC = () => {
         }}
       >
         <h2 className="text-5xl font-bold mb-12 text-center">
-          Security Audit Protocol
+          <span className="block text-cyan-400">QUANTUM CRYPTOGRAPHY PIONEER</span>
+          <span className="text-3xl block mt-4">Enterprise Security Assessment Protocol</span>
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {[
             {
               icon: <Shield className="w-12 h-12 text-cyan-400" />,
-              title: "Legacy System Analysis",
-              description: "Deep-dive vulnerability assessment of your current infrastructure"
+              title: "Quantum-Resistant Analysis",
+              description: "Post-quantum cryptography assessment and implementation strategy for enterprise systems"
             },
             {
               icon: <Lock className="w-12 h-12 text-cyan-400" />,
-              title: "Quantum-Ready Architecture",
-              description: "Future-proof security implementations for next-gen systems"
+              title: "Self-Evolving Security",
+              description: "AI-driven security architecture that adapts to emerging quantum threats"
             },
             {
               icon: <Key className="w-12 h-12 text-cyan-400" />,
-              title: "Zero-Trust Implementation",
-              description: "Military-grade security protocols for enterprise systems"
+              title: "Enterprise Mesh Defense",
+              description: "Quantum-ready security mesh with self-healing capabilities for Fortune 500 infrastructure"
             }
           ].map((item, index) => (
             <motion.div

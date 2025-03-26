@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Zap, Shield, Cpu, BookOpen } from 'lucide-react';
 import { useSpring, animated } from '@react-spring/web';
 import { Link } from 'react-router-dom';
+import { InterviewButton } from './InterviewButton';
 
 const GlowingText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isHovered, setIsHovered] = React.useState(false);
@@ -108,7 +109,10 @@ export const HeroSection: React.FC = () => {
       >
         <GlowingText>MICHAEL SIMONEAU</GlowingText>
         <span className="block text-2xl md:text-4xl mt-4 bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text font-extrabold">
-          <GlowingText>LEGACY TERMINATOR</GlowingText>
+          <GlowingText>QUANTUM CRYPTOGRAPHY PIONEER</GlowingText>
+        </span>
+        <span className="block text-xl md:text-3xl mt-2 text-cyan-400 font-bold">
+          <GlowingText>FROM HOMELESS TO $200M ARCHITECT</GlowingText>
         </span>
       </motion.h1>
 
@@ -118,18 +122,21 @@ export const HeroSection: React.FC = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.4 }}
       >
-        From shelter laptops to $200M rebuilds - Transforming legacy nightmares into quantum fortunes
+        Pioneering quantum-resistant enterprise architectures that transform legacy systems into self-evolving quantum fortresses
       </motion.p>
 
       <motion.div 
-        className="flex flex-col md:flex-row gap-6"
+        className="flex flex-col items-center gap-6 w-full"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <CTAButton text="Security Audit" icon={<Shield size={20} />} targetId="security-audit" />
-        <CTAButton text="Demo Massacre" icon={<Zap size={20} />} targetId="demo-massacre" />
-        <CTAButton text="CTO Triage" icon={<Cpu size={20} />} targetId="cto-triage" />
+        <InterviewButton />
+        <div className="flex flex-col md:flex-row gap-6">
+          <CTAButton text="Security Audit" icon={<Shield size={20} />} targetId="security-audit" />
+          <CTAButton text="Demo Massacre" icon={<Zap size={20} />} targetId="demo-massacre" />
+          <CTAButton text="CTO Triage" icon={<Cpu size={20} />} targetId="cto-triage" />
+        </div>
       </motion.div>
       
       <motion.div
