@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { HeroSection } from './HeroSection';
 import { SecurityAudit } from './SecurityAudit';
 import { DemoMassacre } from './DemoMassacre';
@@ -13,12 +14,11 @@ const useSectionScroll = () => {
     const container = containerRef.current;
     if (!container) return;
     
-    const sections = Array.from(container.querySelectorAll<HTMLDivElement>('div.h-screen, div.min-h-screen'));
+    const sections = Array.from(container.querySelectorAll<HTMLDivElement>('.section'));
     if (sections.length === 0) return;
     
     const handleScroll = () => {
       if (!container) return;
-      
       const scrollPosition = container.scrollTop;
       const windowHeight = window.innerHeight;
       const currentIndex = Math.floor(scrollPosition / windowHeight);
@@ -32,11 +32,11 @@ const useSectionScroll = () => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [currentSection]);
   
-  return containerRef;
+  return { containerRef, currentSection };
 };
 
 export const MainPage: React.FC = () => {
-  const sectionContainerRef = useSectionScroll();
+  const { containerRef, currentSection } = useSectionScroll();
   
   useEffect(() => {
     document.title = 'Michael Simoneau | FROM HOMELESS TO $200M ARCHITECT';
@@ -46,21 +46,41 @@ export const MainPage: React.FC = () => {
     <>
       <MainNav />
       <div 
-        className="section-container h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
-        ref={sectionContainerRef}
+        className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
+        ref={containerRef}
       >
-        <div className="h-screen snap-start snap-always pt-16">
+        <motion.div 
+          className="section h-screen snap-start snap-always pt-16"
+          initial={{ opacity: 0.9 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           <HeroSection />
-        </div>
-        <div className="min-h-screen snap-start snap-always pt-16 pb-8">
+        </motion.div>
+        <motion.div 
+          className="section min-h-screen snap-start snap-always pt-16 pb-8"
+          initial={{ opacity: 0.9 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           <SecurityAudit />
-        </div>
-        <div className="min-h-screen snap-start snap-always pt-16 pb-8">
+        </motion.div>
+        <motion.div 
+          className="section min-h-screen snap-start snap-always pt-16 pb-8"
+          initial={{ opacity: 0.9 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           <DemoMassacre />
-        </div>
-        <div className="min-h-screen snap-start snap-always pt-16 pb-8">
+        </motion.div>
+        <motion.div 
+          className="section min-h-screen snap-start snap-always pt-16 pb-8"
+          initial={{ opacity: 0.9 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           <CTOTriage />
-        </div>
+        </motion.div>
       </div>
     </>
   );
