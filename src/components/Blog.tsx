@@ -264,51 +264,17 @@ export const Blog: React.FC = () => {
             </div>
           </motion.div>
           
-          {/* Featured Posts */}
-          {featuredPosts.length > 0 && (
-            <motion.div 
-              className="mb-16"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.7, delay: 0.3 }}
-            >
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                  Featured Articles
-                </span>
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {featuredPosts.map(post => (
-                  <FeaturedPost key={post.id} post={post} />
-                ))}
-              </div>
-            </motion.div>
-          )}
-          
           {/* All Posts */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <h2 className="text-2xl font-bold mb-6 flex items-center">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                All Articles
-              </span>
-            </h2>
-            
-            {filteredPosts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {regularPosts.map((post, index) => (
-                  <BlogCard key={post.id} post={post} delay={0.1 * index} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <p className="text-xl text-gray-400">No articles found matching your search.</p>
-              </div>
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPosts.map((post, index) => (
+                <BlogCard key={post.id} post={post} delay={0.1 * index} />
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>

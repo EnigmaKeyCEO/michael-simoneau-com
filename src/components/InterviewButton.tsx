@@ -46,41 +46,53 @@ export const InterviewButton: React.FC = () => {
   const currentAnswer = interviewData[currentIndex].answer;
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-8">
-      <Link to="/interview">
-        <div className="relative bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-8 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/paper-texture.png')] opacity-10" />
-          <div className="relative z-10 flex flex-col h-full">
+    <div className="w-full">
+      <Link to="/interview" className="block w-full">
+        <div className="relative bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-lg w-full transform hover:scale-[1.02] transition-transform duration-300">
+          <div className="absolute inset-0 bg-[url('/paper-texture.png')] opacity-5" />
+          <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent" />
+          <div className="relative z-10 flex flex-col p-4 space-y-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="text-white flex-grow"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="text-white space-y-3"
               >
-                <div className="mb-4">
-                  <span className="text-cyan-400 font-bold">Q: </span>
-                  <Typewriter
-                    words={[currentQuestion]}
-                    cursor={false}
-                    typeSpeed={30}
-                  />
+                <div>
+                  <span className="text-cyan-400 font-bold text-sm mr-2">Q:</span>
+                  <span className="text-gray-100 text-sm font-medium">
+                    <Typewriter
+                      words={[currentQuestion]}
+                      cursor={false}
+                      typeSpeed={30}
+                    />
+                  </span>
                 </div>
-                <div className="mt-4">
-                  <span className="text-cyan-400 font-bold">A: </span>
-                  <Typewriter
-                    words={[currentAnswer]}
-                    cursor={false}
-                    typeSpeed={50}
-                    delaySpeed={0}
-                  />
+                <div>
+                  <span className="text-cyan-400 font-bold text-sm mr-2">A:</span>
+                  <span className="text-gray-300 text-sm">
+                    <Typewriter
+                      words={[currentAnswer]}
+                      cursor={false}
+                      typeSpeed={50}
+                      delaySpeed={0}
+                    />
+                  </span>
                 </div>
               </motion.div>
             </AnimatePresence>
-            <div className="text-gray-500 text-sm font-light tracking-wide mt-auto pt-4">
-              Read Full Interview →
+            <div className="text-cyan-400/80 text-xs font-medium tracking-wide flex items-center">
+              Read Full Interview 
+              <motion.span
+                animate={{ x: [0, 3, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="inline-block ml-1"
+              >
+                →
+              </motion.span>
             </div>
           </div>
         </div>

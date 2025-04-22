@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { Brain, Rocket } from 'lucide-react';
+import { QuantumButton } from './QuantumButton';
 
 export const CTOTriage: React.FC = () => {
   const sectionRef = useRef(null);
@@ -74,16 +75,16 @@ export const CTOTriage: React.FC = () => {
       <motion.div
         className="container mx-auto px-4"
         variants={{
-          visible: { opacity: 1, transition: { duration: 0.8 } },
+          visible: { opacity: 1, transition: { duration: 1 } },
           hidden: { opacity: 0 }
         }}
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
           <span className="block text-cyan-400">QUANTUM CRYPTOGRAPHY PIONEER</span>
-          <span className="text-3xl block mt-4">Enterprise War Room</span>
+          <span className="text-3xl block mt-4">Enterprise Transformation Protocol</span>
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
           <motion.div
             className="bg-black/50 p-8 rounded-lg"
             variants={{
@@ -154,14 +155,10 @@ export const CTOTriage: React.FC = () => {
             hidden: { y: 50, opacity: 0 }
           }}
         >
-          <a 
-            href="https://calendly.com/michael-simoneau/war-room"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
-          >
-            INITIATE WAR ROOM SESSION
-          </a>
+          <QuantumButton
+            text="SCHEDULE A CONSULTATION"
+            href="https://www.linkedin.com/in/michaelsimoneau/"
+          />
         </motion.div>
       </motion.div>
     </motion.section>

@@ -5,7 +5,7 @@ import { Shield, Lock, Key } from 'lucide-react';
 export const SecurityAudit: React.FC = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // const canvasRef = useRef<HTMLCanvasElement>(null);
   const controls = useAnimation();
   
   // Animate when in view
@@ -15,51 +15,51 @@ export const SecurityAudit: React.FC = () => {
     }
   }, [isInView, controls]);
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
+  // useEffect(() => {
+  //   if (!canvasRef.current) return;
 
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
+  //   const ctx = canvasRef.current.getContext('2d');
+  //   if (!ctx) return;
 
-    const width = canvasRef.current.width = window.innerWidth;
-    const height = canvasRef.current.height = 200;
+  //   const width = canvasRef.current.width = window.innerWidth;
+  //   const height = canvasRef.current.height = 200;
 
-    const particles: Array<{ x: number; y: number; vx: number; vy: number }> = [];
-    for (let i = 0; i < 100; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2
-      });
-    }
+  //   const particles: Array<{ x: number; y: number; vx: number; vy: number }> = [];
+  //   for (let i = 0; i < 100; i++) {
+  //     particles.push({
+  //       x: Math.random() * width,
+  //       y: Math.random() * height,
+  //       vx: (Math.random() - 0.5) * 2,
+  //       vy: (Math.random() - 0.5) * 2
+  //     });
+  //   }
 
-    const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(0, 0, width, height);
+  //   const animate = () => {
+  //     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  //     ctx.fillRect(0, 0, width, height);
 
-      particles.forEach(particle => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+  //     particles.forEach(particle => {
+  //       particle.x += particle.vx;
+  //       particle.y += particle.vy;
 
-        if (particle.x < 0 || particle.x > width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > height) particle.vy *= -1;
+  //       if (particle.x < 0 || particle.x > width) particle.vx *= -1;
+  //       if (particle.y < 0 || particle.y > height) particle.vy *= -1;
 
-        ctx.fillStyle = '#00ff88';
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-      });
+  //       ctx.fillStyle = '#00ff88';
+  //       ctx.beginPath();
+  //       ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+  //       ctx.fill();
+  //     });
 
-      requestAnimationFrame(animate);
-    };
+  //     requestAnimationFrame(animate);
+  //   };
 
-    animate();
+  //   animate();
 
-    return () => {
-      // Cleanup if needed
-    };
-  }, []);
+  //   return () => {
+  //     // Cleanup if needed
+  //   };
+  // }, []);
 
   return (
     <motion.section 
@@ -73,10 +73,10 @@ export const SecurityAudit: React.FC = () => {
         hidden: { opacity: 0 }
       }}
     >
-      <canvas 
+      {/* <canvas 
         ref={canvasRef} 
         className="absolute top-0 left-0 w-full pointer-events-none opacity-30"
-      />
+      /> */}
       
       <motion.div
         className="container mx-auto px-4"
@@ -128,16 +128,14 @@ export const SecurityAudit: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <motion.a
-            href="https://calendly.com/michael-simoneau/security-assessment"
+          <a 
+            href="https://www.linkedin.com/in/michaelsimoneau/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
           >
-            Request Security Assessment
-          </motion.a>
+            SCHEDULE A CONSULTATION
+          </a>
         </div>
       </motion.div>
     </motion.section>

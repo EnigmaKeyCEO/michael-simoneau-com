@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { ArrowLeft, Bug } from 'lucide-react';
 import { MainNav } from './MainNav';
+import { QuantumButton } from './QuantumButton';
 
 export const NotFound: React.FC = () => {
   useEffect(() => {
@@ -65,16 +65,11 @@ export const NotFound: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            <Link to="/">
-              <motion.button
-                className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ArrowLeft size={20} />
-                Return to Hub
-              </motion.button>
-            </Link>
+            <QuantumButton
+              text="Return to Hub"
+              icon={<ArrowLeft size={20} />}
+              to="/"
+            />
           </motion.div>
         </motion.div>
       </section>

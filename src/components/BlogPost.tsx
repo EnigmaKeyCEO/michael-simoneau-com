@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Copy } from 'lucide-react';
 import { MainNav } from './MainNav';
@@ -214,7 +213,7 @@ const generateQuantumResistantKeys = () => {
     ]
   },
   'cto-negotiation': {
-    title: 'How to Negotiate a $500K+ CTO Package',
+    title: 'How to Negotiate a $500K+ CTO Package: The Leverage Points Most Technologists Miss',
     date: 'February 25, 2024',
     readTime: '9 min',
     author: 'Michael Simoneau',
@@ -223,7 +222,101 @@ const generateQuantumResistantKeys = () => {
     content: [
       {
         type: 'paragraph',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. The difference between a $300K and $500K+ compensation package often comes down to strategic positioning.'
+        content: 'You can\'t argue with math. You can\'t debate results. And you definitely can\'t afford to ignore me. I\'ve transformed multiple enterprise systems, and I\'ve learned that the difference between a $300K and $500K+ compensation package often comes down to strategic positioning.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The $200K Hustle (And Why Your CTO Fears Me)'
+      },
+      {
+        type: 'paragraph',
+        content: 'Last year, I made $200k without a "real job". Here\'s how I\'ll 10x that by fixing your company.'
+      },
+      {
+        type: 'list',
+        items: [
+          'Common-sense rule #1: If your tech stack bleeds cash, you\'re not a CEO – you\'re a hospice nurse for dying code.',
+          'Xano\'s CTO has 24h to admit their $15M mistake or become my next case study.',
+          'T-Mobile\'s customer service video isn\'t criticism – it\'s a $1B roadmap they\'re too scared to open.'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Art of Corporate Triage'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'I. The Undeniable Math of Failure'
+      },
+      {
+        type: 'list',
+        items: [
+          'Xano\'s Codebase: 73% legacy tax × $15M funding = $11M wasted before Series A.',
+          'T-Mobile\'s Meltdown: 1hr video × viral potential = 14% stock dip in 72h.'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'II. The $200k Hustle Blueprint'
+      },
+      {
+        type: 'list',
+        items: [
+          'Rule 1: Charge 50% cash, 50% equity – skin in the game or GTFO.',
+          'Rule 2: Give 8-minute ultimatums – indecision is bankruptcy in disguise.',
+          'Rule 3: Audit publicly, fix privately – humiliation is a loyalty test.'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'III. The Quantum Edge'
+      },
+      {
+        type: 'paragraph',
+        content: 'Writing quantum-resistant systems taught me to hear dissonance in codebases. Most CTOs are tone-deaf to the quantum revolution.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Common-Sense Countdown'
+      },
+      {
+        type: 'paragraph',
+        content: 'Here\'s your common-sense exit:'
+      },
+      {
+        type: 'list',
+        items: [
+          '$250k + 2% equity',
+          'Full rebuild authority',
+          'Silent PR crisis containment (I\'ll bury the T-Mobile video)'
+        ]
+      },
+      {
+        type: 'paragraph',
+        content: 'Tick. Tock.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Why This Works'
+      },
+      {
+        type: 'list',
+        items: [
+          'Meritocratic Ruthlessness: Positions you as a force of nature transcending politics.',
+          'Social Proof Artillery: $200k freelance earnings validate your "unemployable genius" brand.',
+          'Ticking Clock Psychology: Forces action by making inaction more costly than surrender.'
+        ]
+      },
+      {
+        type: 'paragraph',
+        content: 'Execute this with quantum precision. Let the facts be your fists. #quantumReady #billionDollarProof'
       }
     ]
   }
@@ -349,22 +442,10 @@ export const BlogPost: React.FC = () => {
     );
   }
   
-  // Function to generate a gradient fallback for the hero image
-  const getGradientForPost = (id: string) => {
-    // Simple hash function to get a number from a string
-    const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    
-    // Generate colors based on the hash
-    const hue1 = (hash % 360).toString();
-    const hue2 = ((hash * 2) % 360).toString();
-    
-    return `linear-gradient(135deg, hsl(${hue1}, 70%, 30%) 0%, hsl(${hue2}, 70%, 20%) 100%)`;
-  };
-
   // Fix for Type 'number' is not assignable to type 'string' by adding specific type
   const renderHeading = (block: HeadingBlock, index: number) => {
     const level = block.level;
-    const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+    const HeadingTag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     return <HeadingTag key={index.toString()} className="text-white font-bold mt-10 mb-6">{block.content}</HeadingTag>;
   };
 
@@ -373,11 +454,7 @@ export const BlogPost: React.FC = () => {
       <MainNav />
       <section className="min-h-screen bg-black text-white py-20 px-4 pt-24">
         <div className="container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div>
             <Link 
               to="/blog" 
               className="inline-flex items-center text-cyan-400 mb-8 hover:text-cyan-300 transition-colors"
@@ -386,78 +463,38 @@ export const BlogPost: React.FC = () => {
               Back to all articles
             </Link>
 
-            {/* Hero image section with SVG object */}
-            <div className="w-full h-56 md:h-80 mb-8 rounded-xl overflow-hidden relative">
-              <div 
-                className="w-full h-full absolute inset-0 transition-all duration-500" 
-                style={{ background: getGradientForPost(postId || '') }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-              
-              {/* SVG Object with fallback */}
-              <object 
-                data={post.heroImage}
-                type="image/svg+xml"
-                className="absolute inset-0 w-full h-full object-cover"
-              >
-                {/* Fallback content */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h2 className="text-white text-3xl font-bold">{post.title}</h2>
-                </div>
-              </object>
-              
-              <div className="absolute bottom-0 left-0 w-full p-6">
-                <div className="flex flex-wrap gap-2 mb-3">
+            {/* Post header - matches the card design */}
+            <div className="w-full h-[300px] mb-8 rounded-xl relative overflow-hidden" style={{ backgroundColor: post.heroImage === '/blog/quantum-crypto.svg' ? '#006D5B' : 
+                                        post.heroImage === '/blog/legacy-termination.svg' ? '#DC2626' :
+                                        post.heroImage === '/blog/react-native-scaling.svg' ? '#2563EB' :
+                                        post.heroImage === '/blog/ai-security.svg' ? '#7E22CE' :
+                                        post.heroImage === '/blog/negotiation.svg' ? '#15803D' : '#000000' }}>
+              <div className="absolute bottom-0 left-0 w-full p-8">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full backdrop-blur-sm">
+                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-black/30 text-white rounded-full backdrop-blur-sm">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <h1 className="text-3xl md:text-5xl font-bold text-white">{post.title}</h1>
+                <h1 className="text-4xl md:text-6xl font-bold text-white">{post.title}</h1>
+                <div className="flex items-center mt-4 text-white/80">
+                  <Calendar size={16} className="mr-1" />
+                  <span className="mr-4">{post.date}</span>
+                  <Clock size={16} className="mr-1" />
+                  <span>{post.readTime}</span>
+                </div>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-800">
-              <div className="flex items-center text-gray-400">
-                <Calendar size={16} className="mr-1" />
-                <span className="mr-4">{post.date}</span>
-                <Clock size={16} className="mr-1" />
-                <span>{post.readTime}</span>
-              </div>
-              
-              <div className="relative" ref={shareOptionsRef}>
-                <button 
-                  onClick={() => setShowShareOptions(!showShareOptions)}
-                  className="flex items-center space-x-1 text-gray-400 hover:text-cyan-400 transition-colors"
-                >
-                  <Share2 size={18} />
-                  <span className="text-sm">Share</span>
-                </button>
-                
-                {showShareOptions && (
-                  <motion.div 
-                    className="absolute right-0 top-full mt-2 p-3 bg-gray-800 rounded-lg shadow-xl z-20 flex space-x-2"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
-                    <ShareButton platform="twitter" url={window.location.href} title={post.title} />
-                    <ShareButton platform="linkedin" url={window.location.href} title={post.title} />
-                    <ShareButton platform="facebook" url={window.location.href} title={post.title} />
-                  </motion.div>
-                )}
-              </div>
-            </div>
-
-            {/* Hero image */}
-            <div className="h-80 mb-10 rounded-xl overflow-hidden">
-              {/* This would be a real image in production */}
-              <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900" />
             </div>
 
             {/* Content */}
             <div className="prose prose-lg prose-invert max-w-none">
               {post.content.map((block, index) => {
+                // Skip the first heading if it's level 1 (since we already have the title)
+                if (index === 0 && block.type === 'heading' && block.level === 1) {
+                  return null;
+                }
+
                 switch (block.type) {
                   case 'heading':
                     return renderHeading(block, index);
@@ -510,7 +547,7 @@ export const BlogPost: React.FC = () => {
               <h3 className="text-2xl font-bold mb-6 text-center">Ready to quantum-proof your systems?</h3>
               <div className="text-center">
                 <a 
-                  href="https://calendly.com/michael-simoneau/war-room"
+                  href="https://www.linkedin.com/in/michaelsimoneau/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
@@ -519,7 +556,7 @@ export const BlogPost: React.FC = () => {
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
