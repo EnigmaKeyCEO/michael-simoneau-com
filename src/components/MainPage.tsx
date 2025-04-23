@@ -4,7 +4,7 @@ import { HeroSection } from './HeroSection';
 import { SecurityAudit } from './SecurityAudit';
 import { DemoMassacre } from './DemoMassacre';
 import { CTOTriage } from './CTOTriage';
-import { MainNav } from './MainNav';
+import { useSpeech } from '../contexts/SpeechContext';
 
 const useSectionScroll = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,51 +37,60 @@ const useSectionScroll = () => {
 
 export const MainPage: React.FC = () => {
   const { containerRef, currentSection } = useSectionScroll();
+  const { handlePlayPause } = useSpeech();
+  const hasStartedRef = useRef(false);
   
   useEffect(() => {
     document.title = 'Michael Simoneau | FROM HOMELESS TO $200M ARCHITECT';
-  }, []);
+    
+    // Only start playing once when the component mounts
+    if (!hasStartedRef.current) {
+      hasStartedRef.current = true;
+      const timer = setTimeout(() => {
+        handlePlayPause();
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [handlePlayPause]);
 
   return (
-    <>
-      <MainNav />
-      <div 
-        className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
-        ref={containerRef}
+    <div 
+      className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
+      ref={containerRef}
+    >
+      <motion.div 
+        className="section h-screen snap-start snap-always pt-16"
+        initial={{ opacity: 0.9 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
       >
-        <motion.div 
-          className="section h-screen snap-start snap-always pt-16"
-          initial={{ opacity: 0.9 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <HeroSection />
-        </motion.div>
-        <motion.div 
-          className="section min-h-screen snap-start snap-always pt-16 pb-8"
-          initial={{ opacity: 0.9 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <SecurityAudit />
-        </motion.div>
-        <motion.div 
-          className="section min-h-screen snap-start snap-always pt-16 pb-8"
-          initial={{ opacity: 0.9 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <DemoMassacre />
-        </motion.div>
-        <motion.div 
-          className="section min-h-screen snap-start snap-always pt-16 pb-8"
-          initial={{ opacity: 0.9 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <CTOTriage />
-        </motion.div>
-      </div>
-    </>
+        <HeroSection />
+      </motion.div>
+      <motion.div 
+        className="section min-h-screen snap-start snap-always pt-16 pb-8"
+        initial={{ opacity: 0.9 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <SecurityAudit />
+      </motion.div>
+      <motion.div 
+        className="section min-h-screen snap-start snap-always pt-16 pb-8"
+        initial={{ opacity: 0.9 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <DemoMassacre />
+      </motion.div>
+      <motion.div 
+        className="section min-h-screen snap-start snap-always pt-16 pb-8"
+        initial={{ opacity: 0.9 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <CTOTriage />
+      </motion.div>
+    </div>
   );
 }; 

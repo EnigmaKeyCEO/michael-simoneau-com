@@ -5,7 +5,11 @@ import { QuantumButton } from './QuantumButton';
 
 export const CTOTriage: React.FC = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
+  const isInView = useInView(sectionRef, { 
+    once: true,
+    amount: 0.5,
+    margin: "0px 0px -100px 0px"
+  });
   const controls = useAnimation();
 
   // Animate when in view
@@ -14,51 +18,6 @@ export const CTOTriage: React.FC = () => {
       controls.start("visible");
     }
   }, [isInView, controls]);
-
-  // Voice synthesis effect
-  useEffect(() => {
-    // Only trigger once when first in view
-    if (!isInView) return;
-    
-    let isMounted = true;
-    const synth = window.speechSynthesis;
-    const messages = [
-      "Quantum vulnerability detected in your infrastructure",
-      "Initiating enterprise mesh transformation protocol"
-    ];
-
-    // Only speak if speech synthesis is available
-    if (synth) {
-      const utterances = messages.map(message => {
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.rate = 0.8;
-        utterance.pitch = 0.5;
-        return utterance;
-      });
-
-      let currentIndex = 0;
-      const speakNext = () => {
-        if (!isMounted) return;
-        if (currentIndex < utterances.length) {
-          synth.speak(utterances[currentIndex]);
-          currentIndex++;
-        }
-      };
-
-      utterances.forEach(utterance => {
-        utterance.onend = speakNext;
-      });
-
-      speakNext();
-    }
-
-    return () => {
-      isMounted = false;
-      if (synth) {
-        synth.cancel();
-      }
-    };
-  }, [isInView]);
 
   return (
     <motion.section 

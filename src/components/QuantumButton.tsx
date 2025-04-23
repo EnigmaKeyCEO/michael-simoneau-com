@@ -29,22 +29,21 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
   };
 
   const baseClasses = `
-    bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold 
-    rounded-lg flex items-center justify-center gap-1 overflow-hidden relative group
-    min-w-[10rem] md:min-w-[16rem] h-12
+    relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold 
+    rounded-lg flex items-center justify-center gap-1 overflow-hidden group
+    w-full md:w-auto min-h-[48px] px-6 py-3
+    transform hover:scale-[1.02] transition-transform duration-300
   `;
 
   const content = (
     <>
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 transition-transform duration-300 group-hover:translate-x-0" style={{ transform: 'translateX(100%)' }} />
+      <div className="absolute inset-0 bg-[url('/paper-texture.png')] opacity-5" />
+      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent" />
       <div className="relative z-10 flex items-center justify-center w-full">
-        <div className="flex items-center justify-center gap-1 md:hidden">
+        <div className="flex items-center justify-center gap-2">
           {icon}
-          <span className="text-xs">{getAbbreviation()}</span>
-        </div>
-        <div className="hidden md:flex items-center justify-center gap-1">
-          {icon}
-          <span className="text-xs transition-colors duration-300">{text}</span>
+          <span className="text-sm md:text-base transition-colors duration-300">{text}</span>
         </div>
       </div>
     </>

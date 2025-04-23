@@ -9,7 +9,7 @@ export const MainNav: React.FC = () => {
   const isHomePage = location.pathname === '/';
   
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/70 backdrop-blur-lg border-b border-gray-800">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-gray-800/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="text-white font-bold text-lg hover:text-cyan-400 transition-colors flex items-center">
@@ -56,7 +56,7 @@ export const MainNav: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
         >
-          <nav className="flex flex-col items-center space-y-8 p-6">
+          <nav className="flex flex-col items-center space-y-8 p-6 bg-black/75">
             {!isHomePage && (
               <Link 
                 to="/" 

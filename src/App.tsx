@@ -9,21 +9,30 @@ import { Blog } from './components/Blog';
 import { BlogPost } from './components/BlogPost';
 import { Interview } from './components/Interview';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import { SpeechProvider } from './contexts/SpeechContext';
+import { MainNav } from './components/MainNav';
+import { UniversalPlayer } from './components/UniversalPlayer';
+import { CookieNotice } from './components/CookieNotice';
 
 function App() {
   return (
     <HashRouter>
-      <QuantumBackground />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/proof" element={<SecurityAudit />} />
-        <Route path="/bloodbath" element={<DemoMassacre />} />
-        <Route path="/triage" element={<CTOTriage />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:postId" element={<BlogPost />} />
-        <Route path="/interview" element={<Interview />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <SpeechProvider>
+        <QuantumBackground />
+        <MainNav />
+        <UniversalPlayer />
+        <CookieNotice />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/proof" element={<SecurityAudit />} />
+          <Route path="/bloodbath" element={<DemoMassacre />} />
+          <Route path="/triage" element={<CTOTriage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:postId" element={<BlogPost />} />
+          <Route path="/interview" element={<Interview />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </SpeechProvider>
     </HashRouter>
   );
 }
