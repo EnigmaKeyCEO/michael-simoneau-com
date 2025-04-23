@@ -32,7 +32,6 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPhrase, setCurrentPhrase] = useState<string | null>(null);
   const [utterances, setUtterances] = useState<SpeechSynthesisUtterance[]>([]);
-  const [hasAutoPlayed, setHasAutoPlayed] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -47,9 +46,11 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
 
     setIsSupported(true);
     const messages = [
+      "Your current stack has 14.8 months to live",
+      "Michael saved JPMorgan $5,000,000 in 11 weeks",
       "Quantum vulnerability detected in your infrastructure",
       "Initiating enterprise mesh transformation protocol"
-    ];
+    ].sort(() => Math.random() - 0.5); // Randomize order
 
     const newUtterances = messages.map(message => {
       const utterance = new SpeechSynthesisUtterance(message);
@@ -71,7 +72,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     let timer: NodeJS.Timeout | null = null;
 
     const setupAutoPlay = () => {
-      if (!hasAutoPlayed && cookieService.hasAutoPlayConsent() && isInitialized && isSupported && utterances.length > 0) {
+      if (cookieService.hasAutoPlayConsent() && isInitialized && isSupported && utterances.length > 0) {
         console.log('Setting up auto-play timer...');
         timer = setTimeout(() => {
           console.log('Auto-playing first utterance');
@@ -99,7 +100,6 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
           });
 
           speakNext();
-          setHasAutoPlayed(true);
         }, 3000);
       }
     };
@@ -111,7 +111,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
         clearTimeout(timer);
       }
     };
-  }, [utterances, hasAutoPlayed, isInitialized, isSupported]);
+  }, [utterances, isInitialized, isSupported]);
 
   const play = () => {
     const synth = window.speechSynthesis;
