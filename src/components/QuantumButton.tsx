@@ -31,7 +31,7 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
   const baseClasses = `
     bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold 
     rounded-lg flex items-center justify-center gap-1 overflow-hidden relative group
-    w-40 md:w-64 h-12
+    min-w-[10rem] md:min-w-[16rem] h-12
   `;
 
   const content = (

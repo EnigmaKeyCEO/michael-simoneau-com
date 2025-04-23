@@ -68,27 +68,31 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* Bottom section with buttons */}
-      <div className="flex flex-col items-center gap-6 w-full">
-        <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
           <QuantumButton 
             text="Security Audit" 
             icon={<Shield size={20} />} 
-            targetId="security-audit" 
+            targetId="security-audit"
+            className="flex-1" 
           />
           <QuantumButton 
             text="Demo Massacre" 
             icon={<Zap size={20} />} 
-            targetId="demo-massacre" 
+            targetId="demo-massacre"
+            className="flex-1" 
           />
           <QuantumButton 
             text="CTO Triage" 
             icon={<Cpu size={20} />} 
-            targetId="cto-triage" 
+            targetId="cto-triage"
+            className="flex-1" 
           />
           <QuantumButton 
             text="Quantum Insights Blog" 
             icon={<BookOpen size={20} />} 
-            to="/blog" 
+            to="/blog"
+            className="flex-1" 
           />
         </div>
       </div>
