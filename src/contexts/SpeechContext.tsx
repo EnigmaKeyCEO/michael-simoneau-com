@@ -35,6 +35,8 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
+  // Transient state to track if auto-play happened before cookie consent
+  const [hasPlayedThisSession, setHasPlayedThisSession] = useState(false);
 
   useEffect(() => {
     const synth = window.speechSynthesis;
@@ -50,7 +52,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
       "Michael saved JPMorgan $5,000,000 in 11 weeks",
       "Quantum vulnerability detected in your infrastructure",
       "Initiating enterprise mesh transformation protocol"
-    ].sort(() => Math.random() - 0.5); // Randomize order
+    ].sort(() => Math.random() - 0.5);
 
     const newUtterances = messages.map(message => {
       const utterance = new SpeechSynthesisUtterance(message);
@@ -72,7 +74,10 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     let timer: NodeJS.Timeout | null = null;
 
     const setupAutoPlay = () => {
-      if (cookieService.hasAutoPlayConsent() && isInitialized && isSupported && utterances.length > 0) {
+      // Check if we've already played this session OR if there's a cookie indicating we've played before
+      const hasPlayedBefore = cookieService.hasAutoPlayConsent() || hasPlayedThisSession;
+      
+      if (!hasPlayedBefore && isInitialized && isSupported && utterances.length > 0) {
         console.log('Setting up auto-play timer...');
         timer = setTimeout(() => {
           console.log('Auto-playing first utterance');
@@ -82,6 +87,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
           synth.cancel(); // Cancel any ongoing speech
           setIsPlaying(true);
           setCurrentPhrase(utterances[0].text);
+          setHasPlayedThisSession(true); // Mark as played for this session
 
           let currentIndex = 0;
           const speakNext = () => {
@@ -111,7 +117,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
         clearTimeout(timer);
       }
     };
-  }, [utterances, isInitialized, isSupported]);
+  }, [utterances, isInitialized, isSupported, hasPlayedThisSession]);
 
   const play = () => {
     const synth = window.speechSynthesis;
