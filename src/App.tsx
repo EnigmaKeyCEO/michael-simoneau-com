@@ -7,6 +7,7 @@ import { NotFound } from './components/NotFound';
 import { Blog } from './components/Blog';
 import { BlogPost } from './components/BlogPost';
 import { Interview } from './components/Interview';
+import { FullProfile } from './pages/FullProfile';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { SpeechProvider } from './contexts/SpeechContext';
 import { MainNav } from './components/MainNav';
@@ -27,6 +28,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:postId" element={<BlogPost />} />
           <Route path="/interview" element={<Interview />} />
+          <Route path="/profile" element={<FullProfile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SpeechProvider>

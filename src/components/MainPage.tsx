@@ -4,6 +4,7 @@ import { HeroSection } from "./HeroSection";
 import { SecurityAudit } from "./SecurityAudit";
 import { DemoMassacre } from "./DemoMassacre";
 import { CTOTriage } from "./CTOTriage";
+import { ProfessionalProfile } from "./ProfessionalProfile";
 import { useSpeech } from "../contexts/SpeechContext";
 
 const useSectionScroll = () => {
@@ -95,6 +96,14 @@ export const MainPage: React.FC = () => {
         transition={{ duration: 0.2 }}
       >
         <CTOTriage />
+      </motion.div>
+      <motion.div
+        className="section min-h-screen snap-start snap-always pt-16 pb-8"
+        initial={{ opacity: 0.9 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <ProfessionalProfile />
       </motion.div>
     </div>
   );
