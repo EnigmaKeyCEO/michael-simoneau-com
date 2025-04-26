@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LucideIcon } from 'lucide-react';
 
 interface QuantumButtonProps {
   text: string;
@@ -21,11 +20,28 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
   className = '',
   targetId
 }) => {
-  const getAbbreviation = () => {
-    if (text === "Security Audit") return "Se";
-    if (text === "Demo Massacre") return "Ma";
-    if (text === "CTO Triage") return "T";
-    return text.substring(0, 2);
+  const handleScroll = (e: React.MouseEvent) => {
+    if (targetId) {
+      e.preventDefault();
+      const element = document.getElementById(targetId);
+      if (element) {
+        // Get the container with snap scrolling
+        const container = document.querySelector('.snap-y');
+        if (container) {
+          // Calculate the scroll position to the target section
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = element.getBoundingClientRect();
+          const scrollTop = elementRect.top - containerRect.top + container.scrollTop - 24;
+          
+          // Scroll to the target position
+          container.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+    onClick?.();
   };
 
   const baseClasses = `
@@ -67,7 +83,7 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
 
   return (
     <button 
-      onClick={onClick} 
+      onClick={handleScroll} 
       data-target={targetId}
       className={`${baseClasses} ${className}`}
     >

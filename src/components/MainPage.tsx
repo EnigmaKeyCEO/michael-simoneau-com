@@ -36,8 +36,8 @@ const useSectionScroll = () => {
 };
 
 export const MainPage: React.FC = () => {
-  const { containerRef, currentSection } = useSectionScroll();
-  const { handlePlayPause } = useSpeech();
+  const { containerRef } = useSectionScroll();
+  const { play, pause } = useSpeech(); // Provide a default no-op function
   const hasStartedRef = useRef(false);
   
   useEffect(() => {
@@ -47,12 +47,12 @@ export const MainPage: React.FC = () => {
     if (!hasStartedRef.current) {
       hasStartedRef.current = true;
       const timer = setTimeout(() => {
-        handlePlayPause();
+        play();
       }, 3000);
 
       return () => clearTimeout(timer);
     }
-  }, [handlePlayPause]);
+  }, [play, pause]);
 
   return (
     <div 

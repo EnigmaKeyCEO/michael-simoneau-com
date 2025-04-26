@@ -1,4 +1,3 @@
-import React from 'react';
 import { QuantumBackground } from './components/QuantumBackground';
 import { MainPage } from './components/MainPage';
 import { SecurityAudit } from './components/SecurityAudit';

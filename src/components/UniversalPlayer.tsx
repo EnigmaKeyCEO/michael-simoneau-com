@@ -32,7 +32,7 @@ export const UniversalPlayer: React.FC = () => {
   return (
     <div>
       <motion.div 
-        className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-sm h-[52px] px-4 sm:px-2"
+        className="flex items-center justify-center gap-1 h-[52px] px-4 sm:px-2"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}

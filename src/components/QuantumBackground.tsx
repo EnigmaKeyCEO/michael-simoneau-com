@@ -8,15 +8,27 @@ const ANIMATION_FACTOR = 0.0005; // 20x slower
 
 function ParticleField() {
   const ref = useRef<THREE.Points>(null!);
-  const [sphere] = React.useState(() => 
-    random.inSphere(new Float32Array(5000), { radius: 20 }) as Float32Array
-  );
-
-  useFrame((_state, delta) => {
-    ref.current.rotation.x -= delta * ANIMATION_FACTOR;
-    ref.current.rotation.y -= delta * ANIMATION_FACTOR;
+  const [sphere] = React.useState(() => {
+    // Create a larger array to ensure we have enough valid points
+    const positions = new Float32Array(5000 * 3);
+    const validPositions = random.inSphere(positions, { radius: 20 }) as Float32Array;
+    
+    // Validate positions to ensure no NaN values
+    for (let i = 0; i < validPositions.length; i++) {
+      if (isNaN(validPositions[i])) {
+        validPositions[i] = 0; // Replace NaN with 0
+      }
+    }
+    
+    return validPositions;
   });
 
+  useFrame((_state, delta) => {
+    if (ref.current) {
+      ref.current.rotation.x -= delta * ANIMATION_FACTOR;
+      ref.current.rotation.y -= delta * ANIMATION_FACTOR;
+    }
+  });
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
