@@ -11,7 +11,6 @@ import { Interview } from './components/Interview';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { SpeechProvider } from './contexts/SpeechContext';
 import { MainNav } from './components/MainNav';
-import { UniversalPlayer } from './components/UniversalPlayer';
 import { CookieNotice } from './components/CookieNotice';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
       <SpeechProvider>
         <QuantumBackground />
         <MainNav />
-        <UniversalPlayer />
         <CookieNotice />
         <Routes>
           <Route path="/" element={<MainPage />} />
