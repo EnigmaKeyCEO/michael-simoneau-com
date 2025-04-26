@@ -1,48 +1,50 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { HeroSection } from './HeroSection';
-import { SecurityAudit } from './SecurityAudit';
-import { DemoMassacre } from './DemoMassacre';
-import { CTOTriage } from './CTOTriage';
-import { useSpeech } from '../contexts/SpeechContext';
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { HeroSection } from "./HeroSection";
+import { SecurityAudit } from "./SecurityAudit";
+import { DemoMassacre } from "./DemoMassacre";
+import { CTOTriage } from "./CTOTriage";
+import { useSpeech } from "../contexts/SpeechContext";
 
 const useSectionScroll = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
-  
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    
-    const sections = Array.from(container.querySelectorAll<HTMLDivElement>('.section'));
+
+    const sections = Array.from(
+      container.querySelectorAll<HTMLDivElement>(".section")
+    );
     if (sections.length === 0) return;
-    
+
     const handleScroll = () => {
       if (!container) return;
       const scrollPosition = container.scrollTop;
       const windowHeight = window.innerHeight;
       const currentIndex = Math.floor(scrollPosition / windowHeight);
-      
+
       if (currentIndex !== currentSection) {
         setCurrentSection(currentIndex);
       }
     };
-    
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
   }, [currentSection]);
-  
+
   return { containerRef, currentSection };
 };
 
 export const MainPage: React.FC = () => {
   const { containerRef } = useSectionScroll();
-  const { play, pause } = useSpeech(); // Provide a default no-op function
+  const { play, pause } = useSpeech();
   const hasStartedRef = useRef(false);
-  
+
   useEffect(() => {
-    document.title = 'Michael Simoneau | FROM HOMELESS TO $200M ARCHITECT';
-    
+    document.title = "Michael Simoneau | FROM HOMELESS TO $200M ARCHITECT";
+
     // Only start playing once when the component mounts
     if (!hasStartedRef.current) {
       hasStartedRef.current = true;
@@ -50,16 +52,19 @@ export const MainPage: React.FC = () => {
         play();
       }, 3000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        pause();
+        clearTimeout(timer);
+      };
     }
   }, [play, pause]);
 
   return (
-    <div 
+    <div
       className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
       ref={containerRef}
     >
-      <motion.div 
+      <motion.div
         className="section h-screen snap-start snap-always pt-16"
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
@@ -67,7 +72,7 @@ export const MainPage: React.FC = () => {
       >
         <HeroSection />
       </motion.div>
-      <motion.div 
+      <motion.div
         className="section min-h-screen snap-start snap-always pt-16 pb-8"
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
@@ -75,7 +80,7 @@ export const MainPage: React.FC = () => {
       >
         <SecurityAudit />
       </motion.div>
-      <motion.div 
+      <motion.div
         className="section min-h-screen snap-start snap-always pt-16 pb-8"
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
@@ -83,7 +88,7 @@ export const MainPage: React.FC = () => {
       >
         <DemoMassacre />
       </motion.div>
-      <motion.div 
+      <motion.div
         className="section min-h-screen snap-start snap-always pt-16 pb-8"
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
@@ -93,4 +98,4 @@ export const MainPage: React.FC = () => {
       </motion.div>
     </div>
   );
-}; 
+};

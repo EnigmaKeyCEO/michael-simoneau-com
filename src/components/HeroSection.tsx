@@ -1,13 +1,10 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Zap, Shield, Cpu, BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { InterviewButton } from './InterviewButton';
 import { QuantumButton } from './QuantumButton';
 
 const GlowingText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isHovered, setIsHovered] = React.useState(false);
-
   return (
     <motion.span
       whileHover={{ textShadow: '0 0 10px rgba(0, 255, 136, 0.7), 0 0 20px rgba(0, 255, 136, 0.5), 0 0 30px rgba(0, 255, 136, 0.3)' }}
@@ -89,7 +86,7 @@ export const HeroSection: React.FC = () => {
             className="flex-1" 
           />
           <QuantumButton 
-            text="Quantum Insights Blog" 
+            text="Web Log" 
             icon={<BookOpen size={20} />} 
             to="/blog"
             className="flex-1" 
