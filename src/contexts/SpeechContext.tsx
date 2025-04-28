@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { cookieService } from '../services/cookieService';
 
 interface SpeechContextType {
@@ -35,14 +35,18 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
-  // Transient state to track if auto-play happened before cookie consent
   const [hasPlayedThisSession, setHasPlayedThisSession] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
 
-  useEffect(() => {
+  const initializeSpeech = useCallback(() => {
+    if (isInitializing || isInitialized) return;
+
+    setIsInitializing(true);
     const synth = window.speechSynthesis;
     if (!synth) {
       setIsSupported(false);
       setError('Speech synthesis not supported in this browser');
+      setIsInitializing(false);
       return;
     }
 
@@ -63,31 +67,25 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
 
     setUtterances(newUtterances);
     setIsInitialized(true);
-
-    return () => {
-      synth.cancel();
-    };
-  }, []);
+    setIsInitializing(false);
+  }, [isInitialized, isInitializing]);
 
   // Handle auto-play with 3-second delay
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
     const setupAutoPlay = () => {
-      // Check if we've already played this session OR if there's a cookie indicating we've played before
       const hasPlayedBefore = cookieService.hasAutoPlayConsent() || hasPlayedThisSession;
       
       if (!hasPlayedBefore && isInitialized && isSupported && utterances.length > 0) {
-        console.log('Setting up auto-play timer...');
         timer = setTimeout(() => {
-          console.log('Auto-playing first utterance');
           const synth = window.speechSynthesis;
           if (!synth) return;
 
-          synth.cancel(); // Cancel any ongoing speech
+          synth.cancel();
           setIsPlaying(true);
           setCurrentPhrase(utterances[0].text);
-          setHasPlayedThisSession(true); // Mark as played for this session
+          setHasPlayedThisSession(true);
 
           let currentIndex = 0;
           const speakNext = () => {
@@ -119,11 +117,15 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     };
   }, [utterances, isInitialized, isSupported, hasPlayedThisSession]);
 
-  const play = () => {
+  const play = useCallback(() => {
+    if (!isInitialized) {
+      initializeSpeech();
+    }
+
     const synth = window.speechSynthesis;
     if (!synth || !utterances.length) return;
 
-    synth.cancel(); // Cancel any ongoing speech
+    synth.cancel();
     setIsPlaying(true);
     setCurrentPhrase(utterances[0].text);
 
@@ -144,17 +146,17 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     });
 
     speakNext();
-  };
+  }, [utterances, isInitialized, initializeSpeech]);
 
-  const pause = () => {
+  const pause = useCallback(() => {
     const synth = window.speechSynthesis;
     if (!synth) return;
 
     synth.pause();
     setIsPlaying(false);
-  };
+  }, []);
 
-  const skipForward = () => {
+  const skipForward = useCallback(() => {
     const synth = window.speechSynthesis;
     if (!synth) return;
 
@@ -164,9 +166,9 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
       setCurrentPhrase(utterances[currentIndex + 1].text);
       synth.speak(utterances[currentIndex + 1]);
     }
-  };
+  }, [utterances, currentPhrase]);
 
-  const skipBack = () => {
+  const skipBack = useCallback(() => {
     const synth = window.speechSynthesis;
     if (!synth) return;
 
@@ -176,7 +178,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
       setCurrentPhrase(utterances[currentIndex - 1].text);
       synth.speak(utterances[currentIndex - 1]);
     }
-  };
+  }, [utterances, currentPhrase]);
 
   return (
     <SpeechContext.Provider

@@ -86,8 +86,8 @@ export const SecurityAudit: React.FC = () => {
         }}
       >
         <h2 className="font-bold mb-12 text-center break-words max-w-full w-full">
-          <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cyan-400 break-words text-center">QUANTUM CRYPTOGRAPHY PIONEER</span>
-          <span className="block mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-center">Enterprise Security Assessment Protocol</span>
+          <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-cyan-400 break-words text-center">QUANTUM CRYPTOGRAPHY PIONEER</span>
+          <span className="block mt-4 text-lg sm:text-xl md:text-2xl lg:text-3xl break-words text-center">Enterprise Security Assessment Protocol</span>
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
