@@ -271,7 +271,10 @@ export const Blog: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post, index) => (
+              {featuredPosts.map((post) => (
+                <FeaturedPost key={post.id} post={post} />
+              ))}
+              {regularPosts.map((post, index) => (
                 <BlogCard key={post.id} post={post} delay={0.1 * index} />
               ))}
             </div>

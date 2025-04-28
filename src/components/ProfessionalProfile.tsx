@@ -16,21 +16,6 @@ export const ProfessionalProfile: React.FC = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="max-w-6xl mx-auto">
-        {/* Header Section */}
-        <motion.div 
-          className="text-center mb-12"
-          initial={{ y: -20 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-quantum-300 to-quantum-500 break-words text-center">
-            Michael Simoneau
-          </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-quantum-300 mb-1 break-words text-center">FROM HOMELESS TO $200M ARCHITECT</p>
-          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-quantum-300 mb-4 break-words text-center">QUANTUM CRYPTOGRAPHY PIONEER</p>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-quantum-400 break-words text-center">LEGACY SYSTEM TERMINATOR</p>
-        </motion.div>
-
         {/* Quick Stats */}
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
@@ -68,8 +53,10 @@ export const ProfessionalProfile: React.FC = () => {
             Discover the complete journey of a quantum-ready architect
           </p>
         </motion.div>
+
+        {/* Audio Player */}
         <motion.div
-          className="text-center mt-8"
+          className="text-center mt-8 mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}

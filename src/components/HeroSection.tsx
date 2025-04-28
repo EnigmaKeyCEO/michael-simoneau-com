@@ -88,7 +88,7 @@ export const HeroSection: React.FC = () => {
           <QuantumButton 
             text="Professional Profile" 
             icon={<User size={20} />} 
-            targetId="profile"
+            to="/full-profile"
             className="flex-1" 
           />
           <QuantumButton 

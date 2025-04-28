@@ -18,15 +18,8 @@ export const MainNav: React.FC = () => {
         setIsOpen(false);
       }
     } else {
-      // Navigate to home page first, then scroll to section
-      navigate('/', { replace: true });
-      // Use setTimeout to ensure the home page is loaded before scrolling
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      // Navigate to home page with hash
+      navigate(`/#${sectionId}`, { replace: true });
       setIsOpen(false);
     }
   };
@@ -47,9 +40,13 @@ export const MainNav: React.FC = () => {
           <button onClick={() => scrollToSection('security-audit')} className="text-gray-300 hover:text-cyan-400 transition-colors">Security</button>
           <button onClick={() => scrollToSection('demo-massacre')} className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</button>
           <button onClick={() => scrollToSection('cto-triage')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-          <Link to="/profile" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+          <button onClick={() => scrollToSection('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors">
             <User size={16} className="mr-2" />
             Profile
+          </button>
+          <Link to="/full-profile" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+            <User size={16} className="mr-2" />
+            Full Profile
           </Link>
           <Link to="/blog" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <BookOpen size={16} className="mr-2" />
@@ -103,14 +100,13 @@ export const MainNav: React.FC = () => {
             >
               Services
             </button>
-            
             <Link 
-              to="/profile" 
+              to="/full-profile" 
               className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
               onClick={() => setIsOpen(false)}
             >
               <User size={18} className="mr-2" />
-              Profile
+              Full Profile
             </Link>
             <Link 
               to="/blog" 
