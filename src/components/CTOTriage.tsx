@@ -1,55 +1,28 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { Brain, Rocket } from 'lucide-react';
 import { QuantumButton } from './QuantumButton';
 
 export const CTOTriage: React.FC = () => {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { 
-    once: true,
-    amount: 0.5,
-    margin: "0px 0px -100px 0px"
-  });
-  const controls = useAnimation();
-
-  // Animate when in view
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
-
   return (
     <motion.section 
-      ref={sectionRef}
       id="cto-triage"
-      className="min-h-screen flex flex-col items-center justify-center text-white px-4 relative"
+      className="flex flex-col items-center justify-center text-white px-4 relative"
       initial={{ opacity: 0 }}
-      animate={controls}
-      variants={{
-        visible: { opacity: 1, transition: { duration: 0.8 } },
-        hidden: { opacity: 0 }
-      }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
     >
       <motion.div
-        className="container mx-auto px-4"
-        variants={{
-          visible: { opacity: 1, transition: { duration: 1 } },
-          hidden: { opacity: 0 }
-        }}
+        className="container w-full mx-auto px-4"
       >
         <h2 className="text-5xl font-bold mb-16 text-center">
           <span className="block text-cyan-400">QUANTUM CRYPTOGRAPHY PIONEER</span>
           <span className="text-3xl block mt-4">Enterprise Transformation Protocol</span>
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-8 mb-6 md:mb-16">
           <motion.div
-            className="bg-black/50 p-8 rounded-lg"
-            variants={{
-              visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
-              hidden: { x: -100, opacity: 0 }
-            }}
+            className="bg-black/50 p-4 md:p-8 rounded-lg"
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Brain className="text-cyan-400" />
@@ -76,11 +49,7 @@ export const CTOTriage: React.FC = () => {
           </motion.div>
 
           <motion.div
-            className="bg-black/50 p-8 rounded-lg"
-            variants={{
-              visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
-              hidden: { x: 100, opacity: 0 }
-            }}
+            className="bg-black/50 p-4 md:p-8 rounded-lg"
           >
             <h3 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <Rocket className="text-cyan-400" />
@@ -109,10 +78,6 @@ export const CTOTriage: React.FC = () => {
 
         <motion.div
           className="text-center"
-          variants={{
-            visible: { y: 0, opacity: 1, transition: { duration: 0.8 } },
-            hidden: { y: 50, opacity: 0 }
-          }}
         >
           <QuantumButton
             text="SCHEDULE A CONSULTATION"

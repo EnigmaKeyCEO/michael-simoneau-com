@@ -10,7 +10,7 @@ import { UniversalPlayer } from './UniversalPlayer';
 export const ProfessionalProfile: React.FC = () => {
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-b from-quantum-900 to-black text-white p-8"
+      className="bg-gradient-to-b from-quantum-900 to-black text-white p-4 sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -23,12 +23,12 @@ export const ProfessionalProfile: React.FC = () => {
           animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-quantum-300 to-quantum-500">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-quantum-300 to-quantum-500 break-words text-center">
             Michael Simoneau
           </h1>
-          <p className="text-2xl text-quantum-300 mb-1">FROM HOMELESS TO $200M ARCHITECT</p>
-          <p className="text-2xl text-quantum-300 mb-4">QUANTUM CRYPTOGRAPHY PIONEER</p>
-          <p className="text-xl text-quantum-400">LEGACY SYSTEM TERMINATOR</p>
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-quantum-300 mb-1 break-words text-center">FROM HOMELESS TO $200M ARCHITECT</p>
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-quantum-300 mb-4 break-words text-center">QUANTUM CRYPTOGRAPHY PIONEER</p>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-quantum-400 break-words text-center">LEGACY SYSTEM TERMINATOR</p>
         </motion.div>
 
         {/* Quick Stats */}
@@ -54,7 +54,7 @@ export const ProfessionalProfile: React.FC = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className="text-center"
+          className="text-center mt-8 mb-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -69,7 +69,7 @@ export const ProfessionalProfile: React.FC = () => {
           </p>
         </motion.div>
         <motion.div
-          className="text-center"
+          className="text-center mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}

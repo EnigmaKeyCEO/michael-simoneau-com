@@ -1,13 +1,35 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, Home } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { BookOpen, Menu, X, Home, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { UniversalPlayer } from './UniversalPlayer';
 
 export const MainNav: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
+
+  const scrollToSection = (sectionId: string) => {
+    if (isHomePage) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setIsOpen(false);
+      }
+    } else {
+      // Navigate to home page first, then scroll to section
+      navigate('/', { replace: true });
+      // Use setTimeout to ensure the home page is loaded before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      setIsOpen(false);
+    }
+  };
   
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-gray-800/50">
@@ -22,19 +44,13 @@ export const MainNav: React.FC = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          {isHomePage ? (
-            <>
-              <a href="#security-audit" className="text-gray-300 hover:text-cyan-400 transition-colors">Security</a>
-              <a href="#demo-massacre" className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</a>
-              <a href="#cto-triage" className="text-gray-300 hover:text-cyan-400 transition-colors">Services</a>
-            </>
-          ) : (
-            <>
-              <Link to="/#security-audit" className="text-gray-300 hover:text-cyan-400 transition-colors">Security</Link>
-              <Link to="/#demo-massacre" className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</Link>
-              <Link to="/#cto-triage" className="text-gray-300 hover:text-cyan-400 transition-colors">Services</Link>
-            </>
-          )}
+          <button onClick={() => scrollToSection('security-audit')} className="text-gray-300 hover:text-cyan-400 transition-colors">Security</button>
+          <button onClick={() => scrollToSection('demo-massacre')} className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</button>
+          <button onClick={() => scrollToSection('cto-triage')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+          <Link to="/profile" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+            <User size={16} className="mr-2" />
+            Profile
+          </Link>
           <Link to="/blog" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <BookOpen size={16} className="mr-2" />
             Blog
@@ -60,66 +76,42 @@ export const MainNav: React.FC = () => {
         >
           <nav className="flex flex-col items-center space-y-8 p-6 bg-black/75">
             {!isHomePage && (
-              <Link 
-                to="/" 
+              <button 
+                onClick={() => navigate('/')}
                 className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
-                onClick={() => setIsOpen(false)}
               >
                 <Home size={18} className="mr-2" />
                 Home
-              </Link>
+              </button>
             )}
             
-            {isHomePage ? (
-              <>
-                <a 
-                  href="#security-audit" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Security
-                </a>
-                <a 
-                  href="#demo-massacre" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Projects
-                </a>
-                <a 
-                  href="#cto-triage" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Services
-                </a>
-              </>
-            ) : (
-              <>
-                <Link 
-                  to="/#security-audit" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Security
-                </Link>
-                <Link 
-                  to="/#demo-massacre" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Projects
-                </Link>
-                <Link 
-                  to="/#cto-triage" 
-                  className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Services
-                </Link>
-              </>
-            )}
+            <button 
+              onClick={() => scrollToSection('security-audit')}
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              Security
+            </button>
+            <button 
+              onClick={() => scrollToSection('demo-massacre')}
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              Projects
+            </button>
+            <button 
+              onClick={() => scrollToSection('cto-triage')}
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              Services
+            </button>
             
+            <Link 
+              to="/profile" 
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
+              <User size={18} className="mr-2" />
+              Profile
+            </Link>
             <Link 
               to="/blog" 
               className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"

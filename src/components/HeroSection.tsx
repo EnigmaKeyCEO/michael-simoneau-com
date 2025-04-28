@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Zap, Shield, Cpu, BookOpen } from 'lucide-react';
+import { Zap, Shield, Cpu, BookOpen, User } from 'lucide-react';
 import { InterviewButton } from './InterviewButton';
 import { QuantumButton } from './QuantumButton';
 
@@ -24,7 +24,7 @@ export const HeroSection: React.FC = () => {
     <motion.section 
       style={{ y, opacity }}
       id="hero-section"
-      className="relative min-h-screen flex flex-col justify-between text-white px-4 py-16 overflow-y-auto snap-start"
+      className="relative min-h-screen flex flex-col items-center gap-y-8 text-white px-4 py-16 overflow-y-auto snap-start"
     >
       {/* Background gradients */}
       <div className="absolute inset-0 pointer-events-none">
@@ -35,16 +35,16 @@ export const HeroSection: React.FC = () => {
       {/* Top section with title */}
       <div className="flex-shrink-0">
         <motion.h1 
-          className="text-4xl md:text-8xl font-bold text-center"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center break-words"
           initial={{ y: 50 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <GlowingText>MICHAEL SIMONEAU</GlowingText>
-          <span className="block text-lg md:text-4xl mt-3 bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text font-extrabold">
+          <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl mt-3 bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text font-extrabold break-words text-center">
             <GlowingText>QUANTUM CRYPTOGRAPHY PIONEER</GlowingText>
           </span>
-          <span className="block text-base md:text-3xl mt-2 text-cyan-400 font-bold">
+          <span className="block text-lg sm:text-xl md:text-2xl lg:text-3xl mt-2 text-cyan-400 font-bold break-words text-center">
             <GlowingText>FROM HOMELESS TO $200M ARCHITECT</GlowingText>
           </span>
         </motion.h1>
@@ -60,13 +60,13 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* Center section with interview */}
-      <div className="w-full max-w-4xl mx-auto mb-8">
+      <div className="w-full max-w-4xl mx-auto my-8 z-10">
         <InterviewButton />
       </div>
 
       {/* Bottom section with buttons */}
       <div className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-6 w-full">
+        <div className="flex flex-col gap-6 w-full">
           <QuantumButton 
             text="Security Audit" 
             icon={<Shield size={20} />} 
@@ -86,7 +86,13 @@ export const HeroSection: React.FC = () => {
             className="flex-1" 
           />
           <QuantumButton 
-            text="Web Log" 
+            text="Professional Profile" 
+            icon={<User size={20} />} 
+            targetId="profile"
+            className="flex-1" 
+          />
+          <QuantumButton 
+            text="My Personal Web Log" 
             icon={<BookOpen size={20} />} 
             to="/blog"
             className="flex-1" 

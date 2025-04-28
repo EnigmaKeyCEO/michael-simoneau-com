@@ -22,8 +22,8 @@ function App() {
         <CookieNotice />
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/proof" element={<SecurityAudit />} />
-          <Route path="/bloodbath" element={<DemoMassacre />} />
+          <Route path="/security-audit" element={<SecurityAudit />} />
+          <Route path="/demo-massacre" element={<DemoMassacre />} />
           <Route path="/triage" element={<CTOTriage />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:postId" element={<BlogPost />} />

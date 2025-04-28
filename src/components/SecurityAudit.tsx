@@ -79,15 +79,15 @@ export const SecurityAudit: React.FC = () => {
       /> */}
       
       <motion.div
-        className="container mx-auto px-4"
+        className="container mx-auto px-4 overflow-x-hidden"
         variants={{
           visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
           hidden: { opacity: 0, y: 50 }
         }}
       >
-        <h2 className="text-5xl font-bold mb-12 text-center">
-          <span className="block text-cyan-400">QUANTUM CRYPTOGRAPHY PIONEER</span>
-          <span className="text-3xl block mt-4">Enterprise Security Assessment Protocol</span>
+        <h2 className="font-bold mb-12 text-center break-words max-w-full w-full">
+          <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cyan-400 break-words text-center">QUANTUM CRYPTOGRAPHY PIONEER</span>
+          <span className="block mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-center">Enterprise Security Assessment Protocol</span>
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">

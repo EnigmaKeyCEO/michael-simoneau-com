@@ -12,17 +12,9 @@ type Metric = {
 type ProjectData = {
   title: string;
   description: string;
-  metrics: Metric[];
-  before?: {
-    performance: string;
-    cost: string;
-    uptime: string;
-  };
-  after?: {
-    performance: string;
-    cost: string;
-    uptime: string;
-  };
+  metrics?: Metric[];
+  before?: { performance: string; cost: string; uptime: string };
+  after?: { performance: string; cost: string; uptime: string };
 };
 
 export const DemoMassacre: React.FC = () => {
@@ -65,10 +57,6 @@ export const DemoMassacre: React.FC = () => {
     }
   ];
 
-  // Get references to the projects
-  const project1 = projects[0];
-  const project2 = projects[1];
-
   return (
     <motion.section 
       ref={sectionRef}
@@ -88,9 +76,9 @@ export const DemoMassacre: React.FC = () => {
           hidden: { opacity: 0 }
         }}
       >
-        <h2 className="text-5xl font-bold mb-16 text-center">
-          <span className="block text-cyan-400">FROM HOMELESS TO $200M ARCHITECT</span>
-          <span className="text-3xl block mt-4">Enterprise Transformation Gallery</span>
+        <h2 className="font-bold mb-16 text-center break-words w-full">
+          <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cyan-400 break-words text-center">FROM HOMELESS TO $200M ARCHITECT</span>
+          <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl block mt-4 break-words text-center">Enterprise Transformation Gallery</span>
         </h2>
 
         {/* YachtOffice Project */}
