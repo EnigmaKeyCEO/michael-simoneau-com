@@ -538,18 +538,29 @@ export const BlogPost: React.FC = () => {
             <div 
               className="w-full h-[200px] md:h-[300px] mb-8 rounded-xl relative overflow-hidden" 
               style={{ 
-                backgroundColor: post.heroImage === '/blog/quantum-crypto.svg' ? '#006D5B' : 
-                                post.heroImage === '/blog/legacy-termination.svg' ? '#DC2626' :
-                                post.heroImage === '/blog/react-native-scaling.svg' ? '#2563EB' :
-                                post.heroImage === '/blog/ai-security.svg' ? '#7E22CE' :
-                                post.heroImage === '/blog/negotiation.svg' ? '#15803D' : '#000000',
-                background: `linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%)`
+                background: post.heroImage === '/blog/quantum-crypto.svg' ? 
+                  'linear-gradient(135deg, #006D5B 0%, #004D3D 100%)' : 
+                post.heroImage === '/blog/legacy-termination.svg' ? 
+                  'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)' :
+                post.heroImage === '/blog/react-native-scaling.svg' ? 
+                  'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)' :
+                post.heroImage === '/blog/ai-security.svg' ? 
+                  'linear-gradient(135deg, #7E22CE 0%, #5B21B6 100%)' :
+                post.heroImage === '/blog/negotiation.svg' ? 
+                  'linear-gradient(135deg, #15803D 0%, #166534 100%)' : 
+                  'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)'
               }}
             >
+              {/* Dark gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+
               <div className="absolute bottom-0 left-0 w-full p-4 md:p-8">
                 <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
                   {post.tags.map((tag, idx) => (
-                    <span key={`tag-${idx}`} className="px-2 md:px-3 py-1 text-xs font-medium bg-black/30 text-white rounded-full backdrop-blur-sm">
+                    <span 
+                      key={`tag-${idx}`} 
+                      className="px-2 md:px-3 py-1 text-xs font-medium bg-black/30 text-cyan-300 rounded-full backdrop-blur-sm"
+                    >
                       {tag}
                     </span>
                   ))}

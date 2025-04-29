@@ -67,21 +67,25 @@ const BLOG_POSTS: BlogPost[] = [
   }
 ];
 
-// Utility function to generate a unique gradient for each post
-const getGradientForPost = (id: string) => {
-  // Simple hash function to get a number from a string
-  const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  
-  // Generate colors based on the hash
-  const hue1 = (hash % 360).toString();
-  const hue2 = ((hash * 2) % 360).toString();
-  
-  return `linear-gradient(135deg, hsl(${hue1}, 70%, 30%) 0%, hsl(${hue2}, 70%, 20%) 100%)`;
+// Utility function to get gradient for post
+const getGradientForPost = (imageUrl: string) => {
+  switch (imageUrl) {
+    case '/blog/quantum-crypto.svg':
+      return 'linear-gradient(135deg, #006D5B 0%, #004D3D 100%)';
+    case '/blog/legacy-termination.svg':
+      return 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)';
+    case '/blog/react-native-scaling.svg':
+      return 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)';
+    case '/blog/ai-security.svg':
+      return 'linear-gradient(135deg, #7E22CE 0%, #5B21B6 100%)';
+    case '/blog/negotiation.svg':
+      return 'linear-gradient(135deg, #15803D 0%, #166534 100%)';
+    default:
+      return 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)';
+  }
 };
 
 const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  
   return (
     <motion.div 
       className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -89,48 +93,45 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="relative h-80 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
-        
-        <div 
-          className={`absolute inset-0 transition-opacity duration-500 ease-out ${imageLoaded ? 'opacity-0' : 'opacity-100'}`} 
-          style={{ background: getGradientForPost(post.id) }}
-        />
-        
-        <object 
-          data={post.imageUrl}
-          type="image/svg+xml"
-          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setImageLoaded(true)}
-        />
-        
-        <div className="absolute bottom-0 left-0 z-20 p-6 w-full">
-          <div className="flex gap-3 mb-3 flex-wrap">
-            {post.tags.map(tag => (
-              <span key={tag} className="px-3 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full backdrop-blur-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
+      <Link to={`/blog/${post.id}`} className="block">
+        <div className="relative h-80 overflow-hidden">
+          {/* Background gradient */}
+          <div 
+            className="absolute inset-0" 
+            style={{ background: getGradientForPost(post.imageUrl) }}
+          />
           
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors duration-300">
-            {post.title}
-          </h3>
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
           
-          <div className="flex items-center text-gray-400 text-sm">
-            <Calendar size={14} className="mr-1" />
-            <span className="mr-4">{post.date}</span>
-            <Clock size={14} className="mr-1" />
-            <span>{post.readTime}</span>
+          <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end">
+            <div className="flex gap-2 mb-3 flex-wrap">
+              {post.tags.map((tag, idx) => (
+                <span key={`tag-${idx}`} className="px-3 py-1 text-xs font-medium bg-black/30 text-cyan-300 rounded-full backdrop-blur-sm">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors duration-300 line-clamp-2">
+              {post.title}
+            </h3>
+            
+            <div className="flex items-center text-white/80 text-sm">
+              <Calendar size={14} className="mr-1" />
+              <span className="mr-4">{post.date}</span>
+              <Clock size={14} className="mr-1" />
+              <span>{post.readTime}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
       
       <div className="p-6">
-        <p className="text-gray-300 mb-4">{post.excerpt}</p>
+        <p className="text-gray-300 mb-4 line-clamp-3">{post.excerpt}</p>
         <Link 
           to={`/blog/${post.id}`}
-          className="flex items-center text-cyan-400 font-medium group-hover:text-cyan-300 transition-colors duration-300"
+          className="inline-flex items-center text-cyan-400 font-medium group-hover:text-cyan-300 transition-colors duration-300"
         >
           Read Full Article
           <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
@@ -141,8 +142,6 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
 };
 
 const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 0 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  
   return (
     <motion.article 
       className="group flex flex-col h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -150,36 +149,37 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
     >
-      <div className="relative h-48 overflow-hidden">
-        <div 
-          className={`absolute inset-0 transition-opacity duration-500 ease-out ${imageLoaded ? 'opacity-0' : 'opacity-100'}`} 
-          style={{ background: getGradientForPost(post.id) }}
-        />
-        
-        <object 
-          data={post.imageUrl}
-          type="image/svg+xml"
-          className={`absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setImageLoaded(true)}
-        />
-      </div>
+      <Link to={`/blog/${post.id}`} className="block">
+        <div className="relative h-48 overflow-hidden">
+          {/* Background gradient */}
+          <div 
+            className="absolute inset-0" 
+            style={{ background: getGradientForPost(post.imageUrl) }}
+          />
+          
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
+          
+          <div className="absolute inset-0 z-20 p-5 flex flex-col justify-end">
+            <div className="flex gap-2 mb-2 flex-wrap">
+              {post.tags.slice(0, 2).map((tag, idx) => (
+                <span key={`tag-${idx}`} className="px-2 py-1 text-xs font-medium bg-black/30 text-cyan-300 rounded-full backdrop-blur-sm">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            
+            <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors duration-300 line-clamp-2">
+              {post.title}
+            </h3>
+          </div>
+        </div>
+      </Link>
       
       <div className="p-5 flex flex-col flex-grow">
-        <div className="flex gap-2 mb-3 flex-wrap">
-          {post.tags.slice(0, 2).map(tag => (
-            <span key={tag} className="px-2 py-1 text-xs font-medium bg-cyan-900/50 text-cyan-300 rounded-full">
-              {tag}
-            </span>
-          ))}
-        </div>
+        <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
         
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors duration-300">
-          {post.title}
-        </h3>
-        
-        <p className="text-gray-300 text-sm mb-4 flex-grow">{post.excerpt.substring(0, 120)}...</p>
-        
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-800">
+        <div className="flex items-center justify-between pt-3 border-t border-gray-800">
           <div className="flex items-center text-gray-400 text-xs">
             <Calendar size={12} className="mr-1" />
             <span className="mr-4">{post.date}</span>
@@ -189,7 +189,7 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
           
           <Link 
             to={`/blog/${post.id}`}
-            className="text-cyan-400 text-sm font-medium flex items-center group-hover:text-cyan-300 transition-colors duration-300"
+            className="text-cyan-400 text-sm font-medium inline-flex items-center group-hover:text-cyan-300 transition-colors duration-300"
           >
             Read
             <ChevronRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
@@ -270,10 +270,15 @@ export const Blog: React.FC = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Featured Posts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               {featuredPosts.map((post) => (
                 <FeaturedPost key={post.id} post={post} />
               ))}
+            </div>
+
+            {/* Regular Posts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {regularPosts.map((post, index) => (
                 <BlogCard key={post.id} post={post} delay={0.1 * index} />
               ))}
