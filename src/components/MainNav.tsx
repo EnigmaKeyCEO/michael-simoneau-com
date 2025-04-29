@@ -40,10 +40,6 @@ export const MainNav: React.FC = () => {
           <button onClick={() => scrollToSection('security-audit')} className="text-gray-300 hover:text-cyan-400 transition-colors">Security</button>
           <button onClick={() => scrollToSection('demo-massacre')} className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</button>
           <button onClick={() => scrollToSection('cto-triage')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-          <button onClick={() => scrollToSection('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors">
-            <User size={16} className="mr-2" />
-            Profile
-          </button>
           <Link to="/full-profile" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <User size={16} className="mr-2" />
             Full Profile
