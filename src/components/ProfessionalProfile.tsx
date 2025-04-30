@@ -46,7 +46,7 @@ export const ProfessionalProfile: React.FC = () => {
         >
           <QuantumButton 
             text="View Full Quantum Profile"
-            to="/profile"
+            to="/full-profile"
             className="mx-auto"
           />
           <p className="mt-4 text-quantum-300">

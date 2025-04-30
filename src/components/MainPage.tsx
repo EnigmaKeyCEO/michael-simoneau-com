@@ -60,13 +60,15 @@ export const MainPage: React.FC = () => {
     }
   }, [play, pause]);
 
+  const sectionStyles = "section min-h-screen snap-start snap-always pt-12 pb-16 sm:mt-76 sm:pt-16 sm:pb-24 w-full max-w-full overflow-x-hidden";
+
   return (
     <div
       className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory w-full max-w-full"
       ref={containerRef}
     >
       <motion.div
-        className="section min-h-screen snap-start snap-always pt-12 pb-8 sm:mt-76 sm:pt-16 sm:pb-16 w-full max-w-full overflow-x-hidden"
+        className={sectionStyles}
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -74,7 +76,7 @@ export const MainPage: React.FC = () => {
         <HeroSection />
       </motion.div>
       <motion.div
-        className="section min-h-screen snap-start snap-always pt-12 pb-8 sm:mt-76 sm:pt-16 sm:pb-16 w-full max-w-full overflow-x-hidden"
+        className={sectionStyles}
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -82,7 +84,7 @@ export const MainPage: React.FC = () => {
         <SecurityAudit />
       </motion.div>
       <motion.div
-        className="section min-h-screen snap-start snap-always pt-12 pb-8 sm:mt-76 sm:pt-16 sm:pb-16 w-full max-w-full overflow-x-hidden"
+        className={sectionStyles}
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -90,7 +92,7 @@ export const MainPage: React.FC = () => {
         <DemoMassacre />
       </motion.div>
       <motion.div
-        className="section min-h-screen snap-start snap-always pt-12 pb-8 sm:mt-76 sm:pt-16 sm:pb-16 w-full max-w-full overflow-x-hidden"
+        className={sectionStyles}
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -98,7 +100,7 @@ export const MainPage: React.FC = () => {
         <CTOTriage />
       </motion.div>
       <motion.div
-        className="section min-h-screen snap-start snap-always pt-12 pb-8 sm:mt-76 sm:pt-16 sm:pb-16 w-full max-w-full overflow-x-hidden"
+        className={sectionStyles}
         initial={{ opacity: 0.9 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
