@@ -31,16 +31,40 @@ const interviewData: QAPair[] = [
   }
 ];
 
+const calculateInterval = (question: string, answer: string) => {
+  const answerWords = answer.split(' ').length;
+  
+  // Base timing calculations:
+  // - Question typing: ~30ms per character (Typewriter typeSpeed)
+  // - Question pause: 1500ms (delaySpeed)
+  // - Answer typing: ~50ms per character (Typewriter typeSpeed)
+  // - Reading time: ~250ms per word
+  // - Transition delay: 3000ms
+  // - Buffer time: 2000ms (to ensure animations complete)
+  
+  const questionTypingTime = question.length * 30 * 1.2; // Add 20% buffer for Typewriter
+  const answerTypingTime = answer.length * 50 * 1.2; // Add 20% buffer for Typewriter
+  const readingTime = answerWords * 250;
+  const bufferTime = 2000;
+  
+  const totalTime = questionTypingTime + 1500 + answerTypingTime + readingTime + 3000 + bufferTime;
+  return Math.max(totalTime, 8000);
+};
+
 export const InterviewButton: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    const currentQuestion = interviewData[currentIndex].question;
+    const currentAnswer = interviewData[currentIndex].answer;
+    const interval = calculateInterval(currentQuestion, currentAnswer);
+
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % interviewData.length);
-    }, 8000);
+    }, interval);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [currentIndex]);
 
   const currentQuestion = interviewData[currentIndex].question;
   const currentAnswer = interviewData[currentIndex].answer;
@@ -67,8 +91,8 @@ export const InterviewButton: React.FC = () => {
                     <Typewriter
                       words={[currentQuestion]}
                       cursor={false}
-                      typeSpeed={20}
-                      delaySpeed={2000}
+                      typeSpeed={30}
+                      delaySpeed={1500}
                     />
                   </span>
                 </div>
@@ -78,8 +102,8 @@ export const InterviewButton: React.FC = () => {
                     <Typewriter
                       words={[currentAnswer]}
                       cursor={false}
-                      typeSpeed={25}
-                      delaySpeed={3000}
+                      typeSpeed={50}
+                      delaySpeed={4000}
                     />
                   </span>
                 </div>
