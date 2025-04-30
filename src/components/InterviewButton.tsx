@@ -67,7 +67,8 @@ export const InterviewButton: React.FC = () => {
                     <Typewriter
                       words={[currentQuestion]}
                       cursor={false}
-                      typeSpeed={30}
+                      typeSpeed={20}
+                      delaySpeed={2000}
                     />
                   </span>
                 </div>
@@ -77,8 +78,8 @@ export const InterviewButton: React.FC = () => {
                     <Typewriter
                       words={[currentAnswer]}
                       cursor={false}
-                      typeSpeed={50}
-                      delaySpeed={0}
+                      typeSpeed={25}
+                      delaySpeed={3000}
                     />
                   </span>
                 </div>
