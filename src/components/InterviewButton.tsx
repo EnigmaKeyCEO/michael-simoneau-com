@@ -52,42 +52,38 @@ export const InterviewButton: React.FC = () => {
           <div className="absolute inset-0 bg-[url('/paper-texture.png')] opacity-5" />
           <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent" />
           <div className="relative z-10 flex flex-col p-4 space-y-2">
-            <div className="grid grid-rows-[auto_auto] gap-3">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-white"
-                >
-                  <div className="grid grid-rows-[1fr_1fr] gap-3">
-                    <div className="flex flex-col">
-                      <span className="text-cyan-400 font-bold text-sm mr-2">Q:</span>
-                      <span className="text-gray-100 text-sm font-medium break-words">
-                        <Typewriter
-                          words={[currentQuestion]}
-                          cursor={false}
-                          typeSpeed={30}
-                        />
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-cyan-400 font-bold text-sm mr-2">A:</span>
-                      <span className="text-gray-300 text-sm break-words">
-                        <Typewriter
-                          words={[currentAnswer]}
-                          cursor={false}
-                          typeSpeed={50}
-                          delaySpeed={0}
-                        />
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="text-white space-y-3"
+              >
+                <div>
+                  <span className="text-cyan-400 font-bold text-sm mr-2">Q:</span>
+                  <span className="text-gray-100 text-sm font-medium">
+                    <Typewriter
+                      words={[currentQuestion]}
+                      cursor={false}
+                      typeSpeed={30}
+                    />
+                  </span>
+                </div>
+                <div>
+                  <span className="text-cyan-400 font-bold text-sm mr-2">A:</span>
+                  <span className="text-gray-300 text-sm">
+                    <Typewriter
+                      words={[currentAnswer]}
+                      cursor={false}
+                      typeSpeed={50}
+                      delaySpeed={0}
+                    />
+                  </span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
             <div className="text-cyan-400/80 text-xs font-medium tracking-wide flex items-center">
               Read Full Interview 
               <motion.span
