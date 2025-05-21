@@ -14,12 +14,36 @@ export const MainNav: React.FC = () => {
     if (isHomePage) {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        // Adjust for fixed MainNav height if necessary, assuming approx 60-80px
+        const offset = 80; 
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
         setIsOpen(false);
       }
     } else {
-      // Navigate to home page with hash
       navigate(`/#${sectionId}`, { replace: true });
+      // setTimeout to allow navigation then scroll, might need adjustment
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const offset = 80;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100); // delay to ensure page has navigated
       setIsOpen(false);
     }
   };
@@ -30,16 +54,16 @@ export const MainNav: React.FC = () => {
         <div className="flex items-center">
           <Link to="/" className="text-white font-bold text-lg hover:text-cyan-400 transition-colors flex items-center">
             <span className="mr-1">MS</span>
-            {!isHomePage && <Home size={16} className="ml-1" />}
+            {/* Removed Home icon from beside MS as MainNav is always visible on main page now */}
           </Link>
         </div>
         <UniversalPlayer />
         
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Updated section IDs */}
         <nav className="hidden md:flex items-center space-x-8">
-          <button onClick={() => scrollToSection('security-audit')} className="text-gray-300 hover:text-cyan-400 transition-colors">Security</button>
-          <button onClick={() => scrollToSection('demo-massacre')} className="text-gray-300 hover:text-cyan-400 transition-colors">Projects</button>
-          <button onClick={() => scrollToSection('cto-triage')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+          <button onClick={() => scrollToSection('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+          <button onClick={() => scrollToSection('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+          <button onClick={() => scrollToSection('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
           <Link to="/full-profile" className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <User size={16} className="mr-2" />
             Full Profile
@@ -79,22 +103,22 @@ export const MainNav: React.FC = () => {
             )}
             
             <button 
-              onClick={() => scrollToSection('security-audit')}
+              onClick={() => scrollToSection('about-me-section')}
               className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
             >
-              Security
+              About
             </button>
             <button 
-              onClick={() => scrollToSection('demo-massacre')}
+              onClick={() => scrollToSection('expertise-section')}
               className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
             >
-              Projects
+              Expertise
             </button>
             <button 
-              onClick={() => scrollToSection('cto-triage')}
+              onClick={() => scrollToSection('blog-teaser-section')}
               className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
             >
-              Services
+              Insights
             </button>
             <Link 
               to="/full-profile" 
