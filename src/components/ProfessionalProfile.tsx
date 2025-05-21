@@ -45,7 +45,7 @@ export const ProfessionalProfile: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <QuantumButton 
-            text="View Full Quantum Profile"
+            text="View Full Professional Profile"
             to="/full-profile"
             className="mx-auto"
           />
