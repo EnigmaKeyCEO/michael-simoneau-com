@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // #quantumReady #billionDollarProof
 
 import { InterviewError, ServiceError } from './errors';

@@ -5,10 +5,10 @@ import * as THREE from 'three';
 import { random } from 'maath';
 
 const ANIMATION_FACTOR = 0.0015;
-const QUANTUM_ENTANGLEMENT_DISTANCE = 2;
-const QUANTUM_TUNNELING_PROBABILITY = 0.01;
+const ENTANGLEMENT_DISTANCE = 2; // Renamed from QUANTUM_ENTANGLEMENT_DISTANCE
+const TUNNELING_PROBABILITY = 0.01; // Renamed from QUANTUM_TUNNELING_PROBABILITY
 
-function QuantumParticleField() {
+function AnimatedParticleField() { // Renamed from QuantumParticleField
   const ref = useRef<THREE.Points>(null!);
   const [sphere] = React.useState(() => {
     const positions = new Float32Array(4000 * 3);
@@ -23,7 +23,7 @@ function QuantumParticleField() {
     return validPositions;
   });
 
-  // Quantum entanglement connections
+  // Entanglement connections (formerly Quantum entanglement)
   const [entangledPairs] = React.useState(() => {
     const pairs: number[][] = [];
     for (let i = 0; i < sphere.length / 3; i++) {
@@ -33,7 +33,7 @@ function QuantumParticleField() {
           Math.pow(sphere[i * 3 + 1] - sphere[j * 3 + 1], 2) +
           Math.pow(sphere[i * 3 + 2] - sphere[j * 3 + 2], 2)
         );
-        if (distance < QUANTUM_ENTANGLEMENT_DISTANCE) {
+        if (distance < ENTANGLEMENT_DISTANCE) {
           pairs.push([i, j]);
         }
       }
@@ -41,26 +41,25 @@ function QuantumParticleField() {
     return pairs;
   });
 
-  // Quantum tunneling effect
+  // Tunneling effect (formerly Quantum tunneling)
   useFrame((_state, delta) => {
     if (ref.current) {
       ref.current.rotation.x -= delta * ANIMATION_FACTOR;
       ref.current.rotation.y -= delta * ANIMATION_FACTOR;
 
-      // Optimized Quantum tunneling effect: process a fraction of particles per frame
-      const particlesToProcess = Math.ceil(sphere.length / 3 / 10); // Process 1/10th of particles per frame
+      // Optimized tunneling effect: process a fraction of particles per frame
+      const particlesToProcess = Math.ceil(sphere.length / 3 / 10); 
       const offset = Math.floor((_state.clock.getElapsedTime() * particlesToProcess) % (sphere.length / 3));
 
       for (let i = 0; i < particlesToProcess; i++) {
         const index = (offset + i) % (sphere.length / 3);
-        if (Math.random() < QUANTUM_TUNNELING_PROBABILITY) {
+        if (Math.random() < TUNNELING_PROBABILITY) {
           sphere[index * 3] += (Math.random() - 0.5) * 0.1;
           sphere[index * 3 + 1] += (Math.random() - 0.5) * 0.1;
           sphere[index * 3 + 2] += (Math.random() - 0.5) * 0.1;
         }
       }
-      // Make sure to update the geometry if positions change directly
-      // This might not be necessary if using attributes and they are marked for update
+      
       if (ref.current.geometry.attributes.position) {
         (ref.current.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
       }
@@ -84,7 +83,7 @@ function QuantumParticleField() {
           blending={THREE.AdditiveBlending}
         />
       </Points>
-      {/* Quantum entanglement lines */}
+      {/* Entanglement lines (formerly Quantum entanglement) */}
       {entangledPairs.map(([i, j], index) => (
         <Line
           key={index}
@@ -102,7 +101,7 @@ function QuantumParticleField() {
   );
 }
 
-function QuantumHexGrid() {
+function AnimatedHexGrid() { // Renamed from QuantumHexGrid
   const ref = useRef<THREE.Mesh>(null!);
   const [time, setTime] = React.useState(0);
   
@@ -124,7 +123,7 @@ function QuantumHexGrid() {
   );
 }
 
-export const QuantumBackground: React.FC = () => {
+export const AnimatedBackground: React.FC = () => { // Renamed from QuantumBackground
   return (
     <div className="fixed inset-0 -z-50 pointer-events-none w-screen h-screen">
       <Canvas
@@ -140,10 +139,10 @@ export const QuantumBackground: React.FC = () => {
         }}
       >
         <fog attach="fog" args={['#001233', 20, 50]} />
-        <QuantumParticleField />
-        <QuantumHexGrid />
+        <AnimatedParticleField /> {/* Renamed from QuantumParticleField */}
+        <AnimatedHexGrid /> {/* Renamed from QuantumHexGrid */}
         <ambientLight intensity={0.5} />
-        {/* Quantum wave effect */}
+        {/* Wave effect (formerly Quantum wave) */}
         <mesh position={[0, 0, -10]}>
           <planeGeometry args={[100, 100, 100, 100]} />
           <meshBasicMaterial
@@ -157,4 +156,4 @@ export const QuantumBackground: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/40" />
     </div>
   );
-};
+}; 

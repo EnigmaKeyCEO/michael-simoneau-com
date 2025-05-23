@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-interface QuantumButtonProps {
+interface InteractiveButtonProps { // Renamed from QuantumButtonProps
   text: string;
   icon?: React.ReactNode;
   to?: string;
@@ -11,7 +11,7 @@ interface QuantumButtonProps {
   targetId?: string;
 }
 
-export const QuantumButton: React.FC<QuantumButtonProps> = ({
+export const InteractiveButton: React.FC<InteractiveButtonProps> = ({ // Renamed from QuantumButton
   text,
   icon,
   to,
@@ -25,15 +25,12 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
       e.preventDefault();
       const element = document.getElementById(targetId);
       if (element) {
-        // Get the container with snap scrolling
         const container = document.querySelector('.snap-y');
         if (container) {
-          // Calculate the scroll position to the target section
           const containerRect = container.getBoundingClientRect();
           const elementRect = element.getBoundingClientRect();
           const scrollTop = elementRect.top - containerRect.top + container.scrollTop - 24;
           
-          // Scroll to the target position
           container.scrollTo({
             top: scrollTop,
             behavior: 'smooth'
@@ -54,7 +51,6 @@ export const QuantumButton: React.FC<QuantumButtonProps> = ({
   const content = (
     <>
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 transition-transform duration-300 group-hover:translate-x-0" style={{ transform: 'translateX(100%)' }} />
-      <div className="absolute inset-0 bg-[url('/paper-texture.png')] opacity-5" />
       <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent" />
       <div className="relative z-10 flex items-center justify-center w-full">
         <div className="flex items-center justify-center gap-2">

@@ -1,4 +1,4 @@
-// FROM HOMELESS TO $200M ARCHITECT
+
 // Quantum-resistant blog post models for our firestore database #quantumReady #billionDollarProof
 
 export type ContentBlockType = 'paragraph' | 'heading' | 'code' | 'list' | 'callout';

@@ -7,8 +7,8 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Firebase Functions - Quantum-resistant serverless operations #quantumReady #billionDollarProof
 
 import * as functions from 'firebase-functions';

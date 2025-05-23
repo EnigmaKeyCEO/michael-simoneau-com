@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // AI image generation flow using GenKit #quantumReady #billionDollarProof
 
 import * as functions from "firebase-functions/v2";

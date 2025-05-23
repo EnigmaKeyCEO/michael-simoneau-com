@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Test Setup - Quantum-resistant test environment #quantumReady #billionDollarProof
 
 import * as admin from 'firebase-admin';

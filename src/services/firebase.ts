@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Firebase Service - Quantum-resistant Firebase initialization #quantumReady #billionDollarProof
 
 import { initializeApp } from 'firebase/app';

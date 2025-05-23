@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Type definitions for quantum-resistant testing #quantumReady #billionDollarProof
 
 import { CloudFunction, CloudEvent } from 'firebase-functions/v2';

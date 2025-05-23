@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // AI Service Layer - Quantum-resistant AI operations #quantumReady #billionDollarProof
 
 import { getFunctions, httpsCallable } from 'firebase/functions';

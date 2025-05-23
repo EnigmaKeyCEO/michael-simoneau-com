@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Test runner for quantum-resistant testing #quantumReady #billionDollarProof
 
 import * as glob from 'glob';

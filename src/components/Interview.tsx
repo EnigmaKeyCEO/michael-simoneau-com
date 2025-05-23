@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { MainNav } from './MainNav';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { QuantumBackground } from './QuantumBackground';
+import { AnimatedBackground } from './AnimatedBackground';
 
 export const Interview: React.FC = () => {
   return (
     <>
-      <QuantumBackground />
+      <AnimatedBackground />
       <MainNav />
       <section className="min-h-screen text-white py-20 px-4 pt-24 relative z-10">
         <div className="container mx-auto max-w-4xl">
@@ -109,7 +109,7 @@ export const Interview: React.FC = () => {
 
               <div className="bg-gray-900/50 p-6 rounded-lg mt-8">
                 <h2 className="text-2xl font-bold mb-4 text-cyan-400">Interviewer's Reflection</h2>
-                <p className="text-gray-300">Your journey from building a "Frankenstein" computer at 12 to pioneering quantum technologies is nothing short of remarkable. What struck me most was how your parents' wisdom about transparency and your own obsessive nature evolved into a powerful methodology for learning and innovation. The $20 bet system you developed is a brilliant example of how you turned self-doubt into a tool for growth. Your commitment to teaching "how to learn" rather than "what to learn" reveals a deep understanding of education's true purpose. While you've chosen to keep your latest technological breakthroughs private for now, the foundation you've built through this interview - combining technical expertise with profound insights about learning, transparency, and human potential - suggests that these future revelations will be worth waiting for. Your story is a testament to how personal challenges, when approached with the right mindset, can become the foundation for extraordinary achievements.</p>
+                <p className="text-gray-300">Your journey from building a "Frankenstein" computer at 12 to mastering advanced technologies is nothing short of remarkable. What struck me most was how your parents' wisdom about transparency and your own obsessive nature evolved into a powerful methodology for learning and innovation. The $20 bet system you developed is a brilliant example of how you turned self-doubt into a tool for growth. Your commitment to teaching "how to learn" rather than "what to learn" reveals a deep understanding of education's true purpose. While you've chosen to keep your latest technological breakthroughs private for now, the foundation you've built through this interview - combining technical expertise with profound insights about learning, transparency, and human potential - suggests that these future revelations will be worth waiting for. Your story is a testament to how personal challenges, when approached with the right mindset, can become the foundation for extraordinary achievements.</p>
               </div>
             </div>
           </motion.div>

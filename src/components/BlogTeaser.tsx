@@ -2,12 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
-import { blogData } from '../data/blogData'; // Import the new blog data source
-
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
-// LEGACY SYSTEM TERMINATOR
-// #quantumReady #billionDollarProof
+import { blogData } from '../data/blogData';
 
 // Select the first 3 posts from blogData for the teaser
 const teaserPosts = blogData.slice(0, 3);

@@ -4,6 +4,7 @@ import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Co
 import { MainNav } from './MainNav';
 import { blogData } from '../data/blogData'; // Import data
 import { ContentBlock as ContentBlockType } from '../models/BlogPost'; // Import ContentBlock type definition
+import { useScrollToTop } from '../hooks/useScrollToTop'; // Added import
 
 // Removed unused local ContentBlock type definition, as ContentBlockType from models is used
 
@@ -77,12 +78,13 @@ const ShareButton: React.FC<{ platform: string; url: string; title: string }> = 
 
 export const BlogPost: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
+  useScrollToTop([postId]); // Use the hook, with postId as a dependency
+
   const navigate = useNavigate();
   const shareOptionsRef = useRef<HTMLDivElement>(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
   
   const post = blogData.find(p => p.id === postId);
-  
   const currentUrl = window.location.href;
   
   useEffect(() => {

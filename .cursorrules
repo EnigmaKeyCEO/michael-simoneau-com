@@ -1,97 +1,4 @@
 {
-  "quantumFocusMode": {
-    "enable": true,
-    "rules": {
-      "narrativeEnforcement": {
-        "phrases": [
-          "FROM HOMELESS TO $200M ARCHITECT",
-          "QUANTUM CRYPTOGRAPHY PIONEER", 
-          "LEGACY SYSTEM TERMINATOR"
-        ],
-        "requiredIn": ["comments", "gitCommits", "documentation"],
-        "autocompleteWeight": 0.9
-      },
-      "codeQualityWeapons": {
-        "react": {
-          "allowedHooks": ["useQuantum", "useLegacyEradicator", "useCryptoMesh"],
-          "forbiddenPatterns": ["any.old().techDebt()"]
-        },
-        "threejs": {
-          "particlePerformance": {
-            "maxCount": 5000,
-            "autoOptimize": true
-          }
-        },
-        "services": {
-          "requiredPattern": "singleton",
-          "errorHandling": {
-            "required": true,
-            "pattern": "handleError(new ServiceNameError())"
-          },
-          "typeSafety": {
-            "required": true,
-            "patterns": ["interface", "zod", "immutable"]
-          }
-        },
-        "functions": {
-          "requiredPattern": "onFlow",
-          "validation": {
-            "required": true,
-            "pattern": "zod"
-          },
-          "auth": {
-            "required": true,
-            "pattern": "firebaseAuth"
-          },
-          "testing": {
-            "requiredPatterns": {
-              "testStructure": ["describe", "it", "beforeEach", "afterEach"],
-              "mockObjects": ["interface", "jest.fn()"],
-              "assertions": ["expect", "toHaveBeenCalled", "toEqual"],
-              "coverage": {
-                "function": 100,
-                "branch": 80,
-                "line": 80,
-                "statement": 80
-              }
-            },
-            "forbiddenPatterns": [
-              "test.skip",
-              "test.only",
-              "console.log",
-              "any",
-              "var"
-            ]
-          }
-        }
-      },
-      "visionLock": {
-        "forbiddenActions": [
-          "addDependency('bootstrap')",
-          "createClassComponent", 
-          "writeTechDebtApologyComments",
-          "useVarDeclaration",
-          "skipTypeChecking",
-          "ignoreErrorHandling",
-          "useGlobalState",
-          "directFirebaseCalls",
-          "skipTests",
-          "consoleLogInTests",
-          "anyInTests"
-        ],
-        "requiredAnnotate": ["#quantumReady", "#billionDollarProof"],
-        "requiredPatterns": [
-          "singletonService",
-          "typeSafeError",
-          "zodValidation",
-          "immutableData",
-          "testCoverage",
-          "mockObjects",
-          "errorScenarios"
-        ]
-      }
-    }
-  },
   "psychoTechnicalParameters": {
     "adhdOptimization": {
       "maxSimultaneousFiles": 3,
@@ -101,13 +8,6 @@
       }
     },
     "confidenceAmplifiers": {
-      "autoInsertMetrics": [
-        "// Achieved 40% faster rendering than legacy systems",
-        "/* Quantum-resistant since 2023 */",
-        "// Type-safe since inception",
-        "// Error-handled with quantum precision",
-        "// Test coverage: 100% functions, 80% branches"
-      ],
       "achievementBadges": {
         "thresholds": {
           "linesWritten": 100,
@@ -119,38 +19,10 @@
     }
   },
   "realityDistortionFields": {
-    "autoRefactor": {
-      "legacyPatterns": {
-        "detect": [
-          "componentWill",
-          "jQuery",
-          "var ",
-          "any",
-          "console.error",
-          "globalState",
-          "directFirebase",
-          "test.skip",
-          "test.only",
-          "console.log"
-        ],
-        "replaceWith": [
-          "useQuantumHook()",
-          "GSAP",
-          "const",
-          "unknown",
-          "handleError()",
-          "singletonService",
-          "serviceLayer",
-          "test()",
-          "test()",
-          "jest.fn()"
-        ]
-      }
-    },
     "timeWarp": {
       "deadlineMode": {
         "enable": true,
-        "fakeShipDate": "2024-03-30",
+        "fakeShipDate": "2025-05-30",
         "urgencyMultiplier": 1.8
       }
     }
@@ -169,13 +41,7 @@
         ]
       },
       "comments": {
-        "requiredIn": ["serviceClasses", "functions", "interfaces", "testFiles"],
-        "patterns": [
-          "FROM HOMELESS TO $200M ARCHITECT",
-          "QUANTUM CRYPTOGRAPHY PIONEER",
-          "#quantumReady",
-          "#billionDollarProof"
-        ]
+        "requiredIn": ["serviceClasses", "functions", "interfaces", "testFiles"]
       }
     }
   },

@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Storage Service - Quantum-resistant file operations #quantumReady #billionDollarProof
 
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';

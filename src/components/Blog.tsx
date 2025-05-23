@@ -5,6 +5,7 @@ import { Calendar, Clock, ChevronRight, Search } from 'lucide-react';
 import { MainNav } from './MainNav';
 import { blogData } from '../data/blogData'; // Import the new blog data source
 import { BlogData as BlogPostType } from '../data/blogData'; // Import the type for clarity
+import { useScrollToTop } from '../hooks/useScrollToTop'; // Added import
 
 // Utility function to get gradient for post (can be kept or modified if image handling changes)
 const getGradientForPost = (imageUrl: string) => {
@@ -126,11 +127,13 @@ const BlogCard: React.FC<{ post: BlogPostType; delay?: number }> = ({ post, dela
 };
 
 export const Blog: React.FC = () => {
+  useScrollToTop(); // Use the hook
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true });
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Use imported blogData directly
+  // Removed old useEffect for scrolling
+
   const filteredPosts = blogData.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -142,6 +145,7 @@ export const Blog: React.FC = () => {
 
   useEffect(() => {
     document.title = 'Blog | Michael Simoneau';
+    // Removed window.scrollTo from here
   }, []);
 
   return (

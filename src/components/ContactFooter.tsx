@@ -34,7 +34,6 @@ export const ContactFooter: React.FC = () => {
         </div>
         <div className="border-t border-gray-700 pt-8">
           <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Michael Simoneau. All rights reserved.</p>
-          <p className="text-xs text-gray-600 mt-1">#quantumReady #billionDollarProof</p>
         </div>
       </div>
     </motion.footer>

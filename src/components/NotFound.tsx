@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Bug } from 'lucide-react';
 import { MainNav } from './MainNav';
-import { QuantumButton } from './QuantumButton';
+import { InteractiveButton } from './InteractiveButton';
 
 export const NotFound: React.FC = () => {
   useEffect(() => {
@@ -65,7 +65,7 @@ export const NotFound: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            <QuantumButton
+            <InteractiveButton
               text="Return to Hub"
               icon={<ArrowLeft size={20} />}
               to="/"

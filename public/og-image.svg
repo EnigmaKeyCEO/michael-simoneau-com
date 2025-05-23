@@ -23,11 +23,11 @@
   
   <!-- Subtitle with glow effect -->
   <text x="600" y="355" font-family="Arial, sans-serif" font-size="40" text-anchor="middle" fill="#00ff88" font-weight="bold" filter="url(#glow)">
-    FROM HOMELESS TO $200M ARCHITECT
+    ENTERPRISE ARCHITECT &amp; TECHNOLOGY LEADER
   </text>
   
   <!-- Tagline -->
   <text x="600" y="425" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#aaaaaa">
-    QUANTUM CRYPTOGRAPHY PIONEER • LEGACY SYSTEM TERMINATOR
+    DRIVING INNOVATION • MODERNIZING ENTERPRISES
   </text>
 </svg> 

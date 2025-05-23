@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       animation: {
-        'quantum-pulse': 'quantum-pulse 2s infinite',
+        'subtle-pulse': 'subtle-pulse 2s infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
-        'quantum-pulse': {
+        'subtle-pulse': {
           '0%, 100%': { opacity: 1, transform: 'scale(1)' },
           '50%': { opacity: 0.5, transform: 'scale(0.95)' },
         },
@@ -27,10 +27,10 @@ export default {
         },
       },
       backgroundImage: {
-        'quantum-grid': 'linear-gradient(to right, rgba(0,255,136,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,255,136,0.1) 1px, transparent 1px)',
+        'subtle-grid': 'linear-gradient(to right, rgba(0,255,136,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,255,136,0.1) 1px, transparent 1px)',
       },
       backgroundSize: {
-        'quantum': '50px 50px',
+        'grid-size': '50px 50px',
       },
     },
   },

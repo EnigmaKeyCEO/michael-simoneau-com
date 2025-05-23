@@ -1,179 +1,55 @@
-# Firebase Functions Tests - Quantum-resistant Test Suite
+# Firebase Functions Test Suite
 
-## FROM HOMELESS TO $200M ARCHITECT
-## QUANTUM CRYPTOGRAPHY PIONEER
-## LEGACY SYSTEM TERMINATOR
+This directory contains the test suite for the Firebase Cloud Functions. Tests are written using Jest and TypeScript, focusing on unit testing individual function logic and input validation.
 
-## Overview
-This directory contains the test suites for the Firebase Cloud Functions implementation. The tests are designed with quantum-resistant architecture, comprehensive coverage, and maintainability in mind.
+## Architecture Overview
 
-## Test Files
+The testing strategy emphasizes isolating function logic and thoroughly testing all paths, including successful execution and error conditions.
 
-### Core Test Files
-- `setup.ts`: Test environment configuration and initialization
-- `generateBlogImage.test.ts`: Tests for image generation function
-- `menuSuggestionFlow.test.ts`: Tests for menu suggestion function
+### Key Files:
+- `setup.ts`: Contains global setup for the test environment, such as initializing Firebase Admin SDK (if needed for offline tests) and configuring mocks.
+- `generateBlogImage.test.ts`: Unit tests for the `generateBlogImage` function. Focuses on testing input validation, interaction with mocked AI services (Genkit), and expected output/error handling.
+- `menuSuggestionFlow.test.ts`: Unit tests for the `menuSuggestionFlow` Genkit flow. Tests validation, flow logic, and responses.
+- `testRunner.ts`: (Purpose to be clarified - might be a custom runner or utility for specific test scenarios beyond standard Jest execution.)
+- `testUtils.ts`: Utility functions and helpers for writing tests, such as mock data generators or common assertion patterns.
+- `validation.ts`: (Likely contains shared Zod schemas or validation logic used by both functions and their tests; tests here would validate the validation logic itself.)
+- `types.ts`: Shared TypeScript types and interfaces used within the tests.
 
-## Test Environment
+## Implementation Guidelines
 
-### Setup
-```typescript
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  projectId: 'demo-project',
-  storageBucket: 'demo-project.appspot.com',
-});
+- **Jest Framework**: Utilize Jest for test structure (`describe`, `it`, `beforeEach`, `afterEach`, etc.) and assertions (`expect`).
+- **TypeScript**: Write all tests in TypeScript for type safety.
+- **Mocking**: Use Jest's mocking capabilities (`jest.mock`, `jest.fn()`) to isolate units under test and mock external dependencies (e.g., Firebase Admin SDK, Genkit AI client, third-party APIs).
+- **Clear Descriptions**: Test cases should have clear, descriptive names indicating what they are testing.
+- **Arrange-Act-Assert (AAA)**: Structure tests following the AAA pattern.
+- **Test Coverage**: Strive for high test coverage for all function logic, especially error paths and validation.
 
-// Initialize Firebase Functions test environment
-const testEnv = functionsTest.default();
+## Performance Metrics (for tests)
 
-// Set up test environment variables
-process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
-process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
-process.env.FUNCTIONS_EMULATOR = 'true';
-```
+- **Test Execution Time**: Keep test execution times fast to encourage frequent running. Long-running tests should be identified and optimized.
+- **Resource Usage**: Ensure tests clean up resources properly and do not leak memory or other handles.
 
-### Mock Objects
+## Security Measures (for tests)
 
-#### Request Mock
-```typescript
-interface MockRequest {
-  body: {
-    prompt: string;
-    blogId?: string;
-  };
-  rawBody: Buffer;
-}
-```
+- **Mock Data**: Use realistic but non-sensitive mock data for tests.
+- **No Live Services**: Tests should not interact with live external services or production Firebase resources. Utilize emulators or mocks.
 
-#### Response Mock
-```typescript
-interface MockResponse {
-  json: jest.Mock;
-  status: jest.Mock;
-}
-```
+## Testing Requirements (as per `.cursorrules`)
 
-## Test Structure
-
-### Test Suites
-- Setup and teardown
-- Mock object initialization
-- Test case organization
-- Error handling tests
-
-### Test Cases
-- Successful operations
-- Error scenarios
-- Edge cases
-- Input validation
-
-## Testing Guidelines
-
-### Best Practices
-- Isolated test environment
-- Comprehensive mocking
-- Clear test descriptions
-- Proper cleanup
-
-### Coverage Requirements
-- Function coverage: 100%
-- Branch coverage: 80%
-- Line coverage: 80%
-- Statement coverage: 80%
-
-## Error Testing
-
-### Error Scenarios
-- Invalid input
-- Missing required fields
-- Service errors
-- Network errors
-
-### Error Handling
-- Custom error types
-- Error response format
-- Error logging
-- Recovery procedures
-
-## Performance Testing
-
-### Metrics
-- Response times
-- Resource utilization
-- Memory usage
-- CPU usage
-
-### Optimization
-- Cold start performance
-- Memory management
-- Response time optimization
-- Resource cleanup
-
-## Security Testing
-
-### Validation
-- Input validation
-- Type checking
-- Size limits
-- Sanitization
-
-### Error Exposure
-- Secure error messages
-- Error logging
-- Error recovery
-- Error propagation
+- **Structure**:
+    - `setup`: Global test setup (`setup.ts`).
+    - `teardown`: Global test teardown (in `setup.ts` or Jest config).
+    - `mocks`: Extensive use of Jest mocks for dependencies.
+    - `coverage`: Aim for 80% branch coverage.
+- **Patterns**:
+    - `describe`, `it` (or `test`): Standard Jest block structure.
+    - `beforeEach`, `afterEach`: For setting up/tearing down context for tests within a suite.
+- **Assertions**:
+    - `expect`: Primary assertion function.
+    - `toHaveBeenCalled`, `toEqual`, etc.: Common Jest matchers.
 
 ## Documentation Requirements
 
-### Test Documentation
-- Test case descriptions
-- Mock object documentation
-- Environment setup
-- Coverage requirements
-
-### Code Documentation
-- JSDoc comments
-- Test structure
-- Mock usage
-- Error handling
-
-## Legacy System Termination
-
-### Removed Patterns
-- Unstructured tests
-- Untyped mocks
-- Insecure operations
-- Tech debt comments
-
-### Modern Implementation
-- Type-safe tests
-- Structured mocks
-- Secure defaults
-- Clean architecture
-
-## Quantum Focus Mode
-
-### Architecture
-- Quantum-resistant design
-- Type-safe implementation
-- Error-handled operations
-- Performance optimization
-
-### Code Quality
-- Strict TypeScript
-- Comprehensive testing
-- Clear documentation
-- Clean architecture
-
-## YACHT OFFICE PROTOCOL
-
-### Standards
-- Code quality: Quantum-resistant
-- Performance: Optimized for scale
-- Security: Type-safe and validated
-- Documentation: Comprehensive
-- Type safety: Strict and enforced
-- Error handling: Robust and consistent
-- Testing: Thorough and automated
-- Architecture: Modular and maintainable 
+- **README**: This README should be kept current, outlining the testing strategy, key files, and guidelines.
+- **Test Descriptions**: `describe` and `it` blocks should clearly state the purpose of the test suite and individual test case.
+- **Complex Mocks**: If complex mock setups are used, they should be commented to explain their purpose. 

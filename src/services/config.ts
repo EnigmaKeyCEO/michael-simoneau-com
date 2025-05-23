@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Configuration Service - Quantum-resistant app configuration #quantumReady #billionDollarProof
 
 import { z } from 'zod';

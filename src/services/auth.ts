@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Authentication Service - Quantum-resistant user management #quantumReady #billionDollarProof
 
 import {

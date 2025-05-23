@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Test Suite - Quantum-resistant menu suggestion #quantumReady #billionDollarProof
 
 import { menuSuggestionFlow } from '../index';

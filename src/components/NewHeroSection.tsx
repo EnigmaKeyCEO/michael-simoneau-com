@@ -6,7 +6,6 @@ import { ChevronDown } from 'lucide-react';
 
 
 export const NewHeroSection: React.FC = () => {
-  // Error-handled with quantum precision
   return (
     <section 
       id="new-hero"
@@ -15,9 +14,6 @@ export const NewHeroSection: React.FC = () => {
       {/* Background Styling - more abstract and futuristic */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-blue-900/30 opacity-60" />
-        {/* Subtle animated element - e.g. flowing particles or grid lines */}
-        {/* Consider a less specific quantum background if aiming for more realism */}
-        {/* <QuantumBackground /> */}
       </div>
 
       <motion.div

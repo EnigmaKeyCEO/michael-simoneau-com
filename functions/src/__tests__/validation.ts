@@ -1,5 +1,5 @@
-// FROM HOMELESS TO $200M ARCHITECT
-// QUANTUM CRYPTOGRAPHY PIONEER
+
+
 // Test validation for quantum-resistant testing #quantumReady #billionDollarProof
 
 import { parse } from '@babel/parser';
@@ -32,10 +32,7 @@ const FORBIDDEN_PATTERNS = [
  * Required comment patterns
  */
 const REQUIRED_COMMENTS = [
-  'FROM HOMELESS TO $200M ARCHITECT',
-  'QUANTUM CRYPTOGRAPHY PIONEER',
-  '#quantumReady',
-  '#billionDollarProof',
+  ''
 ];
 
 /**
