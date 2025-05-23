@@ -4,7 +4,7 @@ import { Points, PointMaterial, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { random } from 'maath';
 
-const ANIMATION_FACTOR = 0.0005;
+const ANIMATION_FACTOR = 0.0015;
 const QUANTUM_ENTANGLEMENT_DISTANCE = 2;
 const QUANTUM_TUNNELING_PROBABILITY = 0.01;
 

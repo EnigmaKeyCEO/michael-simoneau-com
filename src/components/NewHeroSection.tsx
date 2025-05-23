@@ -14,7 +14,7 @@ export const NewHeroSection: React.FC = () => {
     >
       {/* Background Styling - more abstract and futuristic */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-blue-900/30 opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-blue-900/30 opacity-60" />
         {/* Subtle animated element - e.g. flowing particles or grid lines */}
         {/* Consider a less specific quantum background if aiming for more realism */}
         {/* <QuantumBackground /> */}
@@ -48,9 +48,13 @@ export const NewHeroSection: React.FC = () => {
 
       <motion.div 
         className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+        initial={{ opacity: 0.3 }}
+        animate={{ opacity: [0.3, 1, 0.3] }}
+        transition={{ 
+          duration: 2.5,
+          ease: "easeInOut",
+          repeat: Infinity,
+        }}
       >
         <ChevronDown size={32} className="text-gray-400" />
       </motion.div>
