@@ -2,325 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Copy } from 'lucide-react';
 import { MainNav } from './MainNav';
+import { blogData } from '../data/blogData'; // Import data
+import { ContentBlock as ContentBlockType } from '../models/BlogPost'; // Import ContentBlock type definition
 
-// Define types for content blocks
-type ParagraphBlock = {
-  type: 'paragraph';
-  content: string;
-};
-
-type HeadingBlock = {
-  type: 'heading';
-  level: 1 | 2 | 3 | 4 | 5 | 6;
-  content: string;
-};
-
-type CodeBlock = {
-  type: 'code';
-  language: string;
-  content: string;
-};
-
-type ListBlock = {
-  type: 'list';
-  items: string[];
-};
-
-type CalloutBlock = {
-  type: 'callout';
-  content: string;
-};
-
-type ContentBlock = ParagraphBlock | HeadingBlock | CodeBlock | ListBlock | CalloutBlock;
-
-// This would ideally come from a CMS or API
-// For now we'll stub the content
-const BLOG_CONTENT: Record<string, {
-  title: string;
-  date: string;
-  readTime: string;
-  author: string;
-  tags: string[];
-  heroImage: string;
-  content: ContentBlock[];
-}> = {
-  'quantum-cryptography-revolution': {
-    title: 'The Quantum Cryptography Revolution',
-    date: 'March 22, 2024',
-    readTime: '8 min',
-    author: 'Michael Simoneau',
-    tags: ['Quantum Computing', 'Cryptography', 'Security'],
-    heroImage: '/blog/quantum-crypto.svg',
-    content: [
-      {
-        type: 'paragraph',
-        content: 'In the rapidly evolving landscape of cybersecurity, quantum computing represents both an unprecedented threat and an extraordinary opportunity. As quantum computers advance toward practical computational advantage, existing cryptographic protocols – the foundation of our digital security infrastructure – face obsolescence. This isn\'t mere speculation; it\'s an impending reality that demands immediate attention.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Quantum Threat Model'
-      },
-      {
-        type: 'paragraph',
-        content: 'Shor\'s algorithm, when implemented on a sufficiently powerful quantum computer, can efficiently factor large integers and compute discrete logarithms. This effectively breaks RSA and ECC, the two most widely deployed public-key cryptosystems protecting virtually all secure internet communications.'
-      },
-      {
-        type: 'code',
-        language: 'typescript',
-        content: `// Simplified demonstration of quantum vulnerability
-// Traditional RSA security relies on the difficulty of factoring
-const generateTraditionalKeys = () => {
-  // Select two large prime numbers
-  const p = generateLargePrime();
-  const q = generateLargePrime();
-  
-  // Public key is their product
-  const n = p * q;
-  
-  // Private key depends on these primes
-  // This is secure because factoring n is computationally difficult
-  // ...until quantum computers implement Shor's algorithm
-  return { publicKey: n, privateKey: calculatePrivateKey(p, q) };
-};
-
-// Quantum-resistant approach using lattice-based cryptography
-const generateQuantumResistantKeys = () => {
-  // Use mathematical structures that quantum algorithms cannot efficiently break
-  const lattice = generateRandomLattice(1024); // Higher dimension = more security
-  const error = generateSmallError();
-  
-  // Keys based on the hardness of finding shortest vectors in lattices
-  // Even quantum computers struggle with this problem
-  return { 
-    publicKey: applyLatticeTransformation(lattice, error),
-    privateKey: { lattice, error }
-  };
-};`
-      },
-      {
-        type: 'paragraph',
-        content: 'While a fully functional quantum computer capable of breaking 2048-bit RSA remains years away, the "harvest now, decrypt later" attack vector is already active. Adversaries are collecting encrypted data today with the expectation of decrypting it once quantum computing matures.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Quantum-Resistant AI Systems'
-      },
-      {
-        type: 'paragraph',
-        content: 'AI systems present a particularly critical vulnerability due to their sensitive training data, proprietary algorithms, and potential for amplifying security breaches. Implementing quantum-resistant cryptography for AI requires addressing several architectural layers:'
-      },
-      {
-        type: 'list',
-        items: [
-          '**Data Transport**: Replacing TLS with quantum-resistant alternatives',
-          '**Model Protection**: Securing model weights and architectures against extraction',
-          '**Inference Integrity**: Ensuring prediction requests and responses cannot be compromised',
-          '**Training Pipeline**: Protecting the entire model development lifecycle'
-        ]
-      },
-      {
-        type: 'paragraph',
-        content: 'At StoneX, I led the implementation of a hybrid cryptographic approach that maintained backward compatibility while introducing quantum resistance. This involved careful performance benchmarking, as post-quantum algorithms typically require more computational resources than classical ones.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Implementation Strategy for CTOs'
-      },
-      {
-        type: 'paragraph',
-        content: 'The transition to quantum-resistant systems doesn\'t require waiting for NIST to finalize all standards. A pragmatic approach includes:'
-      },
-      {
-        type: 'list',
-        items: [
-          '**Crypto Agility**: Design systems that can quickly switch between cryptographic primitives',
-          '**Hybrid Implementations**: Deploy classical + post-quantum schemes in parallel',
-          '**Prioritize by Risk**: Focus first on long-lived secrets and identity infrastructure',
-          '**Continuous Monitoring**: Stay informed about advances in quantum computing and cryptanalysis'
-        ]
-      },
-      {
-        type: 'callout',
-        content: 'The organizations that begin their quantum-resistant transition today will gain not just security, but substantial competitive advantage in an increasingly security-conscious market.'
-      },
-      {
-        type: 'paragraph',
-        content: 'The quantum revolution is coming. The question isn\'t if your organization will need quantum-resistant cryptography, but whether you\'ll implement it before or after a catastrophic security breach.'
-      }
-    ]
-  },
-  'legacy-system-massacre': {
-    title: 'How I Terminated a $2M Legacy Nightmare in 90 Days',
-    date: 'March 15, 2024',
-    readTime: '12 min',
-    author: 'Michael Simoneau',
-    tags: ['Case Study', 'Legacy Systems', 'Cost Reduction'],
-    heroImage: '/blog/legacy-termination.svg',
-    content: [
-      {
-        type: 'paragraph',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In enterprise settings, legacy systems often represent the most significant barrier to digital transformation.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The $2M Problem'
-      },
-      {
-        type: 'paragraph',
-        content: 'A Fortune 500 financial services firm was struggling with a 15-year-old trading platform that was causing $2M in monthly losses due to downtime, maintenance costs, and missed market opportunities.'
-      },
-      {
-        type: 'list',
-        items: [
-          '**94.5% uptime** (compared to industry standard 99.99%)',
-          '**8-hour deployment windows** requiring weekend overtime',
-          '**$350,000** monthly maintenance costs',
-          '**Zero** documentation for critical components'
-        ]
-      }
-    ]
-  },
-  'react-native-scaling': {
-    title: 'Scaling React Native to 50+ White Label Clients',
-    date: 'March 10, 2024',
-    readTime: '10 min',
-    author: 'Michael Simoneau',
-    tags: ['React Native', 'Architecture', 'Performance'],
-    heroImage: '/blog/react-native-scaling.svg',
-    content: [
-      {
-        type: 'paragraph',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. When StoneX approached me about their mobile strategy, they had a complex challenge.'
-      }
-    ]
-  },
-  'ai-model-security': {
-    title: 'The Hidden Security Gap in Modern AI Deployments',
-    date: 'March 3, 2024',
-    readTime: '7 min',
-    author: 'Michael Simoneau',
-    tags: ['AI', 'Security', 'Risk Management'],
-    heroImage: '/blog/ai-security.svg',
-    content: [
-      {
-        type: 'paragraph',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. As AI systems become more prevalent, they introduce unique security challenges.'
-      }
-    ]
-  },
-  'cto-negotiation': {
-    title: 'How to Negotiate a $500K+ CTO Package: The Leverage Points Most Technologists Miss',
-    date: 'February 25, 2024',
-    readTime: '9 min',
-    author: 'Michael Simoneau',
-    tags: ['Career', 'Negotiation', 'Leadership'],
-    heroImage: '/blog/negotiation.svg',
-    content: [
-      {
-        type: 'paragraph',
-        content: 'You can\'t argue with math. You can\'t debate results. And you definitely can\'t afford to ignore me. I\'ve transformed multiple enterprise systems, and I\'ve learned that the difference between a $300K and $500K+ compensation package often comes down to strategic positioning.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The $200K Hustle (And Why Your CTO Fears Me)'
-      },
-      {
-        type: 'paragraph',
-        content: 'Last year, I made $200k without a "real job". Here\'s how I\'ll 10x that by fixing your company.'
-      },
-      {
-        type: 'list',
-        items: [
-          'Common-sense rule #1: If your tech stack bleeds cash, you\'re not a CEO – you\'re a hospice nurse for dying code.',
-          'Xano\'s CTO has 24h to admit their $15M mistake or become my next case study.',
-          'T-Mobile\'s customer service video isn\'t criticism – it\'s a $1B roadmap they\'re too scared to open.'
-        ]
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Art of Corporate Triage'
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'I. The Undeniable Math of Failure'
-      },
-      {
-        type: 'list',
-        items: [
-          'Xano\'s Codebase: 73% legacy tax × $15M funding = $11M wasted before Series A.',
-          'T-Mobile\'s Meltdown: 1hr video × viral potential = 14% stock dip in 72h.'
-        ]
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'II. The $200k Hustle Blueprint'
-      },
-      {
-        type: 'list',
-        items: [
-          'Rule 1: Charge 50% cash, 50% equity – skin in the game or GTFO.',
-          'Rule 2: Give 8-minute ultimatums – indecision is bankruptcy in disguise.',
-          'Rule 3: Audit publicly, fix privately – humiliation is a loyalty test.'
-        ]
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'III. The Quantum Edge'
-      },
-      {
-        type: 'paragraph',
-        content: 'Writing quantum-resistant systems taught me to hear dissonance in codebases. Most CTOs are tone-deaf to the quantum revolution.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Common-Sense Countdown'
-      },
-      {
-        type: 'paragraph',
-        content: 'Here\'s your common-sense exit:'
-      },
-      {
-        type: 'list',
-        items: [
-          '$250k + 2% equity',
-          'Full rebuild authority',
-          'Silent PR crisis containment (I\'ll bury the T-Mobile video)'
-        ]
-      },
-      {
-        type: 'paragraph',
-        content: 'Tick. Tock.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Why This Works'
-      },
-      {
-        type: 'list',
-        items: [
-          'Meritocratic Ruthlessness: Positions you as a force of nature transcending politics.',
-          'Social Proof Artillery: $200k freelance earnings validate your "unemployable genius" brand.',
-          'Ticking Clock Psychology: Forces action by making inaction more costly than surrender.'
-        ]
-      },
-      {
-        type: 'paragraph',
-        content: 'Execute this with quantum precision. Let the facts be your fists. #quantumReady #billionDollarProof'
-      }
-    ]
-  }
-};
+// Removed unused local ContentBlock type definition, as ContentBlockType from models is used
 
 const CodeBlock: React.FC<{ language: string; content: string }> = ({ language, content }) => {
   const [copied, setCopied] = React.useState(false);
@@ -396,27 +81,22 @@ export const BlogPost: React.FC = () => {
   const shareOptionsRef = useRef<HTMLDivElement>(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
   
-  // Find the blog post data
-  const post = BLOG_CONTENT[postId as string];
+  const post = blogData.find(p => p.id === postId);
   
-  // Get current URL for sharing
   const currentUrl = window.location.href;
   
-  // Redirect to 404 if post not found
   useEffect(() => {
     if (!post && postId) {
       navigate('/404');
     }
   }, [post, postId, navigate]);
   
-  // Set page title
   useEffect(() => {
     if (post) {
       document.title = `${post.title} | Michael Simoneau`;
     }
   }, [post]);
   
-  // Handle clicks outside of share options panel
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (shareOptionsRef.current && !shareOptionsRef.current.contains(event.target as Node)) {
@@ -430,7 +110,6 @@ export const BlogPost: React.FC = () => {
     };
   }, []);
   
-  // If no post data (and we haven't redirected yet), show loading state
   if (!post) {
     return (
       <>
@@ -445,12 +124,7 @@ export const BlogPost: React.FC = () => {
     );
   }
 
-  // Helper function to render content blocks
-  const renderContentBlock = (block: ContentBlock, index: number) => {
-    if (index === 0 && block.type === 'heading' && block.level === 1) {
-      return null;
-    }
-
+  const renderContentBlock = (block: ContentBlockType, index: number) => {
     switch (block.type) {
       case 'heading': {
         const level = block.level;
@@ -468,17 +142,14 @@ export const BlogPost: React.FC = () => {
           block.content
         );
       }
-      
       case 'paragraph':
         return (
           <p key={index.toString()} className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed">
             {block.content}
           </p>
         );
-      
       case 'code':
         return <CodeBlock key={index.toString()} language={block.language} content={block.content} />;
-      
       case 'list':
         return (
           <ul key={index.toString()} className="list-disc pl-6 mb-6 space-y-2">
@@ -487,16 +158,22 @@ export const BlogPost: React.FC = () => {
             ))}
           </ul>
         );
-      
       case 'callout':
         return (
           <div key={index.toString()} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg">
             <p className="text-cyan-300 italic">{block.content}</p>
           </div>
         );
-      
-      default:
+      default: {
+        // Ensures exhaustiveness if new block types are added to ContentBlockType
+        const _exhaustiveCheck: never = block;
+        if (_exhaustiveCheck) {
+          console.log('Exhaustive check for block type:', block);
+          return null;
+        }
+        // Return null if the block type is not handled
         return null;
+      }
     }
   };
 
@@ -515,7 +192,6 @@ export const BlogPost: React.FC = () => {
                 Back to all articles
               </Link>
               
-              {/* Share button and options */}
               <div className="relative" ref={shareOptionsRef}>
                 <button
                   onClick={() => setShowShareOptions(!showShareOptions)}
@@ -534,24 +210,22 @@ export const BlogPost: React.FC = () => {
               </div>
             </div>
 
-            {/* Post header with responsive design */}
             <div 
               className="w-full h-[200px] md:h-[300px] mb-8 rounded-xl relative overflow-hidden" 
               style={{ 
-                background: post.heroImage === '/blog/quantum-crypto.svg' ? 
+                background: post.heroImage === '/blog/future-security.svg' ? 
                   'linear-gradient(135deg, #006D5B 0%, #004D3D 100%)' : 
-                post.heroImage === '/blog/legacy-termination.svg' ? 
+                post.heroImage === '/blog/system-transformation.svg' ? 
                   'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)' :
-                post.heroImage === '/blog/react-native-scaling.svg' ? 
+                post.heroImage === '/blog/rn-scaling-deep-dive.svg' ? 
                   'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)' :
-                post.heroImage === '/blog/ai-security.svg' ? 
+                post.heroImage === '/blog/ai-practical-security.svg' ? 
                   'linear-gradient(135deg, #7E22CE 0%, #5B21B6 100%)' :
-                post.heroImage === '/blog/negotiation.svg' ? 
+                post.heroImage === '/blog/cto-compensation.svg' ? 
                   'linear-gradient(135deg, #15803D 0%, #166534 100%)' : 
                   'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)'
               }}
             >
-              {/* Dark gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
               <div className="absolute bottom-0 left-0 w-full p-4 md:p-8">
@@ -575,12 +249,10 @@ export const BlogPost: React.FC = () => {
               </div>
             </div>
 
-            {/* Content with improved typography */}
             <div className="prose prose-sm md:prose-lg prose-invert max-w-none">
               {post.content.map((block, index) => renderContentBlock(block, index))}
             </div>
 
-            {/* Author bio with improved mobile layout */}
             <div className="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-4">About the Author</h3>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:space-x-4">
@@ -595,12 +267,11 @@ export const BlogPost: React.FC = () => {
               </div>
             </div>
 
-            {/* Next steps with improved mobile spacing */}
             <div className="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Ready to quantum-proof your systems?</h3>
               <div className="text-center">
                 <a 
-                  href="https://www.linkedin.com/in/michaelsimoneau/"
+                  href="https://www.linkedin.com/in/EnigmaKeyCEO" // Updated Link
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 text-sm md:text-base"
@@ -616,4 +287,4 @@ export const BlogPost: React.FC = () => {
   );
 };
 
-export default BlogPost; 
+export default BlogPost; // Ensure default export if lazy loading expects it 

@@ -3,89 +3,29 @@ import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ChevronRight, Search } from 'lucide-react';
 import { MainNav } from './MainNav';
+import { blogData } from '../data/blogData'; // Import the new blog data source
+import { BlogData as BlogPostType } from '../data/blogData'; // Import the type for clarity
 
-// Define blog post type
-type BlogPost = {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-  imageUrl: string;
-  featured?: boolean;
-};
-
-// Sample blog posts matching your expertise
-const BLOG_POSTS: BlogPost[] = [
-  {
-    id: 'quantum-cryptography-revolution',
-    title: 'The Quantum Cryptography Revolution',
-    excerpt: "How quantum-resistant algorithms are reshaping security for AI-powered systems and what every CTO needs to know before it's too late.",
-    date: 'March 22, 2024',
-    readTime: '8 min',
-    tags: ['Quantum Computing', 'Cryptography', 'Security'],
-    imageUrl: '/blog/quantum-crypto.svg',
-    featured: true
-  },
-  {
-    id: 'legacy-system-massacre',
-    title: 'How I Terminated a $2M Legacy Nightmare in 90 Days',
-    excerpt: "Real-world case study: The systematic approach that took a failing enterprise system from 94.5% uptime to 99.99% while cutting monthly costs by 77%.",
-    date: 'March 15, 2024',
-    readTime: '12 min',
-    tags: ['Case Study', 'Legacy Systems', 'Cost Reduction'],
-    imageUrl: '/blog/legacy-termination.svg',
-    featured: true
-  },
-  {
-    id: 'react-native-scaling',
-    title: 'Scaling React Native to 50+ White Label Clients',
-    excerpt: "Technical deep-dive into the architecture that enabled StoneX to support 50+ white label clients with a single codebase while maintaining sub-200ms load times.",
-    date: 'March 10, 2024',
-    readTime: '10 min',
-    tags: ['React Native', 'Architecture', 'Performance'],
-    imageUrl: '/blog/react-native-scaling.svg'
-  },
-  {
-    id: 'ai-model-security',
-    title: 'The Hidden Security Gap in Modern AI Deployments',
-    excerpt: "Most AI implementations have a critical security vulnerability that few CTOs recognize. Here's how to identify and fix it before catastrophe strikes.",
-    date: 'March 3, 2024',
-    readTime: '7 min',
-    tags: ['AI', 'Security', 'Risk Management'],
-    imageUrl: '/blog/ai-security.svg'
-  },
-  {
-    id: 'cto-negotiation',
-    title: 'How to Negotiate a $500K+ CTO Package: The Leverage Points Most Technologists Miss',
-    excerpt: "Strategic insights from both sides of the table on positioning yourself as a revenue-generating asset rather than a cost center.",
-    date: 'February 25, 2024',
-    readTime: '9 min',
-    tags: ['Career', 'Negotiation', 'Leadership'],
-    imageUrl: '/blog/negotiation.svg'
-  }
-];
-
-// Utility function to get gradient for post
+// Utility function to get gradient for post (can be kept or modified if image handling changes)
 const getGradientForPost = (imageUrl: string) => {
+  // This mapping should ideally be more robust or data-driven if heroImage paths change frequently
   switch (imageUrl) {
-    case '/blog/quantum-crypto.svg':
-      return 'linear-gradient(135deg, #006D5B 0%, #004D3D 100%)';
-    case '/blog/legacy-termination.svg':
-      return 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)';
-    case '/blog/react-native-scaling.svg':
-      return 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)';
-    case '/blog/ai-security.svg':
-      return 'linear-gradient(135deg, #7E22CE 0%, #5B21B6 100%)';
-    case '/blog/negotiation.svg':
-      return 'linear-gradient(135deg, #15803D 0%, #166534 100%)';
+    case '/blog/future-security.svg':
+      return 'linear-gradient(135deg, #007ACC 0%, #005F99 100%)';
+    case '/blog/system-transformation.svg':
+      return 'linear-gradient(135deg, #4A00E0 0%, #8E2DE2 100%)';
+    case '/blog/rn-scaling-deep-dive.svg':
+      return 'linear-gradient(135deg, #1D976C 0%, #93F9B9 100%)';
+    case '/blog/ai-practical-security.svg': // New ID from blogData.ts
+      return 'linear-gradient(135deg, #FF8C00 0%, #FFA500 100%)';
+    case '/blog/cto-compensation.svg': // New ID from blogData.ts
+      return 'linear-gradient(135deg, #B22222 0%, #DC143C 100%)';
     default:
       return 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)';
   }
 };
 
-const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
+const FeaturedPost: React.FC<{ post: BlogPostType }> = ({ post }) => {
   return (
     <motion.div 
       className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -95,15 +35,11 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
     >
       <Link to={`/blog/${post.id}`} className="block">
         <div className="relative h-80 overflow-hidden">
-          {/* Background gradient */}
           <div 
             className="absolute inset-0" 
-            style={{ background: getGradientForPost(post.imageUrl) }}
+            style={{ background: getGradientForPost(post.heroImage) }}
           />
-          
-          {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
-          
           <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end">
             <div className="flex gap-2 mb-3 flex-wrap">
               {post.tags.map((tag, idx) => (
@@ -112,11 +48,9 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
                 </span>
               ))}
             </div>
-            
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors duration-300 line-clamp-2">
               {post.title}
             </h3>
-            
             <div className="flex items-center text-white/80 text-sm">
               <Calendar size={14} className="mr-1" />
               <span className="mr-4">{post.date}</span>
@@ -126,7 +60,6 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
           </div>
         </div>
       </Link>
-      
       <div className="p-6">
         <p className="text-gray-300 mb-4 line-clamp-3">{post.excerpt}</p>
         <Link 
@@ -141,7 +74,7 @@ const FeaturedPost: React.FC<{ post: BlogPost }> = ({ post }) => {
   );
 };
 
-const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 0 }) => {
+const BlogCard: React.FC<{ post: BlogPostType; delay?: number }> = ({ post, delay = 0 }) => {
   return (
     <motion.article 
       className="group flex flex-col h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-800 transition-all duration-300"
@@ -151,15 +84,11 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
     >
       <Link to={`/blog/${post.id}`} className="block">
         <div className="relative h-48 overflow-hidden">
-          {/* Background gradient */}
           <div 
             className="absolute inset-0" 
-            style={{ background: getGradientForPost(post.imageUrl) }}
+            style={{ background: getGradientForPost(post.heroImage) }}
           />
-          
-          {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
-          
           <div className="absolute inset-0 z-20 p-5 flex flex-col justify-end">
             <div className="flex gap-2 mb-2 flex-wrap">
               {post.tags.slice(0, 2).map((tag, idx) => (
@@ -168,17 +97,14 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
                 </span>
               ))}
             </div>
-            
             <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors duration-300 line-clamp-2">
               {post.title}
             </h3>
           </div>
         </div>
       </Link>
-      
       <div className="p-5 flex flex-col flex-grow">
         <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
-        
         <div className="flex items-center justify-between pt-3 border-t border-gray-800">
           <div className="flex items-center text-gray-400 text-xs">
             <Calendar size={12} className="mr-1" />
@@ -186,7 +112,6 @@ const BlogCard: React.FC<{ post: BlogPost; delay?: number }> = ({ post, delay = 
             <Clock size={12} className="mr-1" />
             <span>{post.readTime}</span>
           </div>
-          
           <Link 
             to={`/blog/${post.id}`}
             className="text-cyan-400 text-sm font-medium inline-flex items-center group-hover:text-cyan-300 transition-colors duration-300"
@@ -205,14 +130,13 @@ export const Blog: React.FC = () => {
   const isInView = useInView(sectionRef, { once: true });
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Filter posts based on search term
-  const filteredPosts = BLOG_POSTS.filter(post => 
+  // Use imported blogData directly
+  const filteredPosts = blogData.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
   
-  // Separate featured and regular posts
   const featuredPosts = filteredPosts.filter(post => post.featured);
   const regularPosts = filteredPosts.filter(post => !post.featured);
 
@@ -237,15 +161,14 @@ export const Blog: React.FC = () => {
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                Quantum Insights
+                Strategic Insights
               </span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Strategic perspectives on technology transformation, AI integration, and legacy system termination from CTO advisor Michael Simoneau.
+              Perspectives on technology transformation, enterprise architecture, and leadership from Michael Simoneau.
             </p>
           </motion.div>
           
-          {/* Search Bar */}
           <motion.div 
             className="mb-12 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
@@ -264,20 +187,16 @@ export const Blog: React.FC = () => {
             </div>
           </motion.div>
           
-          {/* All Posts */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            {/* Featured Posts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               {featuredPosts.map((post) => (
                 <FeaturedPost key={post.id} post={post} />
               ))}
             </div>
-
-            {/* Regular Posts */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {regularPosts.map((post, index) => (
                 <BlogCard key={post.id} post={post} delay={0.1 * index} />

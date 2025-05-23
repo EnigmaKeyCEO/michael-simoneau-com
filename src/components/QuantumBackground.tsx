@@ -11,7 +11,7 @@ const QUANTUM_TUNNELING_PROBABILITY = 0.01;
 function QuantumParticleField() {
   const ref = useRef<THREE.Points>(null!);
   const [sphere] = React.useState(() => {
-    const positions = new Float32Array(5000 * 3);
+    const positions = new Float32Array(4000 * 3);
     const validPositions = random.inSphere(positions, { radius: 20 }) as Float32Array;
     
     for (let i = 0; i < validPositions.length; i++) {
@@ -47,13 +47,22 @@ function QuantumParticleField() {
       ref.current.rotation.x -= delta * ANIMATION_FACTOR;
       ref.current.rotation.y -= delta * ANIMATION_FACTOR;
 
-      // Quantum tunneling effect
-      for (let i = 0; i < sphere.length; i += 3) {
+      // Optimized Quantum tunneling effect: process a fraction of particles per frame
+      const particlesToProcess = Math.ceil(sphere.length / 3 / 10); // Process 1/10th of particles per frame
+      const offset = Math.floor((_state.clock.getElapsedTime() * particlesToProcess) % (sphere.length / 3));
+
+      for (let i = 0; i < particlesToProcess; i++) {
+        const index = (offset + i) % (sphere.length / 3);
         if (Math.random() < QUANTUM_TUNNELING_PROBABILITY) {
-          sphere[i] += (Math.random() - 0.5) * 0.1;
-          sphere[i + 1] += (Math.random() - 0.5) * 0.1;
-          sphere[i + 2] += (Math.random() - 0.5) * 0.1;
+          sphere[index * 3] += (Math.random() - 0.5) * 0.1;
+          sphere[index * 3 + 1] += (Math.random() - 0.5) * 0.1;
+          sphere[index * 3 + 2] += (Math.random() - 0.5) * 0.1;
         }
+      }
+      // Make sure to update the geometry if positions change directly
+      // This might not be necessary if using attributes and they are marked for update
+      if (ref.current.geometry.attributes.position) {
+        (ref.current.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
       }
     }
   });
@@ -117,10 +126,10 @@ function QuantumHexGrid() {
 
 export const QuantumBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 -z-50 pointer-events-none">
+    <div className="fixed inset-0 -z-50 pointer-events-none w-screen h-screen">
       <Canvas
         camera={{ position: [0, 0, 20], fov: 75 }}
-        style={{ 
+        style={{
           background: 'linear-gradient(to bottom, #000510 0%, #001233 50%, #000510 100%)',
           position: 'fixed',
           top: 0,

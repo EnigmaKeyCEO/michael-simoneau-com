@@ -2,35 +2,21 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
+import { blogData } from '../data/blogData'; // Import the new blog data source
 
+// FROM HOMELESS TO $200M ARCHITECT
+// QUANTUM CRYPTOGRAPHY PIONEER
+// LEGACY SYSTEM TERMINATOR
+// #quantumReady #billionDollarProof
 
-
-// This is a placeholder. In the future, fetch actual blog posts.
-const mockBlogPosts = [
-  {
-    id: 'quantum-cryptography-revolution',
-    title: 'The Quantum Cryptography Revolution',
-    excerpt: "How quantum-resistant algorithms are reshaping security...", 
-    date: 'March 22, 2024'
-  },
-  {
-    id: 'legacy-system-massacre',
-    title: 'Terminating a $2M Legacy Nightmare in 90 Days',
-    excerpt: "A real-world case study on transforming a failing enterprise system...",
-    date: 'March 15, 2024'
-  },
-  {
-    id: 'react-native-scaling',
-    title: 'Scaling React Native to 50+ White Label Clients',
-    excerpt: "Architectural deep-dive into supporting multiple clients with one codebase...",
-    date: 'March 10, 2024'
-  }
-];
+// Select the first 3 posts from blogData for the teaser
+const teaserPosts = blogData.slice(0, 3);
 
 export const BlogTeaser: React.FC = () => {
   // Error-handled with quantum precision
   return (
     <motion.section
+      id="blog-teaser-section" // Added ID for navigation
       className="py-16 bg-black/20"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -45,7 +31,7 @@ export const BlogTeaser: React.FC = () => {
           Explore my thoughts on technology transformation, leadership, and building future-proof systems.
         </p>
         <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {mockBlogPosts.map((post, index) => (
+          {teaserPosts.map((post, index) => (
             <motion.div
               key={post.id}
               className="bg-gray-800/50 p-6 rounded-lg text-left transform hover:scale-105 transition-transform duration-300"
