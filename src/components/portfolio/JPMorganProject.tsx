@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Timer } from 'lucide-react';
+import { Users, Target, ClipboardList } from 'lucide-react';
 
 // Metric type for clarity
 type Metric = {
@@ -11,14 +11,14 @@ type Metric = {
 
 export const JPMorganProject: React.FC = () => {
   const metrics: Metric[] = [
-    { label: "Uptime Improvement", value: "94.5% → 99.99%", icon: <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-green-400" /> },
-    { label: "Operational Cost Reduction", value: "Over 60%", icon: <TrendingDown className="w-5 h-5 md:w-6 md:h-6 text-green-400" /> },
-    { label: "Deployment Frequency", value: "10x Faster", icon: <Timer className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" /> }
+    { label: "Strategic Project Realignment", value: "12 Weeks", icon: <ClipboardList className="w-5 h-5 md:w-6 md:h-6 text-purple-400" /> },
+    { label: "Agile Transformation Lead", value: "SCRUM Implemented", icon: <Users className="w-5 h-5 md:w-6 md:h-6 text-blue-400" /> },
+    { label: "iOS App Delivery (Lead)", value: "< 2 Years", icon: <Target className="w-5 h-5 md:w-6 md:h-6 text-green-400" /> }
   ];
 
   return (
     <motion.div
-      // #quantumReady #billionDollarProof
+      // #quantumReady #billionDollarProof #agileMastery #swiftLeadership
       // Type-safe since inception
       className="p-8 bg-gray-800/30 rounded-lg my-8 md:my-12"
       initial={{ opacity: 0, y: 50 }}
@@ -26,9 +26,9 @@ export const JPMorganProject: React.FC = () => {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      <h3 className="text-2xl md:text-3xl font-bold text-teal-400 mb-4">J.P. Morgan - Enterprise System Transformation (PaymentNet)</h3>
+      <h3 className="text-2xl md:text-3xl font-bold text-teal-400 mb-4">J.P. Morgan Chase - Lead Mobile Engineer (PaymentNet iOS App)</h3>
       <p className="text-base md:text-lg text-gray-300 mb-6">
-        Modernized a critical legacy payment platform (PaymentNet), dramatically improving reliability and efficiency while reducing operational overhead. This involved architectural redesign, agile transformation, and team leadership.
+        Spearheaded the development of the PaymentNet native iOS application, from initial strategic planning and agile methodology adoption to final delivery. Overcame evolving technical requirements (React Native to Android Native, then to Swift/iOS) by providing strong technical leadership and architectural direction.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-6">
@@ -42,7 +42,12 @@ export const JPMorganProject: React.FC = () => {
             </div>
             <div>
               <span className="block text-xs md:text-sm text-gray-400">{metric.label}</span>
-              <span className={`block text-md md:text-lg font-semibold ${ (metric.icon as React.ReactElement).props.className?.includes('text-green') ? 'text-green-400' : 'text-cyan-300' }`}>{metric.value}</span>
+              <span className={`block text-md md:text-lg font-semibold ${
+                (metric.icon as React.ReactElement).props.className?.includes('text-green') ? 'text-green-400' :
+                (metric.icon as React.ReactElement).props.className?.includes('text-blue') ? 'text-blue-400' :
+                (metric.icon as React.ReactElement).props.className?.includes('text-purple') ? 'text-purple-400' :
+                'text-cyan-300'
+              }`}>{metric.value}</span>
             </div>
           </div>
         ))}
@@ -51,16 +56,20 @@ export const JPMorganProject: React.FC = () => {
       <div className="mb-6">
         <h4 className="text-lg md:text-xl font-semibold text-cyan-400 mb-3">Key Contributions & Highlights:</h4>
         <ul className="list-disc list-inside text-gray-300 space-y-1 text-sm md:text-base">
-          <li>Led the native iOS development for PaymentNet using Swift.</li>
-          <li>Architected for phased modernization, introducing an API gateway for decoupling.</li>
-          <li>Migrated components to a microservices architecture on a cloud-native platform.</li>
-          <li>Drove adoption of Agile (SCRUM), improving team alignment and deployment frequency.</li>
-          <li>Implemented robust CI/CD pipelines and Infrastructure as Code (IaC).</li>
-          <li>Built and mentored a high-performing development team.</li>
+          <li>Led strategic realignment of a 2-year project plan, scrutinizing tasks and establishing realistic goals with stakeholders over 12 weeks.</li>
+          <li>Championed and implemented Agile (SCRUM) methodology, creating a value-based framework and using INVEST criteria for user stories.</li>
+          <li>Demonstrated high adaptability by navigating shifts in mobile technology from React-Native to Android Native, and finally to Swift 5.2 for iOS native development.</li>
+          <li>Architected and led the engineering of the PaymentNet iOS application, rapidly acquiring Swift expertise.</li>
+          <li>Established build pipelines and DevOps tooling for the mobile application.</li>
+          <li>Collaborated closely with server-side architects to define necessary APIs and establish development/staging environments.</li>
+          <li>Built and mentored a mobile development team, including server engineers transitioning to mobile and new hires.</li>
+          <li>Ensured robust security through in-house suites and triple-layer encryption for server communication.</li>
+          <li>Successfully delivered the feature-rich iOS application within the ~2-year timeframe, managing beta rollouts to stakeholders.</li>
+          <li>Earned the informal title "The Michael App" due to pivotal leadership and contribution.</li>
         </ul>
       </div>
-      <p className="text-cyan-500 font-semibold text-sm md:text-base">Key Technologies: Swift, iOS Native, Microservices, API Gateways, Cloud Platforms, CI/CD, Agile (SCRUM), System Architecture.</p>
-      {/* TODO: Add visuals, perhaps illustrating team collaboration or app scale */}
+      <p className="text-cyan-500 font-semibold text-sm md:text-base">Key Technologies: Swift 5.2, iOS Native Development, Agile (SCRUM), Jira, API Architecture, CI/CD, Mobile DevOps, Team Leadership, Stakeholder Management, Secure Mobile Solutions.</p>
+      {/* TODO: Add visuals, perhaps illustrating team collaboration, agile process, or app architecture */}
     </motion.div>
   );
 }; 
