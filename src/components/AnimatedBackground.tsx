@@ -1,17 +1,16 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial, Line } from '@react-three/drei';
+import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 import { random } from 'maath';
 
 const ANIMATION_FACTOR = 0.0015;
-const ENTANGLEMENT_DISTANCE = 2; // Renamed from QUANTUM_ENTANGLEMENT_DISTANCE
-const TUNNELING_PROBABILITY = 0.01; // Renamed from QUANTUM_TUNNELING_PROBABILITY
+const TUNNELING_PROBABILITY = 0.005; // Reduced from 0.01
 
-function AnimatedParticleField() { // Renamed from QuantumParticleField
+function AnimatedParticleField() {
   const ref = useRef<THREE.Points>(null!);
   const [sphere] = React.useState(() => {
-    const positions = new Float32Array(4000 * 3);
+    const positions = new Float32Array(2000 * 3); // Reduced from 4000 * 3
     const validPositions = random.inSphere(positions, { radius: 20 }) as Float32Array;
     
     for (let i = 0; i < validPositions.length; i++) {
@@ -21,24 +20,6 @@ function AnimatedParticleField() { // Renamed from QuantumParticleField
     }
     
     return validPositions;
-  });
-
-  // Entanglement connections (formerly Quantum entanglement)
-  const [entangledPairs] = React.useState(() => {
-    const pairs: number[][] = [];
-    for (let i = 0; i < sphere.length / 3; i++) {
-      for (let j = i + 1; j < sphere.length / 3; j++) {
-        const distance = Math.sqrt(
-          Math.pow(sphere[i * 3] - sphere[j * 3], 2) +
-          Math.pow(sphere[i * 3 + 1] - sphere[j * 3 + 1], 2) +
-          Math.pow(sphere[i * 3 + 2] - sphere[j * 3 + 2], 2)
-        );
-        if (distance < ENTANGLEMENT_DISTANCE) {
-          pairs.push([i, j]);
-        }
-      }
-    }
-    return pairs;
   });
 
   // Tunneling effect (formerly Quantum tunneling)
@@ -83,25 +64,11 @@ function AnimatedParticleField() { // Renamed from QuantumParticleField
           blending={THREE.AdditiveBlending}
         />
       </Points>
-      {/* Entanglement lines (formerly Quantum entanglement) */}
-      {entangledPairs.map(([i, j], index) => (
-        <Line
-          key={index}
-          points={[
-            [sphere[i * 3], sphere[i * 3 + 1], sphere[i * 3 + 2]],
-            [sphere[j * 3], sphere[j * 3 + 1], sphere[j * 3 + 2]]
-          ]}
-          color="#00ff88"
-          lineWidth={0.01}
-          transparent
-          opacity={0.2}
-        />
-      ))}
     </group>
   );
 }
 
-function AnimatedHexGrid() { // Renamed from QuantumHexGrid
+function AnimatedHexGrid() {
   const ref = useRef<THREE.Mesh>(null!);
   const [time, setTime] = React.useState(0);
   
@@ -123,7 +90,7 @@ function AnimatedHexGrid() { // Renamed from QuantumHexGrid
   );
 }
 
-export const AnimatedBackground: React.FC = () => { // Renamed from QuantumBackground
+export const AnimatedBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-50 pointer-events-none w-screen h-screen">
       <Canvas
@@ -139,10 +106,9 @@ export const AnimatedBackground: React.FC = () => { // Renamed from QuantumBackg
         }}
       >
         <fog attach="fog" args={['#001233', 20, 50]} />
-        <AnimatedParticleField /> {/* Renamed from QuantumParticleField */}
-        <AnimatedHexGrid /> {/* Renamed from QuantumHexGrid */}
+        <AnimatedParticleField />
+        <AnimatedHexGrid />
         <ambientLight intensity={0.5} />
-        {/* Wave effect (formerly Quantum wave) */}
         <mesh position={[0, 0, -10]}>
           <planeGeometry args={[100, 100, 100, 100]} />
           <meshBasicMaterial
