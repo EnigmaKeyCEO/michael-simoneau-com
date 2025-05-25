@@ -101,21 +101,6 @@ export const FullProfile: React.FC = () => {
                     EnigmaKeyCEO
                   </a>
                 </div>
-                <div>
-                  <h3 className="text-cyan-300">Company</h3>
-                  <a
-                    href="https://EnigmaKey.co"
-                    className="hover:text-cyan-200"
-                  >
-                    EnigmaKey.co
-                  </a>
-                </div>
-                <div>
-                  <h3 className="text-cyan-300">Personal</h3>
-                  <a href="https://Enigma.CEO" className="hover:text-cyan-200">
-                    Enigma.CEO
-                  </a>
-                </div>
               </div>
             </div>
           </motion.div>
