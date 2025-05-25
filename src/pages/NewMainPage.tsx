@@ -33,7 +33,7 @@ export const NewMainPage: React.FC = () => {
       <div 
         ref={scrollContainerRef} 
         id="new-main-page-scroll-container"
-        className="text-white h-screen flex flex-col overflow-y-auto snap-y snap-mandatory scroll-smooth relative z-10"
+        className="text-white h-screen flex flex-col overflow-y-auto overflow-x-hidden overscroll-behavior-x-none snap-y snap-mandatory scroll-smooth relative z-10"
       >
         <MainNav scrollContainerId="new-main-page-scroll-container" />
 
