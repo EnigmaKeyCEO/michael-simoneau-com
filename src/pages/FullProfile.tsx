@@ -56,14 +56,6 @@ export const FullProfile: React.FC = () => {
               <h3 className="text-4xl font-bold text-cyan-300 mb-2">20+</h3>
               <p className="text-gray-400">Years Experience</p>
             </div>
-            <div className="bg-gray-800/30 p-6 rounded-lg text-center">
-              <h3 className="text-4xl font-bold text-cyan-300 mb-2">$200M+</h3>
-              <p className="text-gray-400">Architectural Impact</p>
-            </div>
-            <div className="bg-gray-800/30 p-6 rounded-lg text-center">
-              <h3 className="text-4xl font-bold text-cyan-300 mb-2">100+</h3>
-              <p className="text-gray-400">Projects Delivered</p>
-            </div>
           </motion.div>
 
           {/* Contact Information */}
