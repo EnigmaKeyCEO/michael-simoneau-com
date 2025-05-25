@@ -1,37 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="16x16" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>Michael Simoneau | Legacy Terminator</title>
-    <meta name="title" content="Michael Simoneau | Legacy Terminator">
-    <meta name="description" content="From shelter laptops to $200M rebuilds - Transforming legacy nightmares into quantum fortunes">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://michaelsimoneau.com/">
-    <meta property="og:title" content="Michael Simoneau | Legacy Terminator">
-    <meta property="og:description" content="From shelter laptops to $200M rebuilds - Transforming legacy nightmares into quantum fortunes">
-    <meta property="og:image" content="https://michaelsimoneau.com/og-image.svg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://michaelsimoneau.com/">
-    <meta property="twitter:title" content="Michael Simoneau | Legacy Terminator">
-    <meta property="twitter:description" content="From shelter laptops to $200M rebuilds - Transforming legacy nightmares into quantum fortunes">
-    <meta property="twitter:image" content="https://michaelsimoneau.com/og-image.svg">
-    
-    <!-- Preload fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#000510" />
+    <meta
+      name="description"
+      content="Michael Simoneau | Enterprise Architect & Technology Leader"
+    />
+    <title>Michael Simoneau | Enterprise Architect & Technology Leader</title>
+
+    <!-- Essential META Tags -->
+    <meta
+      property="og:title"
+      content="Michael Simoneau | Enterprise Architect & Technology Leader"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/profile-image.png" />
+    <meta property="og:url" content="https://www.michaelsimoneau.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Non-Essential, But Recommended -->
+    <meta
+      property="og:description"
+      content="Enterprise Architect & Technology Leader focused on innovation and scalable solutions."
+    />
+    <meta property="og:site_name" content="Michael Simoneau" />
+    <meta
+      name="twitter:image:alt"
+      content="Profile image of Michael Simoneau"
+    />
+
+    <!--  Non-Essential, But Required for Analytics (Optional) -->
+    <meta property="fb:app_id" content="your_app_id" />
+    <meta name="twitter:site" content="@enigmakeyceo" />
+
+    <style>
+      body {
+        background: #000510;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .loading-text {
+        font-size: 1.5rem;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div class="loading-text">Loading Application...</div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
