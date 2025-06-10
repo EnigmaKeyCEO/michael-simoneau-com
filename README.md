@@ -1,88 +1,38 @@
-# Enterprise Quantum Mesh Architecture
-FROM HOMELESS TO $200M ARCHITECT
-QUANTUM CRYPTOGRAPHY PIONEER
-#quantumReady #billionDollarProof
+# Michael Simoneau | Enterprise Architect & Technology Leader
 
-## Vision
-Revolutionizing enterprise computing through quantum-resistant, self-evolving architectures that bridge present capabilities with quantum future-states.
+This repository contains the source code for my personal professional website, a dynamic showcase of over two decades of experience in technology leadership, architecture, and software engineering. This site serves as a living document, reflecting my professional journey, core philosophies, and technical expertise.
 
-## Overview
-This initiative presents a revolutionary approach to enterprise computing that solves critical challenges before they emerge. By combining quantum-resistant architectures, self-evolving systems, and enterprise-grade security, we provide a comprehensive solution for Fortune 500 companies entering the quantum era.
+The content and structure are sourced from my detailed professional history, encapsulating my journey as a "Leader, Inventor & Investor" and "Innovator & Expert Engineer."
 
-## Key Features
+## A Glimpse into the Philosophy
 
-### 1. Quantum-Classical Enterprise Bridge (Q-CEB)
-- Seamless integration between classical and quantum systems
-- State coherence management across computing paradigms
-- Enterprise-grade performance and security
-- Legacy system support and migration paths
+My approach to technology and life is built on a foundation of continuous learning and challenging assumptions. I believe in empowering people with the tools to think, not just telling them what to know. As I shared in a recent interview:
 
-### 2. Autonomous System Evolution Framework (ASEF)
-- Self-evolving architecture that adapts to emerging challenges
-- Pattern recognition and optimization
-- Automated performance tuning
-- Predictive problem resolution
+> "It's more important to teach *how* to learn and problem-solve than *what* to learn in a specific instance. Equipping people with strong critical thinking skills and effective problem-solving methodologies gives them the ability to tackle any challenge they encounter."
 
-### 3. Quantum-Resistant Enterprise Mesh (Q-REM)
-- Future-proof security architecture
-- Self-healing network capabilities
-- Enterprise compliance frameworks
-- Comprehensive monitoring and analytics
+This philosophy was forged early on, from building my first computer from spare parts at age 12 to securing my first paid programming gig at 16 by proactively building a website for a local business. These experiences taught me that "necessity is the mother of all invention" and that turning obsessive curiosity into determined action is a superpower.
 
-## Documentation
+Another core principle is to challenge my own assumptions, a practice I once gamified with a simple $20 bet against myself. This mindset of learning through experience, and being willing to be proven wrong, has been foundational to my career.
 
-### Executive Resources
-- [Tasks and Roadmap](TASKS.md)
-- [Executive Summary](docs/executive/SUMMARY.md)
-- [ROI Analysis](docs/executive/ROI.md)
-- [Risk Assessment](docs/executive/RISK.md)
+> "Your story is a testament to how personal challenges, when approached with the right mindset, can become the foundation for extraordinary achievements." - *Interviewer's Reflection*
 
-### Technical Documentation
-- [Architecture Overview](docs/technical/ARCHITECTURE.md)
-- [Security Framework](docs/technical/SECURITY.md)
-- [Integration Guide](docs/technical/INTEGRATION.md)
-- [Performance Metrics](docs/technical/PERFORMANCE.md)
+## Featured Expertise
 
-### Implementation Resources
-- [Setup Guide](docs/implementation/SETUP.md)
-- [Migration Playbook](docs/implementation/MIGRATION.md)
-- [Testing Framework](docs/implementation/TESTING.md)
-- [Monitoring Guide](docs/implementation/MONITORING.md)
+The site highlights key projects that represent the scale and impact of my work, including:
 
-## Getting Started
+*   **StoneX Group Inc.:** Architecting a scalable, white-label React Native application from a single codebase, leveraging modular sub-packages and a robust CI/CD pipeline.
+*   **J.P. Morgan:** Leading the native Swift development for the "PaymentNet" iOS app, serving over 2 million users, and transforming the team's methodology from waterfall to agile SCRUM.
 
-1. Review the [Tasks and Roadmap](TASKS.md)
-2. Explore the [Architecture Overview](docs/technical/ARCHITECTURE.md)
-3. Assess the [ROI Analysis](docs/executive/ROI.md)
-4. Plan your [Migration](docs/implementation/MIGRATION.md)
+## About This Project
 
-## Success Stories
-- Fortune 500 Financial Institution: 40% reduction in quantum vulnerability surface
-- Global Manufacturing Corporation: 65% improvement in system evolution efficiency
-- International Healthcare Provider: 85% faster security incident response
+This website is built with a modern, performant tech stack:
 
-## Contributing
-Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and development process.
+*   **Framework:** [React](https://react.dev/) (with [Vite](https://vitejs.dev/))
+*   **Language:** [TypeScript](https://www.typescriptlang.org/)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **Animations:** [Framer Motion](https://www.framer.com/motion/)
+*   **Deployment:** [Firebase](https://firebase.google.com/)
 
-## Support
-Enterprise support available 24/7 through our dedicated support channels:
-- Email: enterprise@quantummesh.io
-- Phone: +1 (800) QUANTUM
-- Portal: https://support.quantummesh.io
+### A Note on the Current Structure
 
-## License
-This project is licensed under the Enterprise Quantum License - see the [LICENSE](LICENSE.md) file for details.
-
-## Acknowledgments
-- Quantum Computing Research Partners
-- Enterprise Architecture Advisory Board
-- Security and Compliance Experts
-- Fortune 500 Early Adopters
-
----
-
-*"Pioneering the quantum frontier of enterprise computing"*
-
-© 2024 Enterprise Quantum Mesh Architecture Initiative
-Version: 1.0.0
-Status: Production Ready 
+The codebase is currently undergoing a significant redesign and refactor. As such, the project structure may appear sporadic. The goal is to evolve this into a much cleaner, more modular architecture that fully represents the best practices I advocate for in my professional work. Thank you for your understanding as this transition is in progress.
