@@ -213,7 +213,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">Enigma Key Industries, LLC</p>
                 <p className="text-gray-400">
-                  February 2019 - Present (5 years 4 months)
+                  February 2019 - Present
                 </p>
                 <p className="text-gray-400">Chesterland, Ohio</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -247,7 +247,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">StoneX Group Inc.</p>
                 <p className="text-gray-400">
-                  September 2022 - February 2024 (1 year 6 months)
+                  September 2022 - February 2024
                 </p>
                 <p className="text-gray-400">
                   Chicago, Illinois, United States
@@ -280,7 +280,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">OneMain Financial</p>
                 <p className="text-gray-400">
-                  February 2022 - July 2023 (1 year 6 months)
+                  February 2022 - July 2022
                 </p>
                 <p className="text-gray-400">Remote</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -310,7 +310,7 @@ export const FullProfile: React.FC = () => {
                 <h3 className="text-xl font-semibold">Lead iOS Engineer</h3>
                 <p className="text-cyan-300">JPMorgan Chase & Co.</p>
                 <p className="text-gray-400">
-                  October 2019 - January 2022 (2 years 4 months)
+                  October 2019 - January 2022
                 </p>
                 <p className="text-gray-400">
                   Chicago, Illinois, United States
@@ -345,7 +345,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">Pulse</p>
                 <p className="text-gray-400">
-                  October 2018 - February 2019 (5 months)
+                  October 2018 - February 2019
                 </p>
                 <p className="text-gray-400">Chesterland, OH</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -377,7 +377,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">Medical Mutual</p>
                 <p className="text-gray-400">
-                  March 2018 - August 2018 (6 months)
+                  March 2018 - August 2018
                 </p>
                 <p className="text-gray-400">Cleveland/Akron, Ohio Area</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -401,7 +401,7 @@ export const FullProfile: React.FC = () => {
                 <h3 className="text-xl font-semibold">Software Engineer</h3>
                 <p className="text-cyan-300">HyperProductive, LLC</p>
                 <p className="text-gray-400">
-                  February 2016 - January 2017 (1 year)
+                  February 2016 - January 2017
                 </p>
                 <p className="text-gray-400">Cleveland/Akron, Ohio Area</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -428,7 +428,7 @@ export const FullProfile: React.FC = () => {
                 <h3 className="text-xl font-semibold">IT Consultant</h3>
                 <p className="text-cyan-300">RageOn!</p>
                 <p className="text-gray-400">
-                  July 2015 - January 2016 (7 months)
+                  July 2015 - January 2016
                 </p>
                 <p className="text-gray-400">Cleveland/Akron, Ohio Area</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -459,7 +459,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">Rattan Outdoor Furniture</p>
                 <p className="text-gray-400">
-                  February 2014 - March 2015 (1 year 2 months)
+                  February 2014 - March 2015
                 </p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
                   <li>
@@ -490,7 +490,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">TapFury</p>
                 <p className="text-gray-400">
-                  December 2011 - February 2013 (1 year 3 months)
+                  December 2011 - February 2013
                 </p>
                 <p className="text-gray-400">Greater New York City Area</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -518,7 +518,7 @@ export const FullProfile: React.FC = () => {
                 <h3 className="text-xl font-semibold">Lead Web Developer</h3>
                 <p className="text-cyan-300">Sneak Attack Media</p>
                 <p className="text-gray-400">
-                  July 2011 - December 2011 (6 months)
+                  July 2011 - December 2011
                 </p>
                 <p className="text-gray-400">Greater New York City Area</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
