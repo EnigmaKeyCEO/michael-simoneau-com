@@ -10,6 +10,7 @@ import { NotFound } from "./components/NotFound";
 import { Blog } from "./components/Blog";
 import { BlogPost } from "./components/BlogPost";
 import { Interview } from "./components/Interview";
+import { ZeroScripture } from "./components/ZeroScripture";
 import { FullProfile } from "./pages/FullProfile";
 
 // Lazy load NEW main page component
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "interview",
         element: <Interview />,
+      },
+      {
+        path: "zero",
+        element: <ZeroScripture />,
       },
       {
         path: "full-profile",
