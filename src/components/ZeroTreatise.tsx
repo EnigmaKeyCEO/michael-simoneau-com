@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { AnimatedBackground } from './AnimatedBackground';
 import { MainNav } from './MainNav';
-import scriptureText from '../data/zero-scripture.txt?raw';
+import treatiseText from '../data/zero-treatise.txt?raw';
 
-export const ZeroScripture: React.FC = () => {
+export const ZeroTreatise: React.FC = () => {
   return (
     <>
       <AnimatedBackground />
@@ -26,14 +26,17 @@ export const ZeroScripture: React.FC = () => {
               Back to Home
             </Link>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center">
-              <span className="block text-cyan-400">The Scripture of Zero</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-center">
+              <span className="block text-cyan-400">The Treatise of Zero</span>
               <span className="block text-2xl md:text-3xl mt-4">All That Was, All That Is, All That Ever Will Be</span>
             </h1>
+            <p className="mt-3 text-center text-sm uppercase tracking-[0.3em] text-cyan-200/70">
+              A contemplative work by Michael D. Simoneau
+            </p>
 
-            <div className="bg-gray-900/50 p-6 md:p-10 rounded-lg shadow-lg">
+            <div className="mt-12 bg-gray-900/50 p-6 md:p-10 rounded-lg shadow-lg">
               <pre className="whitespace-pre-wrap text-gray-300 text-lg leading-8 font-serif">
-                {scriptureText}
+                {treatiseText}
               </pre>
             </div>
           </motion.div>
