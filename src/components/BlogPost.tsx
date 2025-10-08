@@ -5,6 +5,7 @@ import { MainNav } from './MainNav';
 import { blogData } from '../data/blogData'; // Import data
 import { ContentBlock as ContentBlockType } from '../models/BlogPost'; // Import ContentBlock type definition
 import { useScrollToTop } from '../hooks/useScrollToTop'; // Added import
+import { parseInlineMarkdown } from '../utils/markdown';
 
 // Removed unused local ContentBlock type definition, as ContentBlockType from models is used
 
@@ -130,25 +131,24 @@ export const BlogPost: React.FC = () => {
     switch (block.type) {
       case 'heading': {
         const level = block.level;
-        return React.createElement(
-          `h${level}`,
-          {
-            key: index.toString(),
-            className: `
+        return React.createElement(`h${level}`, {
+          key: index.toString(),
+          className: `
               font-bold text-white
               ${level === 2 ? 'text-2xl md:text-3xl mt-12 mb-6' : ''}
               ${level === 3 ? 'text-xl md:text-2xl mt-8 mb-4' : ''}
               ${level > 3 ? 'text-lg md:text-xl mt-6 mb-3' : ''}
-            `
-          },
-          block.content
-        );
+            `,
+          dangerouslySetInnerHTML: { __html: parseInlineMarkdown(block.content) }
+        });
       }
       case 'paragraph':
         return (
-          <p key={index.toString()} className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed">
-            {block.content}
-          </p>
+          <p
+            key={index.toString()}
+            className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: parseInlineMarkdown(block.content) }}
+          />
         );
       case 'code':
         return <CodeBlock key={index.toString()} language={block.language} content={block.content} />;
@@ -156,14 +156,21 @@ export const BlogPost: React.FC = () => {
         return (
           <ul key={index.toString()} className="list-disc pl-6 mb-6 space-y-2">
             {block.items.map((item, i) => (
-              <li key={i.toString()} className="text-gray-300" dangerouslySetInnerHTML={{ __html: item }} />
+              <li
+                key={i.toString()}
+                className="text-gray-300"
+                dangerouslySetInnerHTML={{ __html: parseInlineMarkdown(item) }}
+              />
             ))}
           </ul>
         );
       case 'callout':
         return (
           <div key={index.toString()} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg">
-            <p className="text-cyan-300 italic">{block.content}</p>
+            <p
+              className="text-cyan-300 italic"
+              dangerouslySetInnerHTML={{ __html: parseInlineMarkdown(block.content) }}
+            />
           </div>
         );
       default: {
