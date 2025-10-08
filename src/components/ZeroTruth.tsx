@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { AnimatedBackground } from './AnimatedBackground';
 import { MainNav } from './MainNav';
-import truthText from '../data/zero-truth.txt?raw';
+import truthText from '/zero.txt?raw';
 
 export const ZeroTruth: React.FC = () => {
   return (
