@@ -61,6 +61,14 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
             <BookOpen size={16} className="mr-2" />
             Blog
           </Link>
+          <Link
+            to="/zero"
+            onClick={() => setIsOpen(false)}
+            className="text-gray-200 hover:text-cyan-300 transition-colors flex items-center uppercase tracking-[0.4em]"
+          >
+            ZERO
+            <span className="ml-2 inline-block h-2 w-2 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
+          </Link>
         </nav>
         
         <button 
@@ -103,6 +111,14 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
             <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
               <BookOpen size={18} className="mr-2" />
               Blog
+            </Link>
+            <Link
+              to="/zero"
+              className="text-xl text-gray-200 hover:text-cyan-300 transition-colors flex items-center uppercase tracking-[0.6em]"
+              onClick={() => setIsOpen(false)}
+            >
+              ZERO
+              <span className="ml-3 inline-block h-2.5 w-2.5 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
             </Link>
           </nav>
         </motion.div>
