@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+code.inline-code {
+  @apply bg-gray-800/70 text-cyan-200 px-1.5 py-0.5 rounded font-mono text-sm;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px; /* Adjust this value based on MainNav height */
