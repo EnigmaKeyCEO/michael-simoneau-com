@@ -10,24 +10,59 @@ import { parseInlineMarkdown } from '../utils/markdown';
 // Removed unused local ContentBlock type definition, as ContentBlockType from models is used
 
 const CodeBlock: React.FC<{ language: string; content: string }> = ({ language, content }) => {
-  const [copied, setCopied] = React.useState(false);
-  
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(content);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const [copyStatus, setCopyStatus] = React.useState<'idle' | 'success' | 'error'>('idle');
+
+  const resetStatus = () => {
+    setTimeout(() => setCopyStatus('idle'), 2000);
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(content);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = content;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        if (!successful) {
+          throw new Error('execCommand returned false');
+        }
+      }
+
+      setCopyStatus('success');
+      resetStatus();
+    } catch (error) {
+      console.error('Failed to copy code to clipboard:', error);
+      setCopyStatus('error');
+      setTimeout(() => setCopyStatus('idle'), 3000);
+    }
   };
 
   return (
     <div className="relative rounded-lg overflow-hidden my-6">
       <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
         <span className="text-sm font-mono text-gray-400">{language}</span>
-        <button 
+        <button
           onClick={copyToClipboard}
-          className="text-gray-400 hover:text-white transition-colors"
+          className="text-gray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 rounded"
           title="Copy code"
+          type="button"
         >
-          {copied ? 'Copied!' : <Copy size={16} />}
+          {copyStatus === 'success' ? 'Copied!' : copyStatus === 'error' ? 'Copy failed' : <Copy size={16} />}
+          <span className="sr-only" aria-live="polite" role="status">
+            {copyStatus === 'success'
+              ? 'Code copied to clipboard'
+              : copyStatus === 'error'
+                ? 'Copy action failed'
+                : ''}
+          </span>
         </button>
       </div>
       <pre className="bg-gray-900 p-4 overflow-x-auto">
