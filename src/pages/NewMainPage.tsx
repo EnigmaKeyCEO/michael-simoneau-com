@@ -91,17 +91,50 @@ export const NewMainPage: React.FC = () => {
           <CTOTriage />
         </motion.section>
 
-        <motion.section 
-          id="blog-teaser-section" 
+        <motion.section
+          id="blog-teaser-section"
           className={`${sectionWrapperClasses}`}
           initial={{opacity: 0}}
-          whileInView={{opacity: 1}} 
+          whileInView={{opacity: 1}}
           viewport={{once: true, amount: 0.2}}
           transition={{duration: 0.7}}
         >
           <BlogTeaser />
         </motion.section>
-        
+
+        <motion.section
+          id="real-interview-teaser"
+          className={`${sectionWrapperClasses} bg-gray-900/40`}
+          initial={{opacity: 0}}
+          whileInView={{opacity: 1}}
+          viewport={{once: true, amount: 0.2}}
+          transition={{duration: 0.7}}
+        >
+          <div className="container mx-auto flex flex-col items-center gap-8 text-center">
+            <div className="max-w-3xl space-y-4">
+              <h2 className="text-4xl font-bold text-white">
+                Want to see me in a real interview?
+              </h2>
+              <p className="text-lg text-white/80">
+                I'm a real person who shows up with honesty, clarity, and the kind of passion
+                that keeps teams energized. Watch me field real questions, share how I think
+                through tough problems, and stay grounded while doing it.
+              </p>
+            </div>
+            <div className="w-full max-w-4xl">
+              <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl shadow-cyan-500/20 border border-white/10 aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/3QKCe1St6S8"
+                  title="Michael Simoneau Interview"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
         <section className="snap-start">
           <ContactFooter />
         </section>

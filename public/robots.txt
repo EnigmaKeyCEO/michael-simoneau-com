@@ -4,4 +4,4 @@ Allow: /
 Disallow: /__/firebase/
 Disallow: /__/firebaseui/
 
-Sitemap: https://michaelsimoneau.com/sitemap.xml 
+Sitemap: https://michaelsimoneau.com/sitemap.xml
