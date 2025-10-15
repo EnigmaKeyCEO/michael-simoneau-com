@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, Home, User } from 'lucide-react';
+import { BookOpen, Menu, X, Home, User, FlaskConical } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { UniversalPlayer } from './UniversalPlayer';
 import { useScrollToSection } from '../hooks/useScrollToSection';
@@ -54,28 +54,44 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
           <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
-          <Link
-            to="/crypto-fabric"
-            onClick={() => setIsOpen(false)}
-            className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
-          >
-            Crypto Fabric Page
-          </Link>
+          <div className="relative group">
+            <button
+              type="button"
+              className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"
+              aria-haspopup="true"
+            >
+              <FlaskConical size={16} />
+              Labs
+            </button>
+            <div className="absolute left-0 mt-3 hidden w-48 rounded-lg border border-cyan-500/20 bg-gray-950/95 p-2 shadow-xl group-hover:block group-focus-within:block">
+              <Link
+                to="/crypto-fabric"
+                onClick={() => setIsOpen(false)}
+                className="block rounded-md px-3 py-2 text-sm text-gray-200 hover:bg-cyan-500/10 hover:text-cyan-300 transition-colors"
+              >
+                Crypto Fabric
+              </Link>
+              <Link
+                to="/zero"
+                onClick={() => setIsOpen(false)}
+                className="block rounded-md px-3 py-2 text-sm text-gray-200 hover:bg-cyan-500/10 hover:text-cyan-300 transition-colors"
+              >
+                ZERO
+                <span className="ml-2 inline-block h-2 w-2 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
           <Link to="/full-profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <User size={16} className="mr-1 xl:mr-2" />
             Full Profile
           </Link>
-          <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+          <Link
+            to="/blog"
+            onClick={() => setIsOpen(false)}
+            className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+          >
             <BookOpen size={16} className="mr-2" />
             Blog
-          </Link>
-          <Link
-            to="/zero"
-            onClick={() => setIsOpen(false)}
-            className="text-gray-200 hover:text-cyan-300 transition-colors flex items-center uppercase tracking-[0.4em]"
-          >
-            ZERO
-            <span className="ml-2 inline-block h-2 w-2 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
           </Link>
         </nav>
         
@@ -113,28 +129,48 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
             <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
             <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
-            <Link to="/crypto-fabric" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors" onClick={() => setIsOpen(false)}>
-              Crypto Fabric Page
-            </Link>
-            <Link to="/full-profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+            <div className="w-full space-y-4">
+              <div className="flex items-center justify-center text-gray-200 uppercase tracking-[0.3em]">
+                <FlaskConical size={18} className="mr-3" />
+                Labs
+              </div>
+              <div className="flex flex-col space-y-3 text-center">
+                <Link
+                  to="/crypto-fabric"
+                  className="text-lg text-gray-300 hover:text-cyan-400 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Crypto Fabric
+                </Link>
+                <Link
+                  to="/zero"
+                  className="text-lg text-gray-200 hover:text-cyan-300 transition-colors flex items-center justify-center uppercase tracking-[0.6em]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  ZERO
+                  <span className="ml-3 inline-block h-2.5 w-2.5 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+            <Link
+              to="/full-profile"
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
               <User size={18} className="mr-2" />
               Full Profile
             </Link>
-            <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+            <Link
+              to="/blog"
+              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+              onClick={() => setIsOpen(false)}
+            >
               <BookOpen size={18} className="mr-2" />
               Blog
             </Link>
-            <Link
-              to="/zero"
-              className="text-xl text-gray-200 hover:text-cyan-300 transition-colors flex items-center uppercase tracking-[0.6em]"
-              onClick={() => setIsOpen(false)}
-            >
-              ZERO
-              <span className="ml-3 inline-block h-2.5 w-2.5 rounded-full bg-cyan-400/80 opacity-80 animate-pulse" aria-hidden="true" />
-            </Link>
           </nav>
         </motion.div>
-      )}
-    </header>
-  );
+        )}
+      </header>
+    );
 }; 
