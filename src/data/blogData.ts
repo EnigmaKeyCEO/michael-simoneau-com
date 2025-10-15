@@ -22,6 +22,89 @@ export interface BlogData {
 
 export const blogData: BlogData[] = [
   {
+    id: "introducing-zero",
+    title: "-0=+0... Why?",
+    excerpt:
+      "Zero is my zero-cost, zero-friction platform blueprint for founders who need production guardrails without enterprise overhead.",
+    date: "June 9, 2025",
+    readTime: "6 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Zero",
+      "Startup Architecture",
+      "Cloud Run",
+      "Developer Experience",
+    ],
+    heroImage: "/blog/zero-launch.svg",
+    featured: true,
+    content: [
+      createParagraph(
+        "Zero began as a question: how do you give founders production-ready infrastructure without forcing them to pay for it before product-market fit? The answer is a blueprint that treats costs as a feature, enforces secure defaults, and still gives teams the momentum they need to ship.",
+      ),
+      createHeading("Why zero-cost matters", 2),
+      createParagraph(
+        "Most seed-stage teams lose precious cycles wiring billing accounts, appeasing security questionnaires, or reverse engineering enterprise controls. Zero flips that script by making \"no bill until you are ready\" the default state. That means Cloud Run services deployed in a developer tier, Firebase using emulator-first workflows, and CI/CD paths that scale up only when you deliberately promote them.",
+      ),
+      createList([
+        "**Guardrails without the gatekeepers:** Policy-as-code bundles, preflight security scans, and manifest validations run automatically but never block iteration.",
+        "**Cost floors at zero:** Every module is pre-configured to run in free tiers—storage, auth, hosting—until a profitability gate tells the platform to scale.",
+        "**Opinionated defaults:** Teams inherit logging, tracing, and incident response rituals from day one, so discipline grows with the product.",
+      ]),
+      createHeading("How teams adopt Zero", 2),
+      createParagraph(
+        "Think of Zero as a collection of composable playbooks. A new founder imports the repository, runs \"zero init\", and gets project scaffolding that already understands environments, secrets, and terraform state. As the company grows, the same commands enable paid-tier migrations, multi-region failover, and SOC2-friendly audit trails.",
+      ),
+      createCallout(
+        "When you subtract friction, you add runway. That's the -0=+0 equation.",
+      ),
+      createHeading("What's next", 2),
+      createParagraph(
+        "Zero is now live as an invite-only beta. Over the coming weeks I'll publish deeper technical dives into the workflows, including how Zero integrates with Google Cloud Deploy and Artifact Registry while keeping infrastructure spend dormant until a customer contract demands it.",
+      ),
+    ],
+  },
+  {
+    id: "introducing-crypto-fabric",
+    title: "Introducing Crypto Fabric",
+    excerpt:
+      "Crypto Fabric weaves together key management, policy orchestration, and developer tooling so enterprises can stay crypto-agile without slowing delivery.",
+    date: "June 9, 2025",
+    readTime: "8 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Crypto Fabric",
+      "Crypto Agility",
+      "Key Management",
+      "Enterprise Architecture",
+    ],
+    heroImage: "/blog/crypto-fabric-launch.svg",
+    content: [
+      createParagraph(
+        "Every enterprise I advise struggles with the same paradox: cryptography is mission critical, yet the teams responsible for it are outnumbered and overloaded. Crypto Fabric is my answer—a control plane that lets security teams define policies once while giving engineers self-service tooling that stays compliant by design.",
+      ),
+      createHeading("The fabric metaphor", 2),
+      createParagraph(
+        "A fabric interlaces threads to create strength. In this case, the threads are key management, certificate lifecycle automation, code signing, and runtime policy enforcement. Each thread is modular, but together they form a resilient layer that stretches across hybrid clouds, legacy workloads, and greenfield microservices.",
+      ),
+      createHeading("Core capabilities", 2),
+      createList([
+        "**Unified inventory:** A real-time catalog of every key, certificate, and secret—whether it lives in Cloud KMS, on-prem HSMs, or SaaS providers.",
+        "**Policy orchestration:** Security sets guardrails (like \"TLS 1.3 only\" or \"rotate signing keys every 30 days\") and the platform pushes enforcement hooks into CI/CD pipelines, Kubernetes admission controllers, and API gateways.",
+        "**Developer affordances:** CLI and SDK layers auto-wire approved algorithms, emit SBOM-ready metadata, and block unsafe defaults before they reach production.",
+      ]),
+      createHeading("Why now", 2),
+      createParagraph(
+        "Post-quantum timelines are accelerating, regulatory scrutiny is rising, and the cost of manual crypto governance is untenable. Crypto Fabric recognizes that crypto agility is an organizational problem as much as a technical one. By abstracting the heavy lifting into a shared service, engineering teams focus on product while security leaders gain auditable control.",
+      ),
+      createCallout(
+        "You can't future-proof cryptography alone. Crypto Fabric gives every team a role in staying ahead of the next algorithmic shift.",
+      ),
+      createParagraph(
+        "This launch is the first chapter. Upcoming posts will dig into the reference architecture, Terraform modules, and the connective tissue that keeps compliance artifacts synchronized across auditors, regulators, and your production stack.",
+      ),
+    ],
+  },
+  {
     id: "future-proofing-security",
     title: "Future-Proofing Security in the Enterprise",
     excerpt:
