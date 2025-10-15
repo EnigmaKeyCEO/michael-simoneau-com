@@ -1,10 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Linkedin, Github, Mail, Phone } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone } from 'lucide-react';
 
-
+import { SecurePhoneReveal } from './SecurePhoneReveal';
 
 export const ContactFooter: React.FC = () => {
+  const [showPhoneChallenge, setShowPhoneChallenge] = React.useState(false);
+
   // Quantum-resistant since 2023
   return (
     <motion.footer 
@@ -28,10 +30,33 @@ export const ContactFooter: React.FC = () => {
           <a href="mailto:mike@brainycouch.com" className="text-gray-400 hover:text-cyan-400 transition-colors">
             <Mail size={28} />
           </a>
-          <a href="tel:+13129199542" className="text-gray-400 hover:text-cyan-400 transition-colors">
+          <button
+            type="button"
+            onClick={() => setShowPhoneChallenge((previous) => !previous)}
+            className="text-gray-400 hover:text-cyan-400 transition-colors"
+            aria-expanded={showPhoneChallenge}
+            aria-controls="footer-secure-phone"
+          >
+            <span className="sr-only">
+              {showPhoneChallenge ? 'Hide phone challenge' : 'Reveal phone contact'}
+            </span>
             <Phone size={28} />
-          </a>
+          </button>
         </div>
+        {showPhoneChallenge ? (
+          <div id="footer-secure-phone" className="mx-auto mt-6 max-w-xl">
+            <SecurePhoneReveal
+              variant="inline"
+              heading="Phone Contact"
+              successMessage="Thanks for verifying! Tap the number to start a call."
+              revealButtonLabel="Reveal"
+            />
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">
+            Need a phone number? Tap the phone icon and complete a quick human check.
+          </p>
+        )}
         <div className="border-t border-gray-700 pt-8">
           <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Michael Simoneau. All rights reserved.</p>
         </div>

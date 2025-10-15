@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "../components/AnimatedBackground";
 import { MainNav } from "../components/MainNav";
+import { SecurePhoneReveal } from "../components/SecurePhoneReveal";
 
 export const FullProfile: React.FC = () => {
   return (
@@ -67,11 +68,7 @@ export const FullProfile: React.FC = () => {
             <div className="bg-gray-800/30 p-6 rounded-lg">
               <h2 className="text-2xl font-bold mb-4">Contact Me</h2>
               <div className="space-y-4">
-                <div>
-                  <h3 className="text-cyan-300">Phone</h3>
-                  <p>Mobile: +1.312.919.9542</p>
-                  <p>Business: +1.872.899.1355</p>
-                </div>
+                <SecurePhoneReveal />
                 <div>
                   <h3 className="text-cyan-300">Email</h3>
                   <p>mike@brainycouch.com</p>
@@ -88,17 +85,20 @@ export const FullProfile: React.FC = () => {
                     href="https://linkedin.com/in/michaelsimoneau"
                     className="hover:text-cyan-200"
                   >
-                    @IamMichaelSimoneau
+                    @MichaelSimoneau
                   </a>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">GitHub</h3>
                   <a
-                    href="https://github.com/EnigmaKeyCEO"
+                    href="https://github.com/MichaelSimoneau"
                     className="hover:text-cyan-200"
                   >
-                    EnigmaKeyCEO
+                    @MichaelSimoneau
                   </a>
+                </div>
+                <div>
+                  <p>@IamMichaelSimoneau</p>
                 </div>
               </div>
             </div>
