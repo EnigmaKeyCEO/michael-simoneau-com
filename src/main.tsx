@@ -14,9 +14,15 @@ import { ZeroTruth } from "./components/ZeroTruth";
 import { FullProfile } from "./pages/FullProfile";
 
 // Lazy load NEW main page component
-const LazyNewMainPage = lazy(() => 
+const LazyNewMainPage = lazy(() =>
   import("./pages/NewMainPage").then(module => ({
     default: module.NewMainPage
+  }))
+);
+
+const LazyCryptoFabricPage = lazy(() =>
+  import("./pages/CryptoFabric").then(module => ({
+    default: module.CryptoFabric
   }))
 );
 
@@ -42,6 +48,14 @@ const router = createBrowserRouter([
       {
         path: "blog/:postId",
         element: <BlogPost />,
+      },
+      {
+        path: "crypto-fabric",
+        element: (
+          <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white">Loading Crypto Fabric…</div>}>
+            <LazyCryptoFabricPage />
+          </Suspense>
+        ),
       },
       {
         path: "interview",
