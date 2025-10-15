@@ -321,8 +321,8 @@ export const BlogPost: React.FC = () => {
             <div className="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Ready to quantum-proof your systems?</h3>
               <div className="text-center">
-                <a 
-                  href="https://www.linkedin.com/in/EnigmaKeyCEO" // Updated Link
+                <a
+                  href="https://www.linkedin.com/in/MichaelSimoneau"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 text-sm md:text-base"
