@@ -49,10 +49,18 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
         <nav className="hidden md:flex items-center space-x-6 xl:space-x-8">
           <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
           <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+          <button onClick={() => handleSectionLinkClick('crypto-fabric-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Crypto Fabric</button>
           <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
           <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
           <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
-          
+
+          <Link
+            to="/crypto-fabric"
+            onClick={() => setIsOpen(false)}
+            className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+          >
+            Crypto Fabric Page
+          </Link>
           <Link to="/full-profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <User size={16} className="mr-1 xl:mr-2" />
             Full Profile
@@ -100,10 +108,14 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
             
             <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
             <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+            <button onClick={() => handleSectionLinkClick('crypto-fabric-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Crypto Fabric</button>
             <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
             <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
             <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
+            <Link to="/crypto-fabric" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors" onClick={() => setIsOpen(false)}>
+              Crypto Fabric Page
+            </Link>
             <Link to="/full-profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
               <User size={18} className="mr-2" />
               Full Profile
