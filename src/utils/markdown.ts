@@ -17,11 +17,15 @@ export const parseInlineMarkdown = (text: string): string => {
   });
   // Inline code (`code`)
   html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
-  // Links [text](url)
-  html = html.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
-    '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300">$1</a>'
-  );
+  // Links [text](url) - support external and internal URLs
+  html = html.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_match, text, url) => {
+    const isExternal = /^https?:\/\//i.test(url);
+    const attributes = isExternal
+      ? 'href="' + url + '" target="_blank" rel="noopener noreferrer"'
+      : 'href="' + url + '"';
+
+    return `<a ${attributes} class="text-cyan-400 hover:text-cyan-300">${text}</a>`;
+  });
 
   return html;
 };
