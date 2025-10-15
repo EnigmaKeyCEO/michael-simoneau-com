@@ -38,6 +38,12 @@ export const ZeroTruth: React.FC = () => {
       }
 
       if (/^Principle\s+\d+:/i.test(line)) {
+        const principleDetail = line.replace(/^Principle\s+\d+:\s*/i, '').trim();
+
+        if (!principleDetail) {
+          return;
+        }
+
         groups.get(currentChapter)?.add(line);
       }
     });
