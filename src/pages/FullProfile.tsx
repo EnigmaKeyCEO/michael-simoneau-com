@@ -41,7 +41,6 @@ export const FullProfile: React.FC = () => {
               <p className="text-2xl text-cyan-300 mb-1">
                 Innovator & Expert Engineer
               </p>
-              <p className="text-xl text-gray-400">Founder @ Enigma Key Co.</p>
             </div>
           </motion.div>
 
@@ -86,10 +85,10 @@ export const FullProfile: React.FC = () => {
                 <div>
                   <h3 className="text-cyan-300">LinkedIn</h3>
                   <a
-                    href="https://linkedin.com/in/EnigmaKeyCEO"
+                    href="https://linkedin.com/in/michaelsimoneau"
                     className="hover:text-cyan-200"
                   >
-                    EnigmaKeyCEO
+                    @IamMichaelSimoneau
                   </a>
                 </div>
                 <div>
@@ -213,7 +212,7 @@ export const FullProfile: React.FC = () => {
                 </h3>
                 <p className="text-cyan-300">Enigma Key Industries, LLC</p>
                 <p className="text-gray-400">
-                  February 2019 - Present
+                  February 2019 - February 2024
                 </p>
                 <p className="text-gray-400">Chesterland, Ohio</p>
                 <ul className="list-disc list-inside mt-2 space-y-1">
@@ -239,6 +238,9 @@ export const FullProfile: React.FC = () => {
                     industry.
                   </li>
                 </ul>
+                <p className="text-gray-400 mt-2 italic">
+                  Involvement ended in February 2024.
+                </p>
               </div>
 
               <div>
