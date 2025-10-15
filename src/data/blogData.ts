@@ -26,7 +26,7 @@ export const blogData: BlogData[] = [
     title: "Future-Proofing Security in the Enterprise",
     excerpt:
       "A strategic look at crypto-agility, emerging threats, and building resilient systems for the long term. Essential reading for CTOs.",
-    date: "April 5, 2024",
+    date: "June 8, 2025",
     readTime: "7 min",
     author: "Michael Simoneau",
     tags: [
@@ -82,7 +82,7 @@ function updateCryptography(newConfig: CryptoConfig) {
     title: "Case Study: Transforming a Critical Enterprise System",
     excerpt:
       "How a systematic approach to modernization took a vital legacy platform from 94.5% to 99.99% uptime, drastically cutting operational costs.",
-    date: "March 28, 2024",
+    date: "June 2, 2025",
     readTime: "10 min",
     author: "Michael Simoneau",
     tags: [
@@ -138,7 +138,7 @@ function updateCryptography(newConfig: CryptoConfig) {
       "Architecting React Native for Scalability: The White-Label Challenge",
     excerpt:
       "A technical deep-dive into the strategies and patterns used to build a single, robust React Native codebase for over 50 white-label client applications at StoneX.",
-    date: "March 20, 2024",
+    date: "May 26, 2025",
     readTime: "12 min",
     author: "Michael Simoneau",
     tags: [
@@ -200,7 +200,7 @@ const MyComponent = () => <View style={{backgroundColor: colors.primary}} />;`,
     title: "Practical AI Security: Bridging Gaps in Modern Deployments",
     excerpt:
       "Beyond the hype: identifying common, exploitable vulnerabilities in AI systems and implementing pragmatic security measures before they become critical.",
-    date: "March 12, 2024",
+    date: "May 19, 2025",
     readTime: "8 min",
     author: "Michael Simoneau",
     tags: ["AI", "Machine Learning", "Security", "DevSecOps", "Enterprise"],
@@ -244,7 +244,7 @@ const MyComponent = () => <View style={{backgroundColor: colors.primary}} />;`,
       "Strategic Compensation for Technology Leaders: Beyond the Offer Letter",
     excerpt:
       "Insights for both aspiring and current CTOs on negotiating and structuring compensation to reflect true value and impact within an organization.",
-    date: "March 5, 2024",
+    date: "May 12, 2025",
     readTime: "9 min",
     author: "Michael Simoneau",
     tags: [
