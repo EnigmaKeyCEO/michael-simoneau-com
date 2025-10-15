@@ -96,10 +96,10 @@ export const ServiceOffering: React.FC = () => { // Renamed from SecurityAudit
             hidden: { opacity: 0, scale: 0.9 }
           }}
         >
-          <InteractiveButton 
+          <InteractiveButton
             text="DISCUSS YOUR PROJECT"
-            href="https://www.linkedin.com/in/EnigmaKeyCEO/" // Updated LinkedIn URL
-            className="mx-auto" 
+            href="https://www.linkedin.com/in/MichaelSimoneau/"
+            className="mx-auto"
           />
         </motion.div>
       </motion.div>
