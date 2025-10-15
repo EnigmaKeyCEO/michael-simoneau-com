@@ -1,11 +1,12 @@
 import { useEffect, type FC } from 'react';
+import { useFoundation, useFoundationMetadata } from '../foundation';
 
 type StructuredData = Record<string, unknown>;
 
 type SeoProps = {
-  title: string;
-  description: string;
-  canonicalUrl: string;
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
   keywords?: string[];
   image?: string;
   noIndex?: boolean;
@@ -77,42 +78,54 @@ export const Seo: FC<SeoProps> = ({
   description,
   canonicalUrl,
   keywords,
-  image = 'https://www.michaelsimoneau.com/profile-image.png',
+  image,
   noIndex,
   structuredData,
 }) => {
-  const keywordContent = keywords?.join(', ');
-  const serializedStructuredData = structuredData ? JSON.stringify(structuredData) : null;
+  const metadata = useFoundationMetadata();
+  const { analytics } = useFoundation();
+
+  const effectiveTitle = title ?? metadata.defaultTitle;
+  const effectiveDescription = description ?? metadata.description;
+  const effectiveCanonicalUrl = canonicalUrl ?? metadata.canonicalUrl;
+  const effectiveKeywords = keywords ?? metadata.keywords;
+  const effectiveImage = image ?? metadata.image.social ?? metadata.image.default;
+  const effectiveStructuredData = structuredData ?? metadata.structuredData;
+
+  const keywordContent = effectiveKeywords?.join(', ');
+  const serializedStructuredData = effectiveStructuredData
+    ? JSON.stringify(effectiveStructuredData)
+    : null;
 
   useEffect(() => {
     const previousTitle = document.title;
-    if (title) {
-      document.title = title;
+    if (effectiveTitle) {
+      document.title = effectiveTitle;
     }
 
     const managedElements: ManagedElement[] = [];
 
-    updateMetaTag('description', description, 'name', managedElements);
+    updateMetaTag('description', effectiveDescription, 'name', managedElements);
     updateMetaTag('keywords', keywordContent, 'name', managedElements);
     updateMetaTag('author', 'Michael Simoneau', 'name', managedElements);
     updateMetaTag('robots', noIndex ? 'noindex, nofollow' : 'index, follow', 'name', managedElements);
 
-    updateMetaTag('og:title', title, 'property', managedElements);
-    updateMetaTag('og:description', description, 'property', managedElements);
+    updateMetaTag('og:title', effectiveTitle, 'property', managedElements);
+    updateMetaTag('og:description', effectiveDescription, 'property', managedElements);
     updateMetaTag('og:type', 'website', 'property', managedElements);
-    updateMetaTag('og:url', canonicalUrl, 'property', managedElements);
-    updateMetaTag('og:image', image, 'property', managedElements);
+    updateMetaTag('og:url', effectiveCanonicalUrl, 'property', managedElements);
+    updateMetaTag('og:image', effectiveImage, 'property', managedElements);
     updateMetaTag('og:site_name', 'Michael Simoneau', 'property', managedElements);
     updateMetaTag('og:locale', 'en_US', 'property', managedElements);
 
     updateMetaTag('twitter:card', 'summary_large_image', 'name', managedElements);
-    updateMetaTag('twitter:title', title, 'name', managedElements);
-    updateMetaTag('twitter:description', description, 'name', managedElements);
+    updateMetaTag('twitter:title', effectiveTitle, 'name', managedElements);
+    updateMetaTag('twitter:description', effectiveDescription, 'name', managedElements);
     updateMetaTag('twitter:creator', '@enigmakeyceo', 'name', managedElements);
     updateMetaTag('twitter:site', '@enigmakeyceo', 'name', managedElements);
-    updateMetaTag('twitter:image', image, 'name', managedElements);
+    updateMetaTag('twitter:image', effectiveImage, 'name', managedElements);
 
-    updateLinkTag('canonical', canonicalUrl, managedElements);
+    updateLinkTag('canonical', effectiveCanonicalUrl, managedElements);
 
     let structuredDataItems: StructuredData[] = [];
 
@@ -128,6 +141,15 @@ export const Seo: FC<SeoProps> = ({
       script.text = JSON.stringify(data);
       document.head.appendChild(script);
       scriptElements.push(script);
+    });
+
+    analytics.track({
+      type: 'foundation.seo.update',
+      payload: {
+        title: effectiveTitle,
+        canonicalUrl: effectiveCanonicalUrl,
+      },
+      timestamp: Date.now(),
     });
 
     return () => {
@@ -147,7 +169,16 @@ export const Seo: FC<SeoProps> = ({
         script.remove();
       });
     };
-  }, [title, description, canonicalUrl, keywordContent, image, noIndex, serializedStructuredData]);
+  }, [
+    analytics,
+    effectiveTitle,
+    effectiveDescription,
+    effectiveCanonicalUrl,
+    keywordContent,
+    effectiveImage,
+    noIndex,
+    serializedStructuredData,
+  ]);
 
   return null;
 };
