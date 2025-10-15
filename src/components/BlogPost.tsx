@@ -300,7 +300,14 @@ export const BlogPost: React.FC = () => {
             <div className="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-4">About the Author</h3>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:space-x-4">
-                <div className="w-20 h-20 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex-shrink-0" />
+                <div className="w-24 h-24 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-cyan-400 shadow-lg flex-shrink-0">
+                  <img
+                    src="/profile-image.png"
+                    alt={post.author}
+                    className="object-cover w-full h-full"
+                    loading="lazy"
+                  />
+                </div>
                 <div>
                   <h4 className="text-lg font-bold text-center md:text-left">{post.author}</h4>
                   <p className="text-gray-300 text-center md:text-left mt-2">
