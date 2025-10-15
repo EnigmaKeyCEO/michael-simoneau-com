@@ -40,10 +40,28 @@ export const ZeroTruth: React.FC = () => {
               A contemplative work by Michael D. Simoneau
             </p>
 
-            <div className="mt-12 rounded-lg bg-gray-900/50 p-6 shadow-lg md:p-10">
-              <pre className="whitespace-pre-wrap font-serif text-lg leading-8 text-gray-300">
-                {truthText}
-              </pre>
+            <div className="mt-12 space-y-8">
+              <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-6 text-cyan-100 shadow-lg backdrop-blur md:p-8">
+                <h2 className="text-2xl font-semibold text-white">Chapter 6: The Numerical Trinity</h2>
+                <p className="mt-3 text-base leading-7 text-cyan-50/80">
+                  Explore the newly published chapter revealing Zero as the convergence of presence, potential, and truth. This
+                  three-state synthesis bridges classical binaries and quantum superposition, outlining how the {'{-1, 0, 1}'}
+                  framework unlocks ethereal computation.
+                </p>
+                <p className="mt-4 text-base leading-7 text-cyan-50/80">
+                  Read the companion analysis in the{' '}
+                  <Link to="/blog/zero-why" className="font-semibold text-cyan-200 underline decoration-cyan-300/70 underline-offset-4 hover:text-white">
+                    Zero-Why manifesto
+                  </Link>{' '}
+                  to see how the trinity guides systems design across classical, quantum, and ethereal architectures.
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-900/50 p-6 shadow-lg md:p-10">
+                <pre className="whitespace-pre-wrap font-serif text-lg leading-8 text-gray-300">
+                  {truthText}
+                </pre>
+              </div>
             </div>
           </motion.div>
         </div>
