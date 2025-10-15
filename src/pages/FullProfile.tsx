@@ -3,79 +3,6 @@ import { motion } from "framer-motion";
 import { AnimatedBackground } from "../components/AnimatedBackground";
 import { MainNav } from "../components/MainNav";
 
-const PhoneReveal: React.FC = () => {
-  const [userInput, setUserInput] = React.useState("");
-  const [isVerified, setIsVerified] = React.useState(false);
-  const [hasError, setHasError] = React.useState(false);
-  const [firstNumber, secondNumber] = React.useMemo(() => {
-    const generateNumber = () => Math.floor(Math.random() * 4) + 3; // 3 - 6
-    return [generateNumber(), generateNumber()];
-  }, []);
-
-  const phoneNumber = React.useMemo(
-    () =>
-      [43, 49, 50, 49, 51, 56, 56, 55, 50, 50, 57, 55]
-        .map((code) => String.fromCharCode(code))
-        .join(""),
-    []
-  );
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (parseInt(userInput, 10) === firstNumber + secondNumber) {
-      setIsVerified(true);
-      setHasError(false);
-      return;
-    }
-
-    setHasError(true);
-  };
-
-  return (
-    <div className="space-y-3">
-      <p className="text-sm text-gray-400">
-        Solve this quick challenge to reveal the phone number. This helps keep
-        the line free of spam bots.
-      </p>
-      {isVerified ? (
-        <p className="text-lg font-semibold">Mobile: {phoneNumber}</p>
-      ) : (
-        <form className="space-y-2" onSubmit={handleSubmit}>
-          <label className="block text-sm" htmlFor="phone-captcha">
-            What is {firstNumber} + {secondNumber}?
-          </label>
-          <div className="flex items-center space-x-2">
-            <input
-              id="phone-captcha"
-              name="phone-captcha"
-              type="number"
-              inputMode="numeric"
-              pattern="\\d*"
-              min="0"
-              className="w-24 rounded bg-gray-900 border border-gray-700 px-3 py-2 text-white focus:border-cyan-400 focus:outline-none"
-              value={userInput}
-              onChange={(event) => {
-                setUserInput(event.target.value);
-                setHasError(false);
-              }}
-            />
-            <button
-              type="submit"
-              className="rounded bg-cyan-500 px-3 py-2 text-sm font-semibold text-gray-900 transition hover:bg-cyan-400"
-            >
-              Reveal Number
-            </button>
-          </div>
-          {hasError && (
-            <p className="text-sm text-red-400">Incorrect answer. Please try again.</p>
-          )}
-        </form>
-      )}
-    </div>
-  );
-};
-
 export const FullProfile: React.FC = () => {
   return (
     <>
@@ -142,7 +69,8 @@ export const FullProfile: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <h3 className="text-cyan-300">Phone</h3>
-                  <PhoneReveal />
+                  <p>Mobile: +1.312.919.9542</p>
+                  <p>Business: +1.872.899.1355</p>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">Email</h3>
@@ -160,20 +88,17 @@ export const FullProfile: React.FC = () => {
                     href="https://linkedin.com/in/michaelsimoneau"
                     className="hover:text-cyan-200"
                   >
-                    @MichaelSimoneau
+                    @IamMichaelSimoneau
                   </a>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">GitHub</h3>
                   <a
-                    href="https://github.com/MichaelSimoneau"
+                    href="https://github.com/EnigmaKeyCEO"
                     className="hover:text-cyan-200"
                   >
-                    @MichaelSimoneau
+                    EnigmaKeyCEO
                   </a>
-                </div>
-                <div>
-                  <p>@IamMichaelSimoneau</p>
                 </div>
               </div>
             </div>
