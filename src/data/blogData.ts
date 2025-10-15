@@ -22,6 +22,108 @@ export interface BlogData {
 
 export const blogData: BlogData[] = [
   {
+    id: "zero-why",
+    title: "-0=+0... Why?",
+    excerpt:
+      "Zero is my developer-first runway: a no-cost launch lane that snaps into Google Cloud when you're ready to scale beyond the prototype.",
+    date: "June 15, 2025",
+    readTime: "6 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Product Strategy",
+      "Developer Experience",
+      "Cloud",
+      "Startups",
+    ],
+    heroImage: "/blog/zero-launch.svg",
+    featured: true,
+    content: [
+      createParagraph(
+        "The math of the title is playful, but the intent behind Zero is deadly serious: early engineering velocity with enterprise guardrails. I built Zero as a default workspace where a solo founder or a lean team can build with *zero* cloud spend until value is proven, then graduate straight into hardened Google Cloud primitives without re-architecting."
+      ),
+      createHeading("What Exactly Is Zero?", 2),
+      createParagraph(
+        "Zero is a pre-configured environment that boots instantly on my infrastructure, mirrors the layout of a production-ready Cloud Run deployment, and keeps all secrets, dependencies, and CI/CD scripts ready for promotion. Think of it as a reversible pre-prod: every commit can be tested under production-like conditions while still costing nothing to explore."
+      ),
+      createList([
+        "**Zero-cost sandbox:** Persistent Postgres and Redis layers emulate production APIs without incurring metered usage until you deliberately promote.",
+        "**Opinionated defaults:** Type-safe tooling, linting, and automated dependency updates are included so velocity never compromises code health.",
+        "**Upgrade button, not rewrite:** When you flip `DEV_NO_COST=false`, the same services deploy to Cloud Run with managed secrets, telemetry, and rollback plans intact.",
+      ]),
+      createHeading("Why the '-0=+0' Philosophy Matters", 2),
+      createParagraph(
+        "Most founders accept an uncomfortable trade-off: move fast now and pay a rewrite tax later. Zero's philosophy rejects that binary. Subtract the operational drag (`-0`) during the discovery phase, and you still emerge with production equity (`+0`). By designing the developer ergonomics and the compliance scaffolding together, we keep the acceleration without incurring future interest."
+      ),
+      createParagraph(
+        "This is rooted in battle-tested experience. At StoneX and J.P. Morgan I learned that migrations consume multiples of the original build cost. Zero encodes that wisdom: guardrails are cheap when they ship day one."
+      ),
+      createHeading("How Teams Adopt Zero", 2),
+      createParagraph(
+        "Teams start by forking the Zero template repo, wiring in feature flags, and instrumenting core KPIs. From there, the path to production follows a deliberate checklist that mirrors my go-live playbook for regulated environments."
+      ),
+      createList([
+        "Set `DEV_NO_COST=true` and integrate with GitHub Actions for ephemeral preview environments.",
+        "Capture service-level objectives (SLOs) and embed them in runbooks while traffic is still low.",
+        "Run chaos drills in the sandbox so incident playbooks exist before revenue is at stake.",
+      ]),
+      createCallout(
+        "Zero is the onramp I wish every founder had: experiment freely today, arrive in production tomorrow without rebuilding the car mid-race."
+      ),
+      createParagraph(
+        "If you're curious to see it in motion, the /zero page walks through the developer experience and links to the public template repo. I'm continuing to extend the playbook with more automation, including default FinOps dashboards and supply-chain scanning hooks."
+      ),
+    ],
+  },
+  {
+    id: "crypto-fabric-introduction",
+    title: "Introducing Crypto Fabric",
+    excerpt:
+      "Crypto Fabric is my operating model for regulated fintech builders: a lattice of policy, automation, and cryptography that makes compliance an engineering feature, not a tax.",
+    date: "June 12, 2025",
+    readTime: "8 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Fintech",
+      "Security",
+      "Architecture",
+      "Compliance",
+    ],
+    heroImage: "/blog/crypto-fabric-launch.svg",
+    content: [
+      createParagraph(
+        "Crypto Fabric is the culmination of a decade leading regulated trading platforms. It's the architecture that let us deliver new derivatives features at StoneX without waiting for quarterly audit cycles. The Fabric stitches together policy-as-code, cryptographic controls, and runtime automation so your compliance story is provable the instant a regulator asks."
+      ),
+      createHeading("Why Build a Fabric?", 2),
+      createParagraph(
+        "Traditional compliance programs bolt on after the product exists, generating rework and slowing delivery. I wanted something developers could live inside from day zero: a mesh where identity, key management, and data lineage flow together. When an auditor requests evidence, the Fabric answers with immutable logs, signed policies, and reproducible builds."
+      ),
+      createList([
+        "**Provable identity:** Every deploy is signed with hardware-backed keys, binding change history to actual humans.",
+        "**Continuous controls:** Terraform, IAM, and KMS policy diffs must satisfy automated checks before merge.",
+        "**Segmented data planes:** Sensitive datasets stay inside governed enclaves with transparent proxying for analytics.",
+      ]),
+      createHeading("Inside the Fabric", 2),
+      createParagraph(
+        "The /crypto-fabric page shows the canonical architecture, but the implementation hinges on disciplined workflows. We drive infrastructure changes through GitOps pipelines, with attestations generated at each stage. When secrets rotate or services ship, the Fabric captures the proof automatically."
+      ),
+      createList([
+        "Policy repositories map business requirements to executable OPA/Rego rules.",
+        "Supply-chain verifications enforce SBOM generation and signature validation for every artifact.",
+        "Runtime telemetry streams into BigQuery and Chronicle with data retention tuned to jurisdictional rules.",
+      ]),
+      createHeading("Who Is Crypto Fabric For?", 2),
+      createParagraph(
+        "If you're a fintech founder, a bank modernization lead, or a security team partnering with product, the Fabric provides a common language. Engineers get paved roads, compliance teams get real-time evidence, and leadership gets a provable story for regulators and customers."
+      ),
+      createCallout(
+        "Compliance should amplify innovation. Crypto Fabric makes that real by coupling strong cryptography with the automation habits I've honed across Fortune 100 and startup environments."
+      ),
+      createParagraph(
+        "I'm actively expanding the Fabric reference implementation with blueprints for cross-border data residency, zero-knowledge proofs for transaction validation, and reusable audit packages. Subscribe to the blog or reach out if you want to pilot it inside your organization."
+      ),
+    ],
+  },
+  {
     id: "future-proofing-security",
     title: "Future-Proofing Security in the Enterprise",
     excerpt:
