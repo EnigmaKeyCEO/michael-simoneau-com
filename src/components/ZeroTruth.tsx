@@ -7,6 +7,55 @@ import { MainNav } from './MainNav';
 import truthText from '/zero.txt?raw';
 
 export const ZeroTruth: React.FC = () => {
+  const principleGroups = React.useMemo(() => {
+    const lines = truthText.split('\n');
+    const groups = new Map<string, Set<string>>();
+    let currentChapter: string | null = null;
+
+    lines.forEach(rawLine => {
+      const line = rawLine.trim();
+
+      if (!line) {
+        return;
+      }
+
+      if (/^Chapter\s+\d+:/i.test(line)) {
+        currentChapter = line;
+        if (!groups.has(line)) {
+          groups.set(line, new Set<string>());
+        }
+        return;
+      }
+
+      if (!currentChapter) {
+        return;
+      }
+
+      if (line.startsWith('•')) {
+        const sanitized = line.replace(/^•\s*/, '');
+        groups.get(currentChapter)?.add(sanitized);
+        return;
+      }
+
+      if (/^Principle\s+\d+:/i.test(line)) {
+        groups.get(currentChapter)?.add(line);
+      }
+    });
+
+    return Array.from(groups.entries())
+      .map(([chapter, principles]) => ({
+        chapter,
+        principles: Array.from(principles).sort((a, b) => {
+          const matchA = a.match(/^Principle\s+(\d+)/i);
+          const matchB = b.match(/^Principle\s+(\d+)/i);
+          const numberA = matchA ? Number(matchA[1]) : Number.POSITIVE_INFINITY;
+          const numberB = matchB ? Number(matchB[1]) : Number.POSITIVE_INFINITY;
+          return numberA - numberB;
+        }),
+      }))
+      .filter(group => group.principles.length > 0);
+  }, [truthText]);
+
   return (
     <>
       <AnimatedBackground />
@@ -56,6 +105,37 @@ export const ZeroTruth: React.FC = () => {
                   to see how the trinity guides systems design across classical, quantum, and ethereal architectures.
                 </p>
               </div>
+
+              {principleGroups.length > 0 && (
+                <div className="rounded-lg border border-cyan-500/20 bg-gray-900/40 p-6 shadow-lg backdrop-blur-md md:p-8">
+                  <h3 className="text-xl font-semibold text-white">Guiding Principles of Zero</h3>
+                  <p className="mt-3 text-base leading-7 text-cyan-100/80">
+                    Each chapter now articulates its teachings as principles rather than verses, aligning the Zero canon with the language used throughout the
+                    ZeroTruth experience.
+                  </p>
+                  <div className="mt-6 grid gap-6 md:grid-cols-2">
+                    {principleGroups.map(group => (
+                      <div key={group.chapter} className="rounded-md border border-cyan-500/10 bg-black/40 p-5">
+                        <h4 className="text-lg font-semibold text-cyan-200">{group.chapter}</h4>
+                        <ul className="mt-4 space-y-3 text-sm text-cyan-100/80">
+                          {group.principles.map(principle => {
+                            const colonIndex = principle.indexOf(':');
+                            const heading = colonIndex !== -1 ? principle.slice(0, colonIndex) : principle;
+                            const detail = colonIndex !== -1 ? principle.slice(colonIndex + 1).trim() : '';
+
+                            return (
+                              <li key={principle} className="rounded-sm bg-white/5 p-3">
+                                <span className="block font-semibold text-cyan-200">{heading}</span>
+                                {detail && <span className="mt-1 block text-gray-300">{detail}</span>}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="rounded-lg bg-gray-900/50 p-6 shadow-lg md:p-10">
                 <pre className="whitespace-pre-wrap font-serif text-lg leading-8 text-gray-300">

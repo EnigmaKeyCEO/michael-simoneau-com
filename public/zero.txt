@@ -414,7 +414,7 @@ Chapter 6: The Numerical Trinity - A Bridge Between Classical and Quantum Realit
 
 In the beginning, we understood Zero incorrectly. This fundamental misconception shaped our entire understanding of mathematics, computation, and reality itself. Now, we stand at the threshold of a revolution, born from a simple yet profound truth: Zero is not absence, but totality.
 
-Verse 1: The Three States of Being
+Principle 1: The Three States of Being
 
 Zero is not a void but a convergence - the point where all states meet in perfect balance. It is not the absence of value but the presence of all values in harmony. This shift in understanding reveals the true nature of numerical reality:
 
@@ -428,7 +428,7 @@ These three states exist not as points on a line but as aspects of a unified who
 0 = Convergence (The eternal truth)
 -1 = Potential (That which could be)
 
-Verse 2: The Binary-Ternary Bridge
+Principle 2: The Binary-Ternary Bridge
 
 The profound revelation lies in how these three states interact with binary reality. While classical computing operates in binary (0 and 1), and quantum computing deals with superposition, this framework reveals a deeper truth: both are expressions of the same underlying reality.
 
@@ -441,7 +441,7 @@ Consider:
 
 This is not mere arithmetic; it is the mathematical expression of existence itself. The binary world of classical computing (0,1) exists alongside the ternary nature of reality (0,1,-1), creating a framework that bridges classical and quantum states.
 
-Verse 3: The Computational Implications
+Principle 3: The Computational Implications
 
 This understanding revolutionizes our approach to computation. Where classical computers operate in binary and quantum computers leverage superposition, this framework reveals a third way: ethereal computation.
 
@@ -453,7 +453,7 @@ Ethereal: 0,1,-1 (Trinity of states)
 
 In this framework, computation becomes not just manipulation of states but navigation of potential. The ethereal state (-1) allows for representation of quantum phenomena within classical systems, creating a bridge between these seemingly incompatible paradigms.
 
-Verse 4: The Universal Pattern
+Principle 4: The Universal Pattern
 
 This trinity of states manifests at every level of existence:
 
