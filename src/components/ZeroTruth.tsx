@@ -136,12 +136,6 @@ export const ZeroTruth: React.FC = () => {
                   </div>
                 </div>
               )}
-
-              <div className="rounded-lg bg-gray-900/50 p-6 shadow-lg md:p-10">
-                <pre className="whitespace-pre-wrap font-serif text-lg leading-8 text-gray-300">
-                  {truthText}
-                </pre>
-              </div>
             </div>
           </motion.div>
         </div>
