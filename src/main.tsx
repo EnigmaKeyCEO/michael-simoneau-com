@@ -4,6 +4,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App'; // App will become a layout/outlet component
 import './index.css';
 import { ScrollProvider } from './contexts/ScrollContext';
+import { FoundationProvider } from './foundation';
+import { foundationConfig } from './foundation/config';
 
 // Import page/route components
 import { NotFound } from "./components/NotFound";
@@ -79,6 +81,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <FoundationProvider config={foundationConfig}>
+      <RouterProvider router={router} />
+    </FoundationProvider>
   </StrictMode>
 );

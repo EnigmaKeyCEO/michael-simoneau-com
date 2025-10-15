@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { cookieService } from '../services/cookieService';
+import { useFoundation, useFoundationFeature } from '../foundation';
 
 interface SpeechContextType {
   isPlaying: boolean;
@@ -37,9 +38,17 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [hasPlayedThisSession, setHasPlayedThisSession] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
+  const voiceAssistant = useFoundationFeature('voiceAssistant');
+  const { analytics } = useFoundation();
 
   const initializeSpeech = useCallback(() => {
     if (isInitializing || isInitialized) return;
+
+    if (!voiceAssistant.enabled) {
+      setIsSupported(false);
+      setError('Voice assistant disabled by React Foundation');
+      return;
+    }
 
     setIsInitializing(true);
     const synth = window.speechSynthesis;
@@ -51,24 +60,26 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     }
 
     setIsSupported(true);
-    const messages = [
-      "Your current stack has 14.8 months to live",
-      "Michael saved JPMorgan $5,000,000 in 11 weeks",
-      "Quantum vulnerability detected in your infrastructure",
-      "Initiating enterprise mesh transformation protocol"
-    ].sort(() => Math.random() - 0.5);
+    const messages = (voiceAssistant.messages.length > 0
+      ? [...voiceAssistant.messages]
+      : [
+          'Your current stack has 14.8 months to live',
+          'Michael saved JPMorgan $5,000,000 in 11 weeks',
+          'Quantum vulnerability detected in your infrastructure',
+          'Initiating enterprise mesh transformation protocol',
+        ]).sort(() => Math.random() - 0.5);
 
     const newUtterances = messages.map(message => {
       const utterance = new SpeechSynthesisUtterance(message);
-      utterance.rate = 0.8;
-      utterance.pitch = 0.5;
+      utterance.rate = voiceAssistant.voice.rate;
+      utterance.pitch = voiceAssistant.voice.pitch;
       return utterance;
     });
 
     setUtterances(newUtterances);
     setIsInitialized(true);
     setIsInitializing(false);
-  }, [isInitialized, isInitializing]);
+  }, [isInitialized, isInitializing, voiceAssistant]);
 
   // Handle auto-play with 3-second delay
   useEffect(() => {
@@ -77,7 +88,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     const setupAutoPlay = () => {
       const hasPlayedBefore = cookieService.hasAutoPlayConsent() || hasPlayedThisSession;
       
-      if (!hasPlayedBefore && isInitialized && isSupported && utterances.length > 0) {
+      if (!hasPlayedBefore && isInitialized && isSupported && utterances.length > 0 && voiceAssistant.enabled) {
         timer = setTimeout(() => {
           const synth = window.speechSynthesis;
           if (!synth) return;
@@ -104,7 +115,12 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
           });
 
           speakNext();
-        }, 3000);
+          analytics.track({
+            type: 'foundation.voice-assistant.autoplay',
+            payload: { totalPhrases: utterances.length },
+            timestamp: Date.now(),
+          });
+        }, Math.max(0, voiceAssistant.autoPlayDelayMs));
       }
     };
 
@@ -115,7 +131,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
         clearTimeout(timer);
       }
     };
-  }, [utterances, isInitialized, isSupported, hasPlayedThisSession]);
+  }, [analytics, utterances, isInitialized, isSupported, hasPlayedThisSession, voiceAssistant]);
 
   const play = useCallback(() => {
     if (!isInitialized) {
@@ -128,6 +144,12 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     synth.cancel();
     setIsPlaying(true);
     setCurrentPhrase(utterances[0].text);
+
+    analytics.track({
+      type: 'foundation.voice-assistant.play',
+      payload: { totalPhrases: utterances.length },
+      timestamp: Date.now(),
+    });
 
     let currentIndex = 0;
     const speakNext = () => {
@@ -146,7 +168,7 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     });
 
     speakNext();
-  }, [utterances, isInitialized, initializeSpeech]);
+  }, [analytics, utterances, isInitialized, initializeSpeech]);
 
   const pause = useCallback(() => {
     const synth = window.speechSynthesis;
@@ -154,7 +176,12 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
 
     synth.pause();
     setIsPlaying(false);
-  }, []);
+    analytics.track({
+      type: 'foundation.voice-assistant.pause',
+      payload: { phrase: currentPhrase },
+      timestamp: Date.now(),
+    });
+  }, [analytics, currentPhrase]);
 
   const skipForward = useCallback(() => {
     const synth = window.speechSynthesis;
@@ -165,8 +192,13 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     if (currentIndex < utterances.length - 1) {
       setCurrentPhrase(utterances[currentIndex + 1].text);
       synth.speak(utterances[currentIndex + 1]);
+      analytics.track({
+        type: 'foundation.voice-assistant.skip',
+        payload: { direction: 'forward', to: utterances[currentIndex + 1].text },
+        timestamp: Date.now(),
+      });
     }
-  }, [utterances, currentPhrase]);
+  }, [analytics, utterances, currentPhrase]);
 
   const skipBack = useCallback(() => {
     const synth = window.speechSynthesis;
@@ -177,8 +209,13 @@ export const SpeechProvider: React.FC<SpeechProviderProps> = ({ children }) => {
     if (currentIndex > 0) {
       setCurrentPhrase(utterances[currentIndex - 1].text);
       synth.speak(utterances[currentIndex - 1]);
+      analytics.track({
+        type: 'foundation.voice-assistant.skip',
+        payload: { direction: 'backward', to: utterances[currentIndex - 1].text },
+        timestamp: Date.now(),
+      });
     }
-  }, [utterances, currentPhrase]);
+  }, [analytics, utterances, currentPhrase]);
 
   return (
     <SpeechContext.Provider

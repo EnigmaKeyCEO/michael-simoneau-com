@@ -2,33 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cookieService } from '../services/cookieService';
+import { useFoundation, useFoundationFeature } from '../foundation';
 
 export const CookieNotice: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const cookieNotice = useFoundationFeature('cookieNotice');
+  const { analytics } = useFoundation();
 
   useEffect(() => {
-    console.log('Cookie notice state:', {
-      hasSeenNotice: cookieService.hasSeenCookieNotice(),
-      hasAutoPlayConsent: cookieService.hasAutoPlayConsent()
-    });
-
     if (!cookieService.hasSeenCookieNotice()) {
       setIsVisible(true);
     }
   }, []);
 
   const handleAccept = () => {
-    console.log('Accepting cookies and auto-play consent');
     cookieService.setCookieNoticeSeen();
-    cookieService.setAutoPlayConsent(true);
+    cookieService.setAutoPlayConsent(cookieNotice.autoPlayOptIn);
     setIsVisible(false);
+    analytics.track({
+      type: 'foundation.cookie-consent',
+      payload: { status: 'accepted' },
+      timestamp: Date.now(),
+    });
   };
 
   const handleDecline = () => {
-    console.log('Declining cookies and auto-play consent');
     cookieService.setCookieNoticeSeen();
     cookieService.setAutoPlayConsent(false);
     setIsVisible(false);
+    analytics.track({
+      type: 'foundation.cookie-consent',
+      payload: { status: 'declined' },
+      timestamp: Date.now(),
+    });
   };
 
   return (
@@ -43,7 +49,7 @@ export const CookieNotice: React.FC = () => {
         >
           <div className="bg-gray-900/95 backdrop-blur-sm rounded-lg p-4 border border-cyan-500/20 shadow-lg">
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-cyan-400 font-bold text-lg">Cookie Notice</h3>
+              <h3 className="text-cyan-400 font-bold text-lg">{cookieNotice.heading}</h3>
               <button
                 onClick={handleDecline}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -51,21 +57,19 @@ export const CookieNotice: React.FC = () => {
                 <X size={20} />
               </button>
             </div>
-            <p className="text-gray-300 text-sm mb-4">
-              We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
-            </p>
+            <p className="text-gray-300 text-sm mb-4">{cookieNotice.body}</p>
             <div className="flex gap-2">
               <button
                 onClick={handleAccept}
                 className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-2 px-4 rounded transition-colors"
               >
-                Accept
+                {cookieNotice.acceptLabel}
               </button>
               <button
                 onClick={handleDecline}
                 className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors"
               >
-                Decline
+                {cookieNotice.declineLabel}
               </button>
             </div>
           </div>
