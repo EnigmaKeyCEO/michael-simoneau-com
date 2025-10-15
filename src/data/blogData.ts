@@ -80,27 +80,35 @@ export const blogData: BlogData[] = [
     heroImage: "/blog/crypto-fabric-launch.svg",
     content: [
       createParagraph(
-        "Every enterprise I advise struggles with the same paradox: cryptography is mission critical, yet the teams responsible for it are outnumbered and overloaded. Crypto Fabric is my answer—a control plane that lets security teams define policies once while giving engineers self-service tooling that stays compliant by design.",
+        "Crypto Fabric is the culmination of a decade leading regulated trading platforms. It's the architecture that let us deliver new derivatives features at StoneX without waiting for quarterly audit cycles. The Fabric stitches together policy-as-code, cryptographic controls, and runtime automation so your compliance story is provable the instant a regulator asks."
       ),
-      createHeading("The fabric metaphor", 2),
+      createHeading("Why Build a Fabric?", 2),
       createParagraph(
-        "A fabric interlaces threads to create strength. In this case, the threads are key management, certificate lifecycle automation, code signing, and runtime policy enforcement. Each thread is modular, but together they form a resilient layer that stretches across hybrid clouds, legacy workloads, and greenfield microservices.",
+        "Traditional compliance programs bolt on after the product exists, generating rework and slowing delivery. I wanted something developers could live inside from day zero: a mesh where identity, key management, and data lineage flow together. When an auditor requests evidence, the Fabric answers with immutable logs, signed policies, and reproducible builds."
       ),
-      createHeading("Core capabilities", 2),
       createList([
-        "**Unified inventory:** A real-time catalog of every key, certificate, and secret—whether it lives in Cloud KMS, on-prem HSMs, or SaaS providers.",
-        "**Policy orchestration:** Security sets guardrails (like \"TLS 1.3 only\" or \"rotate signing keys every 30 days\") and the platform pushes enforcement hooks into CI/CD pipelines, Kubernetes admission controllers, and API gateways.",
-        "**Developer affordances:** CLI and SDK layers auto-wire approved algorithms, emit SBOM-ready metadata, and block unsafe defaults before they reach production.",
+        "**Provable identity:** Every deploy is signed with hardware-backed keys, binding change history to actual humans.",
+        "**Continuous controls:** Terraform, IAM, and KMS policy diffs must satisfy automated checks before merge.",
+        "**Segmented data planes:** Sensitive datasets stay inside governed enclaves with transparent proxying for analytics.",
       ]),
-      createHeading("Why now", 2),
+      createHeading("Inside the Fabric", 2),
       createParagraph(
-        "Post-quantum timelines are accelerating, regulatory scrutiny is rising, and the cost of manual crypto governance is untenable. Crypto Fabric recognizes that crypto agility is an organizational problem as much as a technical one. By abstracting the heavy lifting into a shared service, engineering teams focus on product while security leaders gain auditable control.",
+        "The /crypto-fabric page shows the canonical architecture, but the implementation hinges on disciplined workflows. We drive infrastructure changes through GitOps pipelines, with attestations generated at each stage. When secrets rotate or services ship, the Fabric captures the proof automatically."
+      ),
+      createList([
+        "Policy repositories map business requirements to executable OPA/Rego rules.",
+        "Supply-chain verifications enforce SBOM generation and signature validation for every artifact.",
+        "Runtime telemetry streams into BigQuery and Chronicle with data retention tuned to jurisdictional rules.",
+      ]),
+      createHeading("Who Is Crypto Fabric For?", 2),
+      createParagraph(
+        "If you're a fintech founder, a bank modernization lead, or a security team partnering with product, the Fabric provides a common language. Engineers get paved roads, compliance teams get real-time evidence, and leadership gets a provable story for regulators and customers."
       ),
       createCallout(
-        "You can't future-proof cryptography alone. Crypto Fabric gives every team a role in staying ahead of the next algorithmic shift.",
+        "Compliance should amplify innovation. Crypto Fabric makes that real by coupling strong cryptography with the automation habits I've honed across Fortune 100 and startup environments."
       ),
       createParagraph(
-        "This launch is the first chapter. Upcoming posts will dig into the reference architecture, Terraform modules, and the connective tissue that keeps compliance artifacts synchronized across auditors, regulators, and your production stack.",
+        "I'm actively expanding the Fabric reference implementation with blueprints for cross-border data residency, zero-knowledge proofs for transaction validation, and reusable audit packages. Subscribe to the blog or reach out if you want to pilot it inside your organization."
       ),
     ],
   },
