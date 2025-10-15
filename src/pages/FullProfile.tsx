@@ -88,17 +88,20 @@ export const FullProfile: React.FC = () => {
                     href="https://linkedin.com/in/michaelsimoneau"
                     className="hover:text-cyan-200"
                   >
-                    @IamMichaelSimoneau
+                    @MichaelSimoneau
                   </a>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">GitHub</h3>
                   <a
-                    href="https://github.com/EnigmaKeyCEO"
+                    href="https://github.com/MichaelSimoneau"
                     className="hover:text-cyan-200"
                   >
-                    EnigmaKeyCEO
+                    @MichaelSimoneau
                   </a>
+                </div>
+                <div>
+                  <p>@IamMichaelSimoneau</p>
                 </div>
               </div>
             </div>
