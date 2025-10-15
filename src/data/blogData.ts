@@ -40,10 +40,10 @@ export const blogData: BlogData[] = [
     featured: true,
     content: [
       createParagraph(
-        "Crypto Fabric is the profitability-first automation stack I designed so digital-asset operators can orchestrate staking, trading, and infrastructure workloads without sacrificing compliance or margin discipline. This featured briefing distills why the modular control center matters right now and how teams can move from zero-cost evaluation to Cloud Run production with investor-grade telemetry baked in."
+        "Crypto Fabric is the profitability-first automation stack I designed so digital-asset operators can orchestrate staking, trading, and infrastructure workloads without sacrificing compliance or margin discipline. This featured briefing distills why the modular control center matters right now and how teams can move from zero-cost evaluation to Cloud Run production with investor-grade telemetry baked in. Visit the [Crypto Fabric Control Center](/crypto-fabric) for the canonical tour, live service catalog, and continuously updated go-to-market bundles."
       ),
       createParagraph(
-        "The project lives in the open at https://github.com/MichaelSimoneau/crypto-fabric, and every section below links back to the architectural playbooks codified there. Consider this your guided tour through the Control Center, the guardrails that keep profits real, and the two-speed delivery engine that turns digital-asset ideas into monitored revenue streams."
+        "The project lives in the open at https://github.com/MichaelSimoneau/crypto-fabric, and every section below links back to the architectural playbooks codified there. Consider this your guided tour through the Control Center, the guardrails that keep profits real, and the two-speed delivery engine that turns digital-asset ideas into monitored revenue streams. When you're ready for the executive overview, the [/crypto-fabric](/crypto-fabric) briefing packages that context with proofs, pricing, and investor-grade telemetry screenshots."
       ),
       createHeading("Profitability-First by Design", 2),
       createParagraph(
@@ -108,7 +108,7 @@ export const blogData: BlogData[] = [
     featured: true,
     content: [
       createParagraph(
-        "Zero has always been presented as absence, yet the lived experience of builders, scientists, and philosophers alike shows a deeper simplicity: Zero is totality. The unpublished Chapter 6 of /zero reframes this intuition as a numerical trinity that fuses convergence (0), manifestation (1), and potential (-1). In this Zero-Why, I want to clarify why the simplest statement — Zero is everything — is also the most complete expression of computational reality."
+        "Zero has always been presented as absence, yet the lived experience of builders, scientists, and philosophers alike shows a deeper simplicity: Zero is totality. The unpublished Chapter 6 of the [Zero canon](/zero) reframes this intuition as a numerical trinity that fuses convergence (0), manifestation (1), and potential (-1). In this Zero-Why, I want to clarify why the simplest statement — Zero is everything — is also the most complete expression of computational reality."
       ),
       createHeading("Simplicity as Proof", 2),
       createParagraph(
