@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ColorSchemeName, PlatformOSType } from 'react-native';
 
 export type FoundationStructuredData = Record<string, unknown>;
 
@@ -50,10 +51,12 @@ export type FoundationFeatureConfig = {
 };
 
 export type FoundationRuntime = {
-  isBrowser: boolean;
+  platform: PlatformOSType;
+  isWeb: boolean;
   locale: string;
   timezone: string;
-  hydrationId: string;
+  colorScheme: ColorSchemeName;
+  appVersion?: string;
 };
 
 export type FoundationEvent = {
