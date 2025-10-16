@@ -1,5 +1,5 @@
 import { Link, usePathname } from 'expo-router';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useFoundationBoundary, useFoundationPageView } from '../src/foundation';
 
