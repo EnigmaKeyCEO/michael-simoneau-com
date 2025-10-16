@@ -353,7 +353,7 @@ export const ZeroTruth: React.FC = () => {
           </span>
         </div>
 
-        <div className="container relative z-10 mx-auto max-w-5xl">
+        <div className="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

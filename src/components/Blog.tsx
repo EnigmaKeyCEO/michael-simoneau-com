@@ -156,7 +156,7 @@ export const Blog: React.FC = () => {
         ref={sectionRef}
         className="min-h-screen bg-black text-white py-20 px-4 pt-24"
       >
-        <div className="container mx-auto max-w-7xl">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           <motion.div
             className="mb-16 text-center"
             initial={{ opacity: 0, y: -20 }}

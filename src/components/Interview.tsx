@@ -11,7 +11,7 @@ export const Interview: React.FC = () => {
       <AnimatedBackground />
       <MainNav />
       <section className="min-h-screen text-white py-20 px-4 pt-24 relative z-10">
-        <div className="container mx-auto max-w-4xl">
+        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

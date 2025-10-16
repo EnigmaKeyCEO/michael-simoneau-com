@@ -15,7 +15,7 @@ export const ContactFooter: React.FC = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.6 }}
     >
-      <div className="container mx-auto px-4 text-center">
+      <div className="mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
         <h2 className="text-3xl font-bold mb-8">Let's Build <span className="text-cyan-400">Something Revolutionary</span></h2>
         <p className="text-gray-400 mb-8 max-w-xl mx-auto">
           I'm always open to discussing new challenges, collaborations, or opportunities to leverage technology for impactful solutions.

@@ -9,7 +9,7 @@ export const SearchOptimizedSummary = () => (
     viewport={{ once: true, amount: 0.2 }}
     transition={{ duration: 0.6 }}
   >
-    <div className="container mx-auto px-4 max-w-5xl">
+    <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
       <article className="bg-gray-900/40 backdrop-blur rounded-2xl border border-cyan-900/40 shadow-xl p-8 md:p-12 space-y-8">
         <header className="space-y-4">
           <h2 className="text-3xl md:text-4xl font-extrabold text-cyan-300" id="search-optimized-summary-heading">

@@ -57,7 +57,7 @@ export const ServiceOffering: React.FC = () => { // Renamed from SecurityAudit
       }}
     >
       <motion.div
-        className="container mx-auto px-4"
+        className="mx-auto w-full max-w-6xl px-4 sm:px-6"
         variants={{ 
           visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, 
           hidden: { opacity: 0, y: 30 }

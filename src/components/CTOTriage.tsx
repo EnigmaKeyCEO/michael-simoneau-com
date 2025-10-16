@@ -13,7 +13,7 @@ export const CTOTriage: React.FC = () => {
       transition={{ duration: 0.8 }}
     >
       <motion.div
-        className="container w-full mx-auto px-4"
+        className="mx-auto w-full max-w-6xl px-4 sm:px-6"
       >
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">
           <span className="block text-cyan-400">Strategic Technology Consulting</span>
