@@ -41,3 +41,6 @@ apphosting.local.yaml
 
 # Local Netlify folder
 .netlify
+
+coverage/
+
