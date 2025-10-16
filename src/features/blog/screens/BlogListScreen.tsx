@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useFoundationMetadata } from '../../../foundation';
+import { useFoundationBoundary, useFoundationMetadata, useFoundationPageView } from '../../../foundation';
 import { BlogListItem } from '../components/BlogListItem';
 import { useBlogArticles, useFeaturedBlogArticles } from '../hooks/useBlogArticles';
 
@@ -7,6 +8,27 @@ export const BlogListScreen = () => {
   const metadata = useFoundationMetadata();
   const featuredArticles = useFeaturedBlogArticles();
   const articles = useBlogArticles();
+  const boundary = useMemo(
+    () => ({
+      id: 'blog-list',
+      label: 'Briefing Library',
+      description: 'Curated analysis and architecture briefs authored by Michael Simoneau.',
+      href: '/blog',
+    }),
+    [],
+  );
+
+  useFoundationBoundary(boundary);
+  useFoundationPageView(
+    'page:view:blog:list',
+    {
+      featuredCount: featuredArticles.length,
+      totalCount: articles.length,
+    },
+    {
+      deps: [featuredArticles.length, articles.length],
+    },
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

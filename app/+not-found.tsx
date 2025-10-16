@@ -1,7 +1,31 @@
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFoundationBoundary, useFoundationPageView } from '../src/foundation';
 
 export default function NotFound() {
+  const pathname = usePathname();
+  const boundary = useMemo(
+    () => ({
+      id: 'not-found',
+      label: 'Signal Lost',
+      description: 'Fallback route presented when no Expo Router path resolves.',
+      href: '/',
+    }),
+    [],
+  );
+
+  useFoundationBoundary(boundary);
+  useFoundationPageView(
+    'page:view:not-found',
+    {
+      pathname,
+    },
+    {
+      deps: [pathname],
+    },
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Signal lost</Text>

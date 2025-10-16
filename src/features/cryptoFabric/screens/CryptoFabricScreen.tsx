@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useFoundationFeature } from '../../../foundation';
+import { useFoundationBoundary, useFoundationFeature, useFoundationPageView } from '../../../foundation';
 
 const serviceCatalog = [
   {
@@ -18,6 +19,27 @@ const serviceCatalog = [
 
 export const CryptoFabricScreen = () => {
   const cryptoFabric = useFoundationFeature('cryptoFabricLaunch');
+  const boundary = useMemo(
+    () => ({
+      id: 'crypto-fabric',
+      label: 'Crypto Fabric',
+      description: 'Profitability-first modular cloud fabric curated by Michael Simoneau.',
+      href: '/crypto-fabric',
+    }),
+    [],
+  );
+
+  useFoundationBoundary(boundary);
+  useFoundationPageView(
+    'page:view:crypto-fabric',
+    {
+      serviceCatalogSize: serviceCatalog.length,
+      featureEnabled: cryptoFabric.enabled,
+    },
+    {
+      deps: [cryptoFabric.enabled],
+    },
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

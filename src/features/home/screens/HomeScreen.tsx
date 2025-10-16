@@ -1,6 +1,13 @@
 import { Link } from 'expo-router';
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useFoundationFeature, useFoundationMetadata, useFoundationRuntime } from '../../../foundation';
+import {
+  useFoundationBoundary,
+  useFoundationFeature,
+  useFoundationMetadata,
+  useFoundationPageView,
+  useFoundationRuntime,
+} from '../../../foundation';
 import { useFeaturedBlogArticles } from '../../blog/hooks/useBlogArticles';
 import { BlogListItem } from '../../blog/components/BlogListItem';
 
@@ -10,6 +17,28 @@ export const HomeScreen = () => {
   const cryptoFabricFeature = useFoundationFeature('cryptoFabricLaunch');
   const voiceAssistantFeature = useFoundationFeature('voiceAssistant');
   const featuredArticles = useFeaturedBlogArticles();
+  const boundary = useMemo(
+    () => ({
+      id: 'home',
+      label: 'Mission Control',
+      description: 'Entry deck for Michael Simoneau with live runtime signals and featured strategies.',
+      href: '/',
+    }),
+    [],
+  );
+
+  useFoundationBoundary(boundary);
+  useFoundationPageView(
+    'page:view:home',
+    {
+      featuredArticleCount: featuredArticles.length,
+      cryptoFabricEnabled: cryptoFabricFeature.enabled,
+      voiceAssistantEnabled: voiceAssistantFeature.enabled,
+    },
+    {
+      deps: [featuredArticles.length, cryptoFabricFeature.enabled, voiceAssistantFeature.enabled],
+    },
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

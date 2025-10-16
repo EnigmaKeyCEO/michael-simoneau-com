@@ -1,5 +1,12 @@
 export { FoundationProvider, useFoundation } from './context';
-export { useFoundationFeature, useFoundationMetadata, useFoundationAnalytics, useFoundationRuntime } from './hooks';
+export {
+  useFoundationFeature,
+  useFoundationMetadata,
+  useFoundationAnalytics,
+  useFoundationRuntime,
+  useFoundationBoundary,
+  useFoundationPageView,
+} from './hooks';
 export type {
   Foundation,
   FoundationFeatureConfig,

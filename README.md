@@ -38,3 +38,21 @@ This website is built with a modern, performant tech stack:
 The latest iteration embraces Expo + React Foundation to keep mobile and web surfaces aligned.
 Expect rapid iteration as new modules come online—the architecture is intentionally modular so future
 features (e.g., AI copilots, profitability dashboards) can land without churn.
+
+## Development & Deployment
+
+Run the Expo-powered web experience locally with:
+
+```bash
+npm install
+npm run start
+```
+
+Prior to merging, generate the static bundle that Firebase Hosting serves via the CI pipeline:
+
+```bash
+npm run build
+```
+
+The `build` script mirrors the previous Vite deployment flow by exporting the Expo Router project to `dist/`,
+which keeps `deploy.sh` and automated Firebase releases unchanged.
