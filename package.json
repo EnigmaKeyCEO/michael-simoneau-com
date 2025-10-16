@@ -2,6 +2,7 @@
   "name": "michael-simoneau-com",
   "private": true,
   "version": "2.0.0",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start --web",
     "android": "expo run:android",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "expo": "~51.0.20",
+    "expo-linking": "~6.3.1",
     "expo-router": "~3.5.7",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
