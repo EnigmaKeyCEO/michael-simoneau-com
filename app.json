@@ -12,9 +12,7 @@
       "typedRoutes": true
     },
     "plugins": [
-      ["expo-router", {
-        "origin": "expo"
-      }]
+      "expo-router"
     ],
     "splash": {
       "backgroundColor": "#0B1120"
