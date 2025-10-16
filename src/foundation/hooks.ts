@@ -2,7 +2,9 @@ import { DependencyList, useEffect, useMemo } from 'react';
 import type { FoundationBoundary, FoundationFeatureConfig } from './types';
 import { useFoundation } from './context';
 
-export const useFoundationFeature = <T extends keyof FoundationFeatureConfig>(feature: T) => {
+export const useFoundationFeature = <T extends keyof FoundationFeatureConfig>(
+  feature: T,
+) => {
   const { features } = useFoundation();
   return useMemo(() => features[feature], [features, feature]);
 };
@@ -45,8 +47,15 @@ export const useFoundationPageView = (
   options?: PageViewOptions,
 ) => {
   const { analytics, runtime } = useFoundation();
-  const payloadFingerprint = useMemo(() => (payload ? JSON.stringify(payload) : 'null'), [payload]);
-  const deps = options?.deps ?? [];
+  const payloadFingerprint = useMemo(
+    () => (payload ? JSON.stringify(payload) : 'null'),
+    [payload],
+  );
+  const providedDeps = options?.deps;
+  const stableDeps = useMemo<DependencyList>(
+    () => providedDeps ?? [],
+    [providedDeps],
+  );
   const enabled = options?.enabled ?? true;
 
   useEffect(() => {
@@ -65,7 +74,6 @@ export const useFoundationPageView = (
       },
       timestamp: Date.now(),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- spread dependency list is intentional
   }, [
     analytics,
     runtime.platform,
@@ -74,7 +82,8 @@ export const useFoundationPageView = (
     runtime.appVersion,
     type,
     payloadFingerprint,
+    payload,
     enabled,
-    ...deps,
+    stableDeps,
   ]);
 };

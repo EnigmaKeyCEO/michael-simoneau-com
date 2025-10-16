@@ -1,7 +1,16 @@
 import { DeepPartial } from './types';
 
-export const deepMerge = <T extends Record<string, any>>(target: T, source: DeepPartial<T>): T => {
-  const output: Record<string, any> = Array.isArray(target) ? [...target] : { ...target };
+type MergeableRecord = Record<string, unknown>;
+
+const isMergeableRecord = (value: unknown): value is MergeableRecord => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+};
+
+export const deepMerge = <T extends MergeableRecord>(
+  target: T,
+  source: DeepPartial<T>,
+): T => {
+  const output: MergeableRecord = { ...target };
 
   Object.entries(source ?? {}).forEach(([key, value]) => {
     if (value === undefined || value === null) {
@@ -13,11 +22,11 @@ export const deepMerge = <T extends Record<string, any>>(target: T, source: Deep
       return;
     }
 
-    if (typeof value === 'object' && value) {
+    if (isMergeableRecord(value)) {
       const targetValue = output[key];
       output[key] = deepMerge(
-        targetValue && typeof targetValue === 'object' ? targetValue : {},
-        value as DeepPartial<Record<string, any>>,
+        isMergeableRecord(targetValue) ? targetValue : {},
+        value as DeepPartial<MergeableRecord>,
       );
       return;
     }
