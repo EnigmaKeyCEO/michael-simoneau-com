@@ -10,7 +10,8 @@
     "build": "expo export --platform web --output-dir dist --clear",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist .expo"
+    "clean": "rm -rf dist .expo",
+    "release": "netlify deploy --dir=dist --prod --message=\"Expo Netlify release\""
   },
   "dependencies": {
     "expo": "~51.0.20",
@@ -28,6 +29,7 @@
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "eslint": "^9.9.1",
+    "netlify-cli": "^17.33.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "typescript": "^5.5.3"

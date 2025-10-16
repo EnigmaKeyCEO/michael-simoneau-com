@@ -31,7 +31,7 @@ This website is built with a modern, performant tech stack:
 *   **Language:** [TypeScript](https://www.typescriptlang.org/)
 *   **Navigation:** [Expo Router](https://expo.dev/router) with typed routes
 *   **Styling:** React Native `StyleSheet` primitives tailored for dark-mode friendly palettes
-*   **Deployment:** [Expo Application Services](https://expo.dev/eas) + static web exports
+*   **Deployment:** [Expo Application Services](https://expo.dev/eas) + Netlify static releases
 
 ### A Note on the Current Structure
 
@@ -48,11 +48,17 @@ npm install
 npm run start
 ```
 
-Prior to merging, generate the static bundle that Firebase Hosting serves via the CI pipeline:
+Prior to merging, generate the static bundle that Netlify serves via the CI pipeline:
 
 ```bash
 npm run build
 ```
 
 The `build` script mirrors the previous Vite deployment flow by exporting the Expo Router project to `dist/`,
-which keeps `deploy.sh` and automated Firebase releases unchanged.
+which keeps `deploy.sh` and automated Netlify releases aligned with the Expo architecture.
+
+To ship a release through Netlify CI, provide `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` and run:
+
+```bash
+npm run release
+```
