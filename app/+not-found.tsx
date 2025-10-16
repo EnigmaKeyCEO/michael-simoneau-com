@@ -1,6 +1,6 @@
 import { Link, usePathname } from 'expo-router';
 import { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useFoundationBoundary, useFoundationPageView } from '../src/foundation';
 
 export default function NotFound() {
@@ -33,9 +33,9 @@ export default function NotFound() {
         The control center could not locate that module. Return to the briefing deck.
       </Text>
       <Link href="/" asChild>
-        <View style={styles.link}>
+        <Pressable style={({ pressed }) => [styles.link, pressed && styles.linkPressed]}>
           <Text style={styles.linkText}>Navigate home</Text>
-        </View>
+        </Pressable>
       </Link>
     </View>
   );
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     backgroundColor: '#38BDF8',
+  },
+  linkPressed: {
+    opacity: 0.85,
   },
   linkText: {
     color: '#0F172A',

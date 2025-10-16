@@ -5,7 +5,8 @@ declare module 'react-native' {
   export type PlatformOSType = 'ios' | 'android' | 'macos' | 'windows' | 'web';
   export type TextStyle = Record<string, unknown>;
   export type ViewStyle = Record<string, unknown>;
-  export type StyleProp<T> = T | Array<T | null | undefined> | null | undefined;
+  export type StyleProp<T> = T | false | Array<T | null | undefined | false> | null | undefined;
+  export type PressableStateCallbackType = (state: { pressed: boolean }) => StyleProp<ViewStyle>;
 
   export const View: React.ComponentType<{
     style?: StyleProp<ViewStyle>;
@@ -21,6 +22,12 @@ declare module 'react-native' {
     children?: React.ReactNode;
   }>;
 
+  export const Pressable: React.ComponentType<{
+    style?: StyleProp<ViewStyle> | PressableStateCallbackType;
+    children?: React.ReactNode;
+    onPress?: () => void;
+  }>;
+
   export const StyleSheet: {
     create<T extends Record<string, unknown>>(styles: T): T;
   };
@@ -34,5 +41,6 @@ declare module 'react-native' {
 
   export const Platform: {
     OS: PlatformOSType;
+    select<T>(spec: { [key in PlatformOSType]?: T } & { default?: T }): T;
   };
 }

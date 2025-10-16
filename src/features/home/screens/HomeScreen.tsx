@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   useFoundationBoundary,
   useFoundationFeature,
@@ -21,7 +21,8 @@ export const HomeScreen = () => {
     () => ({
       id: 'home',
       label: 'Mission Control',
-      description: 'Entry deck for Michael Simoneau with live runtime signals and featured strategies.',
+      description:
+        'Entry deck for Michael Simoneau with live runtime signals and featured strategies.',
       href: '/',
     }),
     [],
@@ -46,7 +47,9 @@ export const HomeScreen = () => {
         <Text style={styles.eyebrow}>Enterprise Architect</Text>
         <Text style={styles.heroTitle}>{metadata.defaultTitle}</Text>
         <Text style={styles.heroSubtitle}>{metadata.description}</Text>
-        <Text style={styles.heroMeta}>{`Operating on ${runtime.platform.toUpperCase()} • ${runtime.locale}`}</Text>
+        <Text
+          style={styles.heroMeta}
+        >{`Operating on ${runtime.platform.toUpperCase()} • ${runtime.locale}`}</Text>
       </View>
 
       {cryptoFabricFeature.enabled && (
@@ -56,7 +59,7 @@ export const HomeScreen = () => {
             <Text style={styles.sectionTitle}>{cryptoFabricFeature.name}</Text>
             <Text style={styles.sectionBody}>{cryptoFabricFeature.description}</Text>
             <View style={styles.benefitList}>
-              {cryptoFabricFeature.keyBenefits.map(benefit => (
+              {cryptoFabricFeature.keyBenefits.map((benefit) => (
                 <View key={benefit.title} style={styles.benefitItem}>
                   <Text style={styles.benefitTitle}>{benefit.title}</Text>
                   <Text style={styles.benefitCopy}>{benefit.description}</Text>
@@ -64,9 +67,14 @@ export const HomeScreen = () => {
               ))}
             </View>
             <Link href={cryptoFabricFeature.cta.href} asChild>
-              <View style={styles.primaryButton}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.primaryButton,
+                  pressed && styles.primaryButtonPressed,
+                ]}
+              >
                 <Text style={styles.primaryButtonText}>{cryptoFabricFeature.cta.label}</Text>
-              </View>
+              </Pressable>
             </Link>
           </View>
         </View>
@@ -75,24 +83,29 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <Text style={styles.sectionEyebrow}>Voice of the stack</Text>
         <View style={styles.voiceCard}>
-          <Text style={styles.sectionBody}>
-            {voiceAssistantFeature.messages.join(' • ')}
-          </Text>
-          <Text style={styles.voiceMeta}>{`Pitch ${voiceAssistantFeature.voice.pitch} • Rate ${voiceAssistantFeature.voice.rate}`}</Text>
+          <Text style={styles.sectionBody}>{voiceAssistantFeature.messages.join(' • ')}</Text>
+          <Text
+            style={styles.voiceMeta}
+          >{`Pitch ${voiceAssistantFeature.voice.pitch} • Rate ${voiceAssistantFeature.voice.rate}`}</Text>
         </View>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionEyebrow}>Latest strategy briefs</Text>
         <View style={styles.grid}>
-          {featuredArticles.map(article => (
+          {featuredArticles.map((article) => (
             <BlogListItem key={`home-${article.id}`} article={article} />
           ))}
         </View>
         <Link href="/blog" asChild>
-          <View style={styles.secondaryButton}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              pressed && styles.secondaryButtonPressed,
+            ]}
+          >
             <Text style={styles.secondaryButtonText}>Browse the briefing library</Text>
-          </View>
+          </Pressable>
         </Link>
       </View>
     </ScrollView>
@@ -187,6 +200,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
   },
+  primaryButtonPressed: {
+    opacity: 0.85,
+  },
   primaryButtonText: {
     fontWeight: '700',
     color: '#0B1120',
@@ -214,6 +230,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#38BDF8',
     alignItems: 'center',
+  },
+  secondaryButtonPressed: {
+    opacity: 0.85,
   },
   secondaryButtonText: {
     color: '#38BDF8',

@@ -13,9 +13,13 @@
       "typedRoutes": true
     },
     "plugins": [
-      ["expo-router", {
-        "origin": "expo"
-      }]
+      [
+        "expo-router",
+        {
+          "origin": "https://michael-simoneau.com",
+          "headOrigin": "https://michael-simoneau.com"
+        }
+      ]
     ],
     "splash": {
       "backgroundColor": "#0B1120"

@@ -19,6 +19,9 @@
     "app.config.js",
     "app.json",
     "AGENTS.md",
-    "**/AGENTS.md"
-  ]
+    "**/AGENTS.md",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "extends": "expo/tsconfig.base"
 }
