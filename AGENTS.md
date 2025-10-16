@@ -4,6 +4,7 @@ Welcome to the forward-only branch of `michael-simoneau-com`. This repository is
 Every contribution must reinforce the future-facing product vision.
 
 ## Prime Directives
+
 - **Expo first.** All app runtime behavior flows through Expo Router + Metro. Never reintroduce Vite, CRA, or other legacy build
   stacks. Optimizations must integrate with Expo tooling (e.g., `expo prebuild`, `expo-doctor`).
 - **React Foundation compliance.** Use the primitives under `src/foundation` for config, analytics, and runtime intelligence.
@@ -15,6 +16,7 @@ Every contribution must reinforce the future-facing product vision.
   introduces animated experiences.
 
 ## Architectural Expectations
+
 - **Features live under `src/features`.** Compose screens, hooks, and view models per feature. Keep shared UI under `src/ui` (create
   it if a common component emerges). Avoid leaking feature-specific concerns into the foundation layer.
 - **Provider orchestration belongs in `src/providers`.** Any global context should be added there and composed inside `AppProviders`.
@@ -24,10 +26,12 @@ Every contribution must reinforce the future-facing product vision.
   component validation. Add smoke tests for critical navigation flows before shipping major UX changes.
 
 ## Tooling + Scripts
-- Use `npm run start` for local development, `npm run web` for web preview, and `npm run typecheck` before commit.
+
+- Use `yarn start` for local development, `yarn web` for web preview, and `yarn typecheck` before commit.
 - ESLint config already extends Expo/React Native best practices. Do not disable rules globally; scope overrides locally when
   necessary.
-- Always regenerate `package-lock.json` with `npm` (not `yarn` or `pnpm`).
+- Manage dependencies with Yarn only; do not introduce `package-lock.json`.
 
 ## Documentation
+
 - Update this file or nested `AGENTS.md` files whenever architectural rules evolve. Keep guidance clear, opinionated, and future-proof.
