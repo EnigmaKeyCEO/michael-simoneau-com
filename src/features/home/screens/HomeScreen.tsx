@@ -1,6 +1,6 @@
-import { Link } from 'expo-router';
-import { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Href, Link } from 'expo-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AccessibilityInfo, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
 import {
   useFoundationBoundary,
   useFoundationFeature,
@@ -10,6 +10,8 @@ import {
 } from '../../../foundation';
 import { useFeaturedBlogArticles } from '../../blog/hooks/useBlogArticles';
 import { BlogListItem } from '../../blog/components/BlogListItem';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export const HomeScreen = () => {
   const metadata = useFoundationMetadata();
@@ -40,185 +42,474 @@ export const HomeScreen = () => {
     },
   );
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.hero}>
-        <Text style={styles.eyebrow}>Enterprise Architect</Text>
-        <Text style={styles.heroTitle}>{metadata.defaultTitle}</Text>
-        <Text style={styles.heroSubtitle}>{metadata.description}</Text>
-        <Text style={styles.heroMeta}>{`Operating on ${runtime.platform.toUpperCase()} • ${runtime.locale}`}</Text>
-      </View>
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [currentOrbit, setCurrentOrbit] = useState(0);
+  
+  useEffect(() => {
+    AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion).catch(() => setReduceMotion(false));
+  }, []);
 
-      {cryptoFabricFeature.enabled && (
-        <View style={styles.section}>
-          <Text style={styles.sectionEyebrow}>{cryptoFabricFeature.highlightLabel}</Text>
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>{cryptoFabricFeature.name}</Text>
-            <Text style={styles.sectionBody}>{cryptoFabricFeature.description}</Text>
-            <View style={styles.benefitList}>
-              {cryptoFabricFeature.keyBenefits.map(benefit => (
-                <View key={benefit.title} style={styles.benefitItem}>
-                  <Text style={styles.benefitTitle}>{benefit.title}</Text>
-                  <Text style={styles.benefitCopy}>{benefit.description}</Text>
-                </View>
-              ))}
-            </View>
-            <Link href={cryptoFabricFeature.cta.href} asChild>
-              <View style={styles.primaryButton}>
-                <Text style={styles.primaryButtonText}>{cryptoFabricFeature.cta.label}</Text>
+  // 3D Orbital Animation System
+  const orbitalRotation = useRef(new Animated.Value(0)).current;
+  const centralHubScale = useRef(new Animated.Value(0.8)).current;
+  const centralHubOpacity = useRef(new Animated.Value(0)).current;
+  const satelliteAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+
+  useEffect(() => {
+    if (reduceMotion) {
+      centralHubScale.setValue(1);
+      centralHubOpacity.setValue(1);
+      satelliteAnimations.forEach(anim => anim.setValue(1));
+      return;
+    }
+
+    // Central hub entrance
+    Animated.parallel([
+      Animated.spring(centralHubScale, { toValue: 1, useNativeDriver: true, tension: 50, friction: 8 }),
+      Animated.timing(centralHubOpacity, { toValue: 1, duration: 800, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+    ]).start();
+
+    // Staggered satellite entrance
+    satelliteAnimations.forEach((anim, index) => {
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 600,
+        delay: 200 + (index * 200),
+        easing: Easing.out(Easing.back(1.2)),
+        useNativeDriver: true,
+      }).start();
+    });
+
+    // Continuous orbital rotation
+    const orbitalLoop = Animated.loop(
+      Animated.timing(orbitalRotation, {
+        toValue: 1,
+        duration: 60000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    );
+    orbitalLoop.start();
+
+    return () => orbitalLoop.stop();
+  }, [reduceMotion, centralHubScale, centralHubOpacity, satelliteAnimations, orbitalRotation]);
+
+  // 3D Transform calculations
+  const orbitalAngle = orbitalRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const getSatelliteTransform = (index: number, total: number) => {
+    const angle = (index * 360) / total;
+    const radius = screenWidth * 0.35;
+    const x = Math.cos((angle * Math.PI) / 180) * radius;
+    const y = Math.sin((angle * Math.PI) / 180) * radius;
+    
+    return {
+      transform: [
+        { translateX: x },
+        { translateY: y },
+        { rotate: orbitalAngle },
+        { scale: satelliteAnimations[index] },
+        { perspective: 1000 },
+        { rotateX: '15deg' },
+      ],
+    };
+  };
+
+  const renderPrimaryButton = (href: Href<string>, label: string) => {
+    const pressedScale = useRef(new Animated.Value(1)).current;
+    const animateTo = (value: number) => {
+      if (reduceMotion) return;
+      Animated.spring(pressedScale, { toValue: value, useNativeDriver: true, damping: 14, stiffness: 180, mass: 0.6 }).start();
+    };
+    return (
+      <Link href={href} asChild>
+        <Pressable
+          onPressIn={() => animateTo(0.97)}
+          onPressOut={() => animateTo(1)}
+          style={({ pressed }) => [styles.primaryButton, pressed ? styles.primaryButtonActive : undefined]}
+        >
+          <Animated.View style={{ transform: [{ scale: pressedScale }] }}>
+            <Text style={styles.primaryButtonText}>{label}</Text>
+          </Animated.View>
+        </Pressable>
+      </Link>
+    );
+  };
+
+  const orbitalSatellites = [
+    {
+      id: 'crypto-fabric',
+      enabled: cryptoFabricFeature.enabled,
+      title: cryptoFabricFeature.name,
+      subtitle: cryptoFabricFeature.highlightLabel,
+      content: (
+        <View style={styles.satelliteCard}>
+          <Text style={styles.satelliteTitle}>{cryptoFabricFeature.name}</Text>
+          <Text style={styles.satelliteDescription}>{cryptoFabricFeature.description}</Text>
+          <View style={styles.benefitGrid}>
+            {cryptoFabricFeature.keyBenefits.map(benefit => (
+              <View key={benefit.title} style={styles.benefitChip}>
+                <Text style={styles.benefitChipText}>{benefit.title}</Text>
               </View>
-            </Link>
+            ))}
           </View>
+          {renderPrimaryButton(cryptoFabricFeature.cta.href as Href<string>, cryptoFabricFeature.cta.label)}
         </View>
-      )}
-
-      <View style={styles.section}>
-        <Text style={styles.sectionEyebrow}>Voice of the stack</Text>
-        <View style={styles.voiceCard}>
-          <Text style={styles.sectionBody}>
+      ),
+    },
+    {
+      id: 'voice-assistant',
+      enabled: true,
+      title: 'Voice Assistant',
+      subtitle: 'Voice of the stack',
+      content: (
+        <View style={styles.satelliteCard}>
+          <Text style={styles.satelliteTitle}>Voice Assistant</Text>
+          <Text style={styles.satelliteDescription}>
             {voiceAssistantFeature.messages.join(' • ')}
           </Text>
           <Text style={styles.voiceMeta}>{`Pitch ${voiceAssistantFeature.voice.pitch} • Rate ${voiceAssistantFeature.voice.rate}`}</Text>
         </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionEyebrow}>Latest strategy briefs</Text>
-        <View style={styles.grid}>
-          {featuredArticles.map(article => (
-            <BlogListItem key={`home-${article.id}`} article={article} />
-          ))}
-        </View>
-        <Link href="/blog" asChild>
-          <View style={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>Browse the briefing library</Text>
+      ),
+    },
+    {
+      id: 'blog-articles',
+      enabled: true,
+      title: 'Strategy Briefs',
+      subtitle: 'Latest insights',
+      content: (
+        <View style={styles.satelliteCard}>
+          <Text style={styles.satelliteTitle}>Strategy Briefs</Text>
+          <View style={styles.articleGrid}>
+            {featuredArticles.slice(0, 2).map(article => (
+              <BlogListItem key={`home-${article.id}`} article={article} />
+            ))}
           </View>
-        </Link>
+          <Link href="/blog">
+            <Pressable style={({ pressed }) => [styles.secondaryButton, pressed ? styles.secondaryButtonActive : undefined]}>
+              <Text style={styles.secondaryButtonText}>Explore All</Text>
+            </Pressable>
+          </Link>
+        </View>
+      ),
+    },
+    {
+      id: 'zero-canon',
+      enabled: true,
+      title: 'Zero Canon',
+      subtitle: 'The living truth',
+      content: (
+        <View style={styles.satelliteCard}>
+          <Text style={styles.satelliteTitle}>Zero Canon</Text>
+          <Text style={styles.satelliteDescription}>
+            The living truth of Zero, Energy, and the Nature of Existence
+          </Text>
+          <Link href="/zero">
+            <Pressable style={({ pressed }) => [styles.secondaryButton, pressed ? styles.secondaryButtonActive : undefined]}>
+              <Text style={styles.secondaryButtonText}>Enter the Canon</Text>
+            </Pressable>
+          </Link>
+        </View>
+      ),
+    },
+  ].filter(satellite => satellite.enabled);
+
+  return (
+    <View style={styles.container}>
+      {/* 3D Orbital System */}
+      <View style={styles.orbitalSystem}>
+        {/* Central Hub */}
+        <Animated.View 
+          style={[
+            styles.centralHub,
+            {
+              opacity: centralHubOpacity,
+              transform: [
+                { scale: centralHubScale },
+                { perspective: 1000 },
+                { rotateX: '5deg' },
+              ],
+            }
+          ]}
+        >
+          <View style={styles.energyField} />
+          <View style={styles.centralCore}>
+            <Text style={styles.centralEyebrow}>Enterprise Architect</Text>
+            <Text style={styles.centralTitle}>{metadata.defaultTitle}</Text>
+            <Text style={styles.centralSubtitle}>{metadata.description}</Text>
+            <Text style={styles.centralMeta}>{`Operating on ${runtime.platform.toUpperCase()} • ${runtime.locale}`}</Text>
+          </View>
+        </Animated.View>
+
+        {/* Orbital Satellites */}
+        {orbitalSatellites.map((satellite, index) => (
+          <Animated.View
+            key={satellite.id}
+            style={[
+              styles.satellite,
+              getSatelliteTransform(index, orbitalSatellites.length),
+            ]}
+          >
+            <View style={styles.connectionBeam} />
+            <View style={styles.satelliteContainer}>
+              <Text style={styles.satelliteLabel}>{satellite.subtitle}</Text>
+              {satellite.content}
+            </View>
+          </Animated.View>
+        ))}
+
+        {/* Orbital Ring */}
+        <Animated.View 
+          style={[
+            styles.orbitalRing,
+            { transform: [{ rotate: orbitalAngle }] }
+          ]}
+        />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
-    gap: 32,
+    flex: 1,
     backgroundColor: '#0B1120',
+    overflow: 'hidden',
   },
-  hero: {
-    gap: 12,
-    padding: 32,
-    backgroundColor: '#111C3D',
-    borderRadius: 32,
+  orbitalSystem: {
+    flex: 1,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: screenHeight,
   },
-  eyebrow: {
+  centralHub: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: 320,
+    height: 320,
+    marginTop: -160,
+    marginLeft: -160,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  energyField: {
+    position: 'absolute',
+    width: 400,
+    height: 400,
+    borderRadius: 400,
+    backgroundColor: '#0ea5e9',
+    opacity: 0.1,
+    shadowColor: '#0ea5e9',
+    shadowOpacity: 0.3,
+    shadowRadius: 60,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  centralCore: {
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: 'rgba(17,28,61,0.95)',
+    borderWidth: 3,
+    borderColor: '#38BDF8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.4,
+    shadowRadius: 40,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  centralEyebrow: {
     color: '#38BDF8',
     fontSize: 14,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    fontWeight: '600',
-  },
-  heroTitle: {
-    fontSize: 32,
-    lineHeight: 38,
-    fontWeight: '700',
-    color: '#F8FAFC',
-  },
-  heroSubtitle: {
-    fontSize: 18,
-    lineHeight: 26,
-    color: '#E2E8F0',
-  },
-  heroMeta: {
-    fontSize: 14,
-    color: '#94A3B8',
-  },
-  section: {
-    gap: 16,
-  },
-  sectionEyebrow: {
-    color: '#38BDF8',
-    fontSize: 12,
     letterSpacing: 3,
     textTransform: 'uppercase',
-    fontWeight: '600',
+    fontWeight: '700',
+    marginBottom: 8,
+    textAlign: 'center',
   },
-  card: {
-    gap: 16,
-    backgroundColor: '#020617',
-    borderRadius: 32,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#1E293B',
+  centralTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#F8FAFC',
+    textAlign: 'center',
+    marginBottom: 8,
+    letterSpacing: -0.5,
   },
-  sectionTitle: {
-    fontSize: 24,
+  centralSubtitle: {
+    fontSize: 16,
+    color: '#CBD5F5',
+    textAlign: 'center',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  centralMeta: {
+    fontSize: 12,
+    color: '#94A3B8',
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  satellite: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  connectionBeam: {
+    position: 'absolute',
+    width: 2,
+    height: 120,
+    backgroundColor: 'rgba(56,189,248,0.4)',
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  satelliteContainer: {
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(2,6,23,0.9)',
+    borderWidth: 2,
+    borderColor: 'rgba(56,189,248,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 8 },
+  },
+  satelliteLabel: {
+    color: '#38BDF8',
+    fontSize: 10,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    fontWeight: '700',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  satelliteCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  satelliteTitle: {
+    fontSize: 16,
     fontWeight: '700',
     color: '#F8FAFC',
+    textAlign: 'center',
+    marginBottom: 8,
   },
-  sectionBody: {
-    fontSize: 16,
-    lineHeight: 24,
+  satelliteDescription: {
+    fontSize: 12,
     color: '#CBD5F5',
+    textAlign: 'center',
+    marginBottom: 12,
+    lineHeight: 16,
   },
-  benefitList: {
-    gap: 12,
+  benefitGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 12,
+    gap: 4,
   },
-  benefitItem: {
-    backgroundColor: '#111C3D',
-    borderRadius: 24,
-    padding: 16,
-    gap: 8,
+  benefitChip: {
+    backgroundColor: 'rgba(56,189,248,0.2)',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(56,189,248,0.4)',
   },
-  benefitTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+  benefitChipText: {
+    fontSize: 10,
     color: '#38BDF8',
+    fontWeight: '600',
   },
-  benefitCopy: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: '#E2E8F0',
+  articleGrid: {
+    gap: 8,
+    marginBottom: 12,
+  },
+  orbitalRing: {
+    position: 'absolute',
+    width: screenWidth * 0.8,
+    height: screenWidth * 0.8,
+    borderRadius: screenWidth * 0.4,
+    borderWidth: 1,
+    borderColor: 'rgba(56,189,248,0.1)',
+    top: '50%',
+    left: '50%',
+    marginTop: -screenWidth * 0.4,
+    marginLeft: -screenWidth * 0.4,
+  },
+  voiceMeta: {
+    fontSize: 10,
+    color: '#94A3B8',
+    letterSpacing: 1,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   primaryButton: {
-    marginTop: 8,
     backgroundColor: '#38BDF8',
-    borderRadius: 999,
-    paddingVertical: 14,
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#67E8F9',
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  primaryButtonActive: {
+    backgroundColor: '#22d3ee',
+    borderColor: '#a5f3fc',
+    transform: [{ scale: 0.95 }],
   },
   primaryButtonText: {
     fontWeight: '700',
     color: '#0B1120',
     textTransform: 'uppercase',
     letterSpacing: 1,
-  },
-  voiceCard: {
-    backgroundColor: '#111C3D',
-    borderRadius: 28,
-    padding: 24,
-    gap: 12,
-  },
-  voiceMeta: {
-    fontSize: 12,
-    color: '#94A3B8',
-    letterSpacing: 1,
-  },
-  grid: {
-    gap: 16,
+    fontSize: 10,
   },
   secondaryButton: {
-    marginTop: 12,
-    paddingVertical: 12,
-    borderRadius: 999,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: '#38BDF8',
     alignItems: 'center',
+    backgroundColor: 'transparent',
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  secondaryButtonActive: {
+    backgroundColor: 'rgba(56,189,248,0.15)',
+    borderColor: '#67E8F9',
+    transform: [{ scale: 0.95 }],
   },
   secondaryButtonText: {
     color: '#38BDF8',
-    fontWeight: '600',
+    fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
+    fontSize: 10,
   },
 });

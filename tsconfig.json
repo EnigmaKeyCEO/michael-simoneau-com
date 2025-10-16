@@ -8,7 +8,9 @@
     "noEmit": true,
     "allowJs": false,
     "isolatedModules": true,
-    "types": ["jest"]
+    "types": [
+      "jest"
+    ]
   },
   "include": [
     "app",
@@ -19,6 +21,8 @@
     "app.json",
     "AGENTS.md",
     "**/AGENTS.md",
-    "src/**/*.spec.tsx"
+    "src/**/*.spec.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }
