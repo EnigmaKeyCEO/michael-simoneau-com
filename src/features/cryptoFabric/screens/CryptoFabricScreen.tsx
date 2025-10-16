@@ -6,14 +6,32 @@ const serviceCatalog = [
   {
     title: 'Guardrail Orchestrator',
     description: 'Policy-driven deployment pipelines that gate workloads on profitability and compliance outcomes.',
+    features: ['Profitability gates', 'Compliance checks', 'Auto-scaling limits', 'Cost ceilings'],
   },
   {
     title: 'Profit Telemetry Mesh',
     description: 'Unified data plane that streams revenue, spend, and risk scores into a single control surface.',
+    features: ['Real-time metrics', 'Revenue tracking', 'Cost analysis', 'Risk scoring'],
   },
   {
     title: 'Zero-Cost Sandbox',
     description: 'Local-first adapters that mirror Cloud Run behavior with deterministic billing simulations.',
+    features: ['Local development', 'Billing simulation', 'Cost prediction', 'Safe testing'],
+  },
+  {
+    title: 'Aave Liquidator',
+    description: 'Automated opportunistic strategies tuned for guardrail-compliant gas ceilings.',
+    features: ['Gas optimization', 'Liquidation detection', 'Profit maximization', 'Risk management'],
+  },
+  {
+    title: 'EigenLayer Operator',
+    description: 'Tier-A operator orchestration that inherits profitability telemetry from day one.',
+    features: ['Validator management', 'Staking automation', 'Reward optimization', 'Monitoring'],
+  },
+  {
+    title: 'Treasury Reinvestor',
+    description: 'Capital allocation engine that routes Crypto Fabric profits into the YachtOffice ecosystem.',
+    features: ['Profit routing', 'Capital allocation', 'Yield optimization', 'Portfolio management'],
   },
 ];
 
@@ -56,6 +74,13 @@ export const CryptoFabricScreen = () => {
             <View key={item.title} style={styles.card}>
               <Text style={styles.cardTitle}>{item.title}</Text>
               <Text style={styles.cardCopy}>{item.description}</Text>
+              <View style={styles.featuresList}>
+                {item.features.map((feature, index) => (
+                  <View key={index} style={styles.featurePill}>
+                    <Text style={styles.featureText}>{feature}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           ))}
         </View>
