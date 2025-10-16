@@ -1,7 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Disallow: /__/firebase/
-Disallow: /__/firebaseui/
-
 Sitemap: https://michaelsimoneau.com/sitemap.xml
