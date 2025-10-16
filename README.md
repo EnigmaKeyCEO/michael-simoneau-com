@@ -27,12 +27,14 @@ The site highlights key projects that represent the scale and impact of my work,
 
 This website is built with a modern, performant tech stack:
 
-*   **Framework:** [React](https://react.dev/) (with [Vite](https://vitejs.dev/))
+*   **Runtime:** [Expo](https://expo.dev/) (React Native targeting web and native)
 *   **Language:** [TypeScript](https://www.typescriptlang.org/)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-*   **Animations:** [Framer Motion](https://www.framer.com/motion/)
-*   **Deployment:** [Firebase](https://firebase.google.com/)
+*   **Navigation:** [Expo Router](https://expo.dev/router) with typed routes
+*   **Styling:** React Native `StyleSheet` primitives tailored for dark-mode friendly palettes
+*   **Deployment:** [Expo Application Services](https://expo.dev/eas) + static web exports
 
 ### A Note on the Current Structure
 
-The codebase is currently undergoing a significant redesign and refactor. As such, the project structure may appear sporadic. The goal is to evolve this into a much cleaner, more modular architecture that fully represents the best practices I advocate for in my professional work. Thank you for your understanding as this transition is in progress.
+The latest iteration embraces Expo + React Foundation to keep mobile and web surfaces aligned.
+Expect rapid iteration as new modules come online—the architecture is intentionally modular so future
+features (e.g., AI copilots, profitability dashboards) can land without churn.

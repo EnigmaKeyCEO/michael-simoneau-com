@@ -1,14 +1,15 @@
-import { Foundation } from './types';
+import { resolveDefaultRuntime } from './runtime';
+import type { Foundation } from './types';
 
 export const defaultFoundationConfig: Foundation = {
   metadata: {
     siteName: 'React Foundation',
     defaultTitle: 'React Foundation Application',
     description: 'A React experience bootstrapped with React Foundation.',
-    canonicalUrl: typeof window !== 'undefined' ? window.location.href : 'https://localhost',
+    canonicalUrl: 'https://michaelsimoneau.com/',
     keywords: ['react', 'foundation'],
     image: {
-      default: 'https://react.dev/images/logo.svg',
+      default: 'https://michaelsimoneau.com/profile-image.png',
       alt: 'React Foundation logo',
     },
     structuredData: [],
@@ -22,7 +23,7 @@ export const defaultFoundationConfig: Foundation = {
       keyBenefits: [],
       cta: {
         label: 'Learn more',
-        href: '#',
+        href: '/crypto-fabric',
       },
     },
     cookieNotice: {
@@ -42,25 +43,16 @@ export const defaultFoundationConfig: Foundation = {
       messages: [],
     },
   },
-  runtime: {
-    isBrowser: typeof window !== 'undefined',
-    locale: typeof navigator !== 'undefined' ? navigator.language : 'en-US',
-    timezone:
-      typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC' : 'UTC',
-    hydrationId: 'react-foundation-root',
-  },
+  runtime: resolveDefaultRuntime(),
   analytics: {
     track: event => {
-      if (typeof window !== 'undefined' && 'dispatchEvent' in window) {
-        window.dispatchEvent(new CustomEvent('foundation:event', { detail: event }));
-      }
-      if (typeof console !== 'undefined') {
-        console.debug('[Foundation event]', event);
+      if (__DEV__) {
+        console.debug('[foundation]', event);
       }
     },
   },
   boundaries: [],
   registerBoundary: () => {
-    // noop by default; overridden by provider
+    // no-op; replaced at runtime
   },
 };

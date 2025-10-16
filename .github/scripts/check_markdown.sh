@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! grep -q "parseInlineMarkdown" src/components/BlogPost.tsx; then
-  echo "parseInlineMarkdown is not referenced in BlogPost.tsx" >&2
+TARGET="src/features/blog/components/BlogContentRenderer.tsx"
+
+if [[ ! -f "$TARGET" ]]; then
+  echo "Missing blog content renderer at $TARGET" >&2
   exit 1
 fi
 
-echo "Markdown parsing hook verified."
+if ! grep -q "StyleSheet" "$TARGET"; then
+  echo "BlogContentRenderer must style blocks with StyleSheet primitives" >&2
+  exit 1
+fi
+
+echo "Blog content renderer verified."

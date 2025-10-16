@@ -1,16 +1,35 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { Appearance } from 'react-native';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { defaultFoundationConfig } from './defaultConfig';
 import type { Foundation, FoundationBoundary, FoundationProviderProps } from './types';
+import { resolveDefaultRuntime } from './runtime';
 import { deepMerge } from './utils';
 
 const FoundationContext = createContext<Foundation>(defaultFoundationConfig);
 
 export const FoundationProvider = ({ config, children }: FoundationProviderProps) => {
   const [boundaries, setBoundaries] = useState<FoundationBoundary[]>([]);
+  const [runtime, setRuntime] = useState(() => resolveDefaultRuntime());
 
   const mergedConfig = useMemo(() => {
-    return deepMerge(defaultFoundationConfig, config ?? {});
-  }, [config]);
+    return deepMerge(defaultFoundationConfig, {
+      ...config,
+      runtime,
+    });
+  }, [config, runtime]);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setRuntime(current => ({
+        ...current,
+        colorScheme: colorScheme ?? current.colorScheme,
+      }));
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const registerBoundary = useCallback<Foundation['registerBoundary']>(boundary => {
     setBoundaries(current => {

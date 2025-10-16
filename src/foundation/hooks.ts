@@ -11,3 +11,13 @@ export const useFoundationMetadata = () => {
   const { metadata } = useFoundation();
   return metadata;
 };
+
+export const useFoundationAnalytics = () => {
+  const { analytics } = useFoundation();
+  return analytics;
+};
+
+export const useFoundationRuntime = () => {
+  const { runtime } = useFoundation();
+  return runtime;
+};

@@ -1,4 +1,4 @@
-import type { DeepPartial, Foundation } from './types';
+import type { DeepPartial, Foundation, FoundationEvent } from './types';
 
 export const foundationConfig: DeepPartial<Foundation> = {
   metadata: {
@@ -6,7 +6,7 @@ export const foundationConfig: DeepPartial<Foundation> = {
     defaultTitle: 'Michael Simoneau | Enterprise Architect & Technology Leader',
     description:
       'Discover how Michael Simoneau leads enterprise architecture, AI strategy, and large-scale transformations for highly regulated organizations.',
-    canonicalUrl: 'https://www.michaelsimoneau.com/',
+    canonicalUrl: 'https://michaelsimoneau.com/',
     keywords: [
       'Michael Simoneau',
       'Michael Simoneau technology leader',
@@ -16,20 +16,20 @@ export const foundationConfig: DeepPartial<Foundation> = {
       'Michael Simoneau AI strategy',
     ],
     image: {
-      default: 'https://www.michaelsimoneau.com/profile-image.png',
+      default: 'https://michaelsimoneau.com/profile-image.png',
       alt: 'Portrait of Michael Simoneau',
-      social: 'https://www.michaelsimoneau.com/profile-image.png',
+      social: 'https://michaelsimoneau.com/profile-image.png',
     },
     structuredData: [
       {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: 'Michael Simoneau | Enterprise Architect & Technology Leader',
-        url: 'https://www.michaelsimoneau.com/',
+        url: 'https://michaelsimoneau.com/',
         description:
           'Explore the enterprise architecture, AI strategy, and transformation leadership of Michael Simoneau, a trusted advisor to CTOs and executive teams.',
         inLanguage: 'en-US',
-        primaryImageOfPage: 'https://www.michaelsimoneau.com/profile-image.png',
+        primaryImageOfPage: 'https://michaelsimoneau.com/profile-image.png',
         about: {
           '@type': 'Person',
           name: 'Michael Simoneau',
@@ -40,11 +40,11 @@ export const foundationConfig: DeepPartial<Foundation> = {
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: 'Michael Simoneau',
-        url: 'https://www.michaelsimoneau.com/',
+        url: 'https://michaelsimoneau.com/',
         jobTitle: 'Enterprise Architect & Technology Leader',
         description:
           'Michael Simoneau architects resilient systems for highly regulated industries, blending AI innovation, zero-trust security, and pragmatic leadership.',
-        image: 'https://www.michaelsimoneau.com/profile-image.png',
+        image: 'https://michaelsimoneau.com/profile-image.png',
         sameAs: [
           'https://www.linkedin.com/in/MichaelSimoneau',
           'https://github.com/EnigmaKeyCEO',
@@ -142,11 +142,8 @@ export const foundationConfig: DeepPartial<Foundation> = {
     },
   },
   analytics: {
-    track: event => {
-      if (typeof window !== 'undefined' && 'dispatchEvent' in window) {
-        window.dispatchEvent(new CustomEvent('foundation:event', { detail: event }));
-      }
-      if (import.meta.env.DEV) {
+    track: (event: FoundationEvent) => {
+      if (__DEV__) {
         console.debug('[React Foundation]', event);
       }
     },
