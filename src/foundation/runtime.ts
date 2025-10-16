@@ -1,6 +1,26 @@
 import { Appearance, Platform } from 'react-native';
 import type { FoundationRuntime } from './types';
 
+type ExpoManifestLike = {
+  extra?: { appVersion?: unknown } | undefined;
+  version?: unknown;
+};
+
+type ExpoGlobalContainer = {
+  manifest?: ExpoManifestLike;
+  manifest2?: ExpoManifestLike;
+};
+
+type ExpoBridge = {
+  __expo?: ExpoGlobalContainer;
+  expo?: ExpoGlobalContainer;
+};
+
+const getExpoBridge = (): ExpoGlobalContainer | undefined => {
+  const globalWithBridge = globalThis as typeof globalThis & ExpoBridge;
+  return globalWithBridge.__expo ?? globalWithBridge.expo;
+};
+
 const getLocale = () => {
   try {
     if (typeof Intl !== 'undefined') {
@@ -31,8 +51,7 @@ const getTimezone = () => {
 
 const resolveAppVersion = () => {
   try {
-    const globalReference = globalThis as Record<string, any> | undefined;
-    const expoGlobal = globalReference?.__expo ?? globalReference?.expo;
+    const expoGlobal = getExpoBridge();
     const manifest = expoGlobal?.manifest2 ?? expoGlobal?.manifest;
     const candidate = manifest?.extra?.appVersion ?? manifest?.version;
     return typeof candidate === 'string' ? candidate : undefined;

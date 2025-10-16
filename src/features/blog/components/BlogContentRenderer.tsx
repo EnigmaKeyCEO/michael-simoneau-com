@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import type { TextStyle } from 'react-native';
 import type { ContentBlock } from '../types';
 
 interface BlogContentRendererProps {
@@ -10,9 +11,7 @@ export const BlogContentRenderer = ({ blocks }: BlogContentRendererProps) => {
   return (
     <View style={styles.container}>
       {blocks.map((block, index) => (
-        <Fragment key={`${block.type}-${index}`}>
-          {renderBlock(block)}
-        </Fragment>
+        <Fragment key={`${block.type}-${index}`}>{renderBlock(block)}</Fragment>
       ))}
     </View>
   );
@@ -22,7 +21,12 @@ const renderBlock = (block: ContentBlock) => {
   switch (block.type) {
     case 'heading':
       return (
-        <Text style={[styles.heading, headingStyles[block.level] ?? headingStyles[2]]}>
+        <Text
+          style={[
+            styles.heading,
+            headingStyles[block.level] ?? headingStyles[2],
+          ]}
+        >
           {block.content}
         </Text>
       );
@@ -57,7 +61,7 @@ const renderBlock = (block: ContentBlock) => {
   }
 };
 
-const headingStyles: Record<number, any> = {
+const headingStyles: Record<number, TextStyle> = {
   1: { fontSize: 32 },
   2: { fontSize: 28 },
   3: { fontSize: 24 },
