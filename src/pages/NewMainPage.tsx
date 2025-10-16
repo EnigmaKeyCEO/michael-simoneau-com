@@ -118,7 +118,7 @@ export const NewMainPage: React.FC = () => {
           viewport={{once: true, amount: 0.2}}
           transition={{duration: 0.7}}
         >
-          <div className="container mx-auto">
+          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
             <h2 className="text-4xl font-bold text-white mb-12 text-center">
               Proven <span className="text-cyan-400">Expertise</span> & Impact
             </h2>
@@ -146,7 +146,7 @@ export const NewMainPage: React.FC = () => {
           viewport={{once: true, amount: 0.2}}
           transition={{duration: 0.7}}
         >
-          <div className="container mx-auto">
+          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
             <div className="max-w-4xl mx-auto text-center">
               {cryptoFabricLaunch.enabled && (
                 <span className="inline-flex items-center justify-center px-3 py-1 text-xs font-semibold tracking-[0.35em] uppercase text-cyan-200/80 bg-cyan-500/10 rounded-full border border-cyan-400/60 mb-4">

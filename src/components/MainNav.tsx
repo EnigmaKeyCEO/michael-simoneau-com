@@ -34,7 +34,7 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
   
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-gray-800/50">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <div className="flex items-center">
           <Link 
             to="/" 

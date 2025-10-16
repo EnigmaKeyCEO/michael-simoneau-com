@@ -225,7 +225,7 @@ export const BlogPost: React.FC = () => {
     <>
       <MainNav />
       <section className="min-h-screen bg-black text-white py-12 md:py-20 px-4 pt-20 md:pt-24">
-        <div className="container mx-auto max-w-4xl">
+        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">
           <div>
             <div className="flex items-center justify-between mb-8">
               <Link 

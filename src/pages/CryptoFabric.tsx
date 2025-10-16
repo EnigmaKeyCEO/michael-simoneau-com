@@ -319,7 +319,7 @@ const CryptoFabric: React.FC = () => {
       <AnimatedBackground />
       <MainNav />
       <main className="relative z-10 pt-24 md:pt-32 pb-24 text-white">
-        <div className="container mx-auto px-4">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <motion.section
             className="bg-black/60 border border-cyan-400/40 rounded-3xl p-8 md:p-12 shadow-2xl"
             initial={{ opacity: 0, y: 16 }}

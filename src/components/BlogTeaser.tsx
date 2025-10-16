@@ -18,7 +18,7 @@ export const BlogTeaser: React.FC = () => {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, delay: 0.4 }}
     >
-      <div className="container mx-auto px-4 text-center">
+      <div className="mx-auto w-full max-w-6xl px-4 text-center sm:px-6">
         <h2 className="text-4xl font-bold text-white mb-4">
           Strategic Insights & <span className="text-cyan-400">Perspectives</span>
         </h2>
