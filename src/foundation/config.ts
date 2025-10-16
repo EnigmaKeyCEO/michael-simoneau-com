@@ -96,7 +96,7 @@ export const foundationConfig: DeepPartial<Foundation> = {
       highlightLabel: 'New launch',
       name: 'Crypto Fabric — Modular GCP Architecture & Control Center',
       description:
-        'A profitability-first automation platform built by Michael Simoneau for digital-asset operators that need Cloud Run guardrails, Firebase-native mobile distribution, and real-time profit telemetry.',
+        'A profitability-first automation platform built by Michael Simoneau for digital-asset operators that need Cloud Run guardrails, Netlify-orchestrated mobile distribution, and real-time profit telemetry.',
       keyBenefits: [
         {
           title: 'Unified control plane',
