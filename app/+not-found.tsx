@@ -29,9 +29,13 @@ export default function NotFound() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Signal lost</Text>
-      <Text style={styles.copy}>The control center could not locate that module. Return to the briefing deck.</Text>
-      <Link href="/" style={styles.link}>
-        <Text style={styles.linkText}>Navigate home</Text>
+      <Text style={styles.copy}>
+        The control center could not locate that module. Return to the briefing deck.
+      </Text>
+      <Link href="/" asChild>
+        <View style={styles.link}>
+          <Text style={styles.linkText}>Navigate home</Text>
+        </View>
       </Link>
     </View>
   );
