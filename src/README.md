@@ -30,7 +30,7 @@ src/
 ## Testing & Quality
 
 - Add React Native Testing Library specs as features mature.
-- Run `npm run typecheck` and `npm run lint` locally before sending pull requests.
+- Run `yarn typecheck` and `yarn lint` locally before sending pull requests.
 - Ensure analytics events emitted from screens are type-safe and covered by tests when possible.
 
 ## Documentation

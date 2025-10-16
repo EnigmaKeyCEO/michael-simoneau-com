@@ -5,11 +5,11 @@ set -euo pipefail
 
 # Build the project
 echo "Building the project..."
-npm run build
+yarn build
 
 # Deploy to Netlify production release
 echo "Deploying to Netlify production release..."
-NETLIFY_DEPLOY_CMD="npm run release"
+NETLIFY_DEPLOY_CMD="yarn release"
 
 if [[ -n "${NETLIFY_AUTH_TOKEN:-}" && -n "${NETLIFY_SITE_ID:-}" ]]; then
   echo "Detected Netlify CI credentials."
