@@ -7,8 +7,8 @@
     "strict": true,
     "noEmit": true,
     "allowJs": false,
-    "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "types": ["jest"]
   },
   "include": [
     "app",
@@ -21,7 +21,8 @@
     "AGENTS.md",
     "**/AGENTS.md",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "src/**/*.spec.tsx"
   ],
   "extends": "expo/tsconfig.base"
 }

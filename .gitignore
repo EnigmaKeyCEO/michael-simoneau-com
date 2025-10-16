@@ -48,3 +48,6 @@ apphosting.local.yaml
 expo-env.d.ts
 .expo
 # @end expo-cli
+
+coverage/
+
