@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "scheme": "michaelsimoneau",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "jsEngine": "hermes",
     "platforms": ["ios", "android", "web"],
     "experiments": {

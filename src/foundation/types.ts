@@ -95,5 +95,6 @@ export type DeepPartial<T> = {
 
 export type FoundationProviderProps = {
   config?: DeepPartial<Foundation>;
+  testID?: string;
   children: ReactNode;
 };
