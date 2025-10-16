@@ -1,4 +1,6 @@
-import { useMemo } from "react";
+import { Href, Link } from 'expo-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AccessibilityInfo, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
 import {
   useFoundationBoundary,
   useFoundationFeature,
@@ -13,6 +15,8 @@ import { HomeHero } from "../components/HomeHero";
 import { ThoughtOrbitLayout } from "../components/ThoughtOrbitLayout";
 import type { ThoughtOrbitSection } from "../components/ThoughtOrbitLayout";
 import { VoiceInsightsBubble } from "../components/VoiceInsightsBubble";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export const HomeScreen = () => {
   const metadata = useFoundationMetadata();
