@@ -252,9 +252,9 @@ const OrbitConstellation = ({ dynamic, index, total }: OrbitConstellationProps) 
     focusRef.current = dynamic.focus;
   }, [dynamic.focus]);
 
-  const baseRadius = 4.8 + index * 3.4;
-  const depth = -index * 4.6 - 2.4;
-  const verticalOffset = (index - (total - 1) / 2) * 2.6;
+  const baseRadius = 4 + index * 1.9;
+  const depth = -index * 3.4 - 2.2;
+  const verticalOffset = (index - (total - 1) / 2) * 2.1;
   const isFeatured = dynamic.id.includes('featured');
   const baseColor = dynamic.tone === 'hero' ? '#60a5fa' : '#38bdf8';
   const emissiveColor = dynamic.tone === 'hero' ? '#1d4ed8' : '#0284c7';
@@ -262,7 +262,7 @@ const OrbitConstellation = ({ dynamic, index, total }: OrbitConstellationProps) 
   const haloRadius = isFeatured ? baseRadius * 1.2 : baseRadius * 1.05;
 
   const satellites = useMemo(
-    () => createSatellites(isFeatured ? 9 : 6, baseRadius, index + 1),
+    () => createSatellites(isFeatured ? 7 : 5, baseRadius, index + 1),
     [baseRadius, index, isFeatured],
   );
 
@@ -301,7 +301,7 @@ const OrbitConstellation = ({ dynamic, index, total }: OrbitConstellationProps) 
   return (
     <group ref={clusterRef} position={[0, verticalOffset, depth]}>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[baseRadius, 0.26, 48, 240]} />
+        <torusGeometry args={[baseRadius, 0.18, 48, 240]} />
         <meshStandardMaterial
           ref={orbitMaterialRef}
           color={baseColor}
@@ -314,7 +314,7 @@ const OrbitConstellation = ({ dynamic, index, total }: OrbitConstellationProps) 
         />
       </mesh>
       <mesh>
-        <sphereGeometry args={[Math.max(0.32, baseRadius * 0.14), 48, 48]} />
+        <sphereGeometry args={[Math.max(0.28, baseRadius * 0.12), 48, 48]} />
         <meshStandardMaterial
           color={baseColor}
           emissive={emissiveColor}

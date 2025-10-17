@@ -1,8 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import type {
-  FoundationMetadata,
-  FoundationRuntime,
-} from "../../../foundation";
+import { StyleSheet, Text, View } from 'react-native';
+import type { FoundationMetadata, FoundationRuntime } from '../../../foundation';
 
 export type HomeHeroProps = {
   metadata: FoundationMetadata;
@@ -27,25 +24,25 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   eyebrow: {
-    color: "#38BDF8",
+    color: '#38BDF8',
     fontSize: 14,
     letterSpacing: 2,
-    textTransform: "uppercase",
-    fontWeight: "600",
+    textTransform: 'uppercase',
+    fontWeight: '600',
   },
   title: {
     fontSize: 32,
     lineHeight: 38,
-    fontWeight: "700",
-    color: "#F8FAFC",
+    fontWeight: '700',
+    color: '#F8FAFC',
   },
   subtitle: {
     fontSize: 18,
     lineHeight: 26,
-    color: "#E2E8F0",
+    color: '#E2E8F0',
   },
   meta: {
     fontSize: 14,
-    color: "#94A3B8",
+    color: '#94A3B8',
   },
 });
