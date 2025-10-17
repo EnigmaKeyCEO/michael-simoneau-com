@@ -9,9 +9,10 @@ import {
 import { useFeaturedBlogArticles } from '../../blog/hooks/useBlogArticles';
 import { CryptoFabricSpotlight } from '../components/CryptoFabricSpotlight';
 import { FeaturedBriefs } from '../components/FeaturedBriefs';
-import { HomeHero } from '../components/HomeHero';
+import { FluidHero } from '../components/FluidHero';
 import { ThoughtOrbitLayout } from '../components/ThoughtOrbitLayout';
 import type { ThoughtOrbitSection } from '../components/ThoughtOrbitLayout';
+import { NeuralTelemetryPanel } from '../components/NeuralTelemetryPanel';
 import { VoiceInsightsBubble } from '../components/VoiceInsightsBubble';
 
 export const HomeScreen = () => {
@@ -48,9 +49,22 @@ export const HomeScreen = () => {
     const orbitSections: ThoughtOrbitSection[] = [
       {
         id: 'hero',
-        content: <HomeHero metadata={metadata} runtime={runtime} />,
+        content: <FluidHero metadata={metadata} runtime={runtime} />,
         alignment: 'center' as const,
         tone: 'hero' as const,
+      },
+      {
+        id: 'neural-telemetry',
+        content: (
+          <NeuralTelemetryPanel
+            metadata={metadata}
+            runtime={runtime}
+            voiceFeature={voiceAssistantFeature}
+            cryptoFeature={cryptoFabricFeature}
+          />
+        ),
+        alignment: 'center' as const,
+        tone: 'surface' as const,
       },
     ];
 
