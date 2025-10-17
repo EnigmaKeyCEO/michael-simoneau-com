@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   LayoutChangeEvent,
   NativeScrollEvent,
@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { ThoughtOrbitFocusProvider } from './ThoughtOrbitFocusContext';
+import { useReducedMotion } from '../../../ui/animation/useReducedMotion';
 
 type OrbitAlignment = 'left' | 'right' | 'center';
 
@@ -27,6 +28,8 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
   const { height } = useWindowDimensions();
   const [centers, setCenters] = useState<number[]>(() => sections.map(() => Number.NaN));
   const [scrollOffset, setScrollOffset] = useState(0);
+  const reduceMotion = useReducedMotion();
+  const scrollRaf = useRef<number | null>(null);
 
   useEffect(() => {
     setCenters(sections.map(() => Number.NaN));
@@ -44,8 +47,32 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
     [],
   );
 
-  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const nextOffset = event.nativeEvent.contentOffset.y;
+
+      if (reduceMotion) {
+        setScrollOffset(nextOffset);
+        return;
+      }
+
+      if (scrollRaf.current !== null) {
+        cancelAnimationFrame(scrollRaf.current);
+      }
+
+      scrollRaf.current = requestAnimationFrame(() => {
+        setScrollOffset(nextOffset);
+      });
+    },
+    [reduceMotion],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (scrollRaf.current !== null) {
+        cancelAnimationFrame(scrollRaf.current);
+      }
+    };
   }, []);
 
   const viewportCenter = scrollOffset + height / 2;
@@ -60,28 +87,29 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
         const gaussianWeight = hasLayout ? Math.exp(-normalized * normalized) : 0;
 
         const alignment: OrbitAlignment = section.alignment ?? 'center';
-        const directionOffset = alignment === 'left' ? -120 : alignment === 'right' ? 120 : 0;
-        const orbitalCurve = (1 - gaussianWeight) ** 2;
-        const translateX = directionOffset * orbitalCurve;
-        const scale = 0.35 + gaussianWeight * 0.75;
-        const zoom = 0.6 + gaussianWeight * 0.4;
-        const opacity = 0.25 + gaussianWeight * 0.75;
-        const elevation = 2 + gaussianWeight * 10;
-        const bubbleRadius = 120 - gaussianWeight * 84;
-        const verticalPadding = 18 + gaussianWeight * 18;
-        const horizontalPadding = 20 + gaussianWeight * 20;
-        const haloSize = 48 * gaussianWeight;
-        const blurShadow = Math.max(12, 48 * gaussianWeight);
+        const focus = reduceMotion ? Math.min(1, gaussianWeight + 0.2) : gaussianWeight;
+        const directionOffset = alignment === 'left' ? -128 : alignment === 'right' ? 128 : 0;
+        const orbitalCurve = reduceMotion ? 0 : (1 - gaussianWeight) ** 2.2;
+        const translateX = reduceMotion ? 0 : directionOffset * orbitalCurve;
+        const scale = reduceMotion ? 1 : 0.86 + gaussianWeight * 0.22;
+        const zoom = reduceMotion ? 1 : 0.72 + gaussianWeight * 0.32;
+        const opacity = reduceMotion ? 0.96 : 0.35 + gaussianWeight * 0.65;
+        const elevation = reduceMotion ? 6 : 4 + gaussianWeight * 12;
+        const bubbleRadius = 96 + focus * 36;
+        const verticalPadding = 24 + focus * 18;
+        const horizontalPadding = 28 + focus * 26;
+        const haloSize = reduceMotion ? 24 : 56 * gaussianWeight;
+        const blurShadow = reduceMotion ? 28 : 22 + gaussianWeight * 28;
         const rotationDirection = alignment === 'left' ? -1 : alignment === 'right' ? 1 : 0;
         const backgroundColor =
           section.tone === 'hero'
-            ? gaussianWeight > 0.6
-              ? '#162A5C'
-              : '#111C3D'
-            : gaussianWeight > 0.6
-              ? '#07142E'
+            ? focus > 0.6
+              ? '#152C5C'
+              : '#101F3F'
+            : focus > 0.7
+              ? '#071529'
               : '#020617';
-        const borderColorOpacity = 0.12 + gaussianWeight * 0.32;
+        const borderColorOpacity = 0.16 + focus * 0.28;
         const borderColor = `rgba(56, 189, 248, ${borderColorOpacity.toFixed(3)})`;
 
         const wrapperAlignmentStyle =
@@ -101,7 +129,7 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
               wrapperAlignmentStyle,
               {
                 minHeight: 220 * zoom,
-                paddingVertical: 12 + (1 - gaussianWeight) * 12,
+                paddingVertical: 16 + (1 - focus) * 10,
               },
             ]}
             onLayout={registerSection(index)}
@@ -110,9 +138,9 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
               style={[
                 styles.sectionHalo,
                 {
-                  opacity: gaussianWeight,
+                  opacity: focus,
                   shadowRadius: haloSize,
-                  shadowOpacity: 0.6 * gaussianWeight,
+                  shadowOpacity: 0.45 * focus,
                 },
               ]}
             />
@@ -135,17 +163,17 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
                   borderRadius: bubbleRadius,
                   backgroundColor,
                   borderColor,
-                  shadowOpacity: 0.15 + gaussianWeight * 0.4,
+                  shadowOpacity: 0.18 + focus * 0.35,
                   shadowRadius: blurShadow,
-                  shadowOffset: { width: 0, height: 20 * gaussianWeight },
+                  shadowOffset: { width: 0, height: 16 + focus * 12 },
                   elevation,
-                  maxWidth: gaussianWeight > 0.85 ? 960 : 760,
+                  maxWidth: focus > 0.82 ? 960 : 820,
                 },
               ]}
             >
               <ThoughtOrbitFocusProvider
                 value={{
-                  focus: gaussianWeight,
+                  focus,
                   distance: Math.abs(normalized),
                 }}
               >
@@ -155,7 +183,7 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
           </View>
         );
       }),
-    [centers, height, registerSection, sections, viewportCenter],
+    [centers, height, reduceMotion, registerSection, sections, viewportCenter],
   );
 
   return (
@@ -173,10 +201,11 @@ export const ThoughtOrbitLayout = ({ sections }: ThoughtOrbitLayoutProps) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
-    paddingVertical: 40,
-    backgroundColor: '#0B1120',
-    gap: 48,
-    rowGap: 48,
+    paddingVertical: 52,
+    paddingBottom: 120,
+    backgroundColor: '#020617',
+    gap: 56,
+    rowGap: 56,
   },
   sectionWrapper: {
     width: '100%',
@@ -191,7 +220,7 @@ const styles = StyleSheet.create({
     marginLeft: -120,
     marginTop: -120,
     borderRadius: 120,
-    backgroundColor: 'rgba(14, 116, 224, 0.12)',
+    backgroundColor: 'rgba(99, 102, 241, 0.16)',
     shadowColor: '#38BDF8',
     pointerEvents: 'none',
   },

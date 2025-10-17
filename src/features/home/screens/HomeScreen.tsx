@@ -7,12 +7,11 @@ import {
   useFoundationRuntime,
 } from '../../../foundation';
 import { useFeaturedBlogArticles } from '../../blog/hooks/useBlogArticles';
-import { CryptoFabricSpotlight } from '../components/CryptoFabricSpotlight';
 import { FeaturedBriefs } from '../components/FeaturedBriefs';
-import { HomeHero } from '../components/HomeHero';
+import { NeuralHero } from '../components/NeuralHero';
+import { NeuralOperatingCanvas } from '../components/NeuralOperatingCanvas';
 import { ThoughtOrbitLayout } from '../components/ThoughtOrbitLayout';
 import type { ThoughtOrbitSection } from '../components/ThoughtOrbitLayout';
-import { VoiceInsightsBubble } from '../components/VoiceInsightsBubble';
 
 export const HomeScreen = () => {
   const metadata = useFoundationMetadata();
@@ -47,35 +46,32 @@ export const HomeScreen = () => {
   const sections = useMemo<ThoughtOrbitSection[]>(() => {
     const orbitSections: ThoughtOrbitSection[] = [
       {
-        id: 'hero',
-        content: <HomeHero metadata={metadata} runtime={runtime} />,
+        id: 'neural-hero',
+        content: <NeuralHero metadata={metadata} runtime={runtime} />,
         alignment: 'center' as const,
         tone: 'hero' as const,
       },
-    ];
-
-    if (cryptoFabricFeature.enabled) {
-      orbitSections.push({
-        id: 'crypto-fabric',
-        content: <CryptoFabricSpotlight feature={cryptoFabricFeature} />,
-        alignment: 'left' as const,
+      {
+        id: 'operating-canvas',
+        content: (
+          <NeuralOperatingCanvas
+            metadata={metadata}
+            runtime={runtime}
+            cryptoFeature={cryptoFabricFeature}
+            voiceFeature={voiceAssistantFeature}
+            featuredArticles={featuredArticles}
+          />
+        ),
+        alignment: 'center' as const,
         tone: 'surface' as const,
-      });
-    }
-
-    orbitSections.push({
-      id: 'voice-assistant',
-      content: <VoiceInsightsBubble feature={voiceAssistantFeature} />,
-      alignment: 'right' as const,
-      tone: 'surface' as const,
-    });
-
-    orbitSections.push({
-      id: 'featured-briefs',
-      content: <FeaturedBriefs articles={featuredArticles} />,
-      alignment: 'left' as const,
-      tone: 'surface' as const,
-    });
+      },
+      {
+        id: 'featured-briefs',
+        content: <FeaturedBriefs articles={featuredArticles} />,
+        alignment: 'center' as const,
+        tone: 'surface' as const,
+      },
+    ];
 
     return orbitSections;
   }, [cryptoFabricFeature, featuredArticles, metadata, runtime, voiceAssistantFeature]);
