@@ -92,7 +92,10 @@ const styles = StyleSheet.create({
   },
   overlayRing: {
     position: 'absolute',
-    inset: -14,
+    top: -14,
+    right: -14,
+    bottom: -14,
+    left: -14,
     borderRadius: 64,
     opacity: 0.28,
     borderWidth: 2,
