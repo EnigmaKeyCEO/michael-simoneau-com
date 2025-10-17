@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from 'react';
-import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
+import { Fragment } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import type { TextStyle } from 'react-native';
 import type { ContentBlock } from '../types';
 
@@ -8,11 +8,6 @@ interface BlogContentRendererProps {
 }
 
 export const BlogContentRenderer = ({ blocks }: BlogContentRendererProps) => {
-  const [reduceMotion, setReduceMotion] = useState(false);
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion).catch(() => setReduceMotion(false));
-  }, []);
-
   return (
     <View style={styles.container}>
       {blocks.map((block, index) => (
@@ -26,12 +21,7 @@ const renderBlock = (block: ContentBlock) => {
   switch (block.type) {
     case 'heading':
       return (
-        <Text
-          style={[
-            styles.heading,
-            headingStyles[block.level] ?? headingStyles[2],
-          ]}
-        >
+        <Text style={[styles.heading, headingStyles[block.level] ?? headingStyles[2]]}>
           {block.content}
         </Text>
       );

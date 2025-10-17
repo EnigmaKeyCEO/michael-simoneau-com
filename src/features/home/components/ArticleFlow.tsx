@@ -1,5 +1,13 @@
 import { Link } from 'expo-router';
-import { Animated, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import type { BlogArticleSummary } from '../../blog/types';
 import { BlogListItem } from '../../blog/components/BlogListItem';
 import { useInteractiveScale } from '../../../ui/animation/useInteractiveScale';
@@ -37,6 +45,16 @@ export const ArticleFlow = ({ articles }: ArticleFlowProps) => {
   );
 };
 
+const mosaicLayout: ViewStyle =
+  Platform.OS === 'web'
+    ? ({
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+      } as unknown as ViewStyle)
+    : {
+        flexDirection: 'column',
+      };
+
 const styles = StyleSheet.create({
   container: {
     gap: 24,
@@ -58,15 +76,7 @@ const styles = StyleSheet.create({
   },
   mosaic: {
     gap: 20,
-    ...Platform.select({
-      web: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-      },
-      default: {
-        flexDirection: 'column',
-      },
-    }),
+    ...mosaicLayout,
   },
   cta: {
     alignSelf: 'flex-start',
