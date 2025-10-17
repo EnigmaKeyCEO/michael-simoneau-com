@@ -1,8 +1,10 @@
 declare module 'expo-router' {
   import * as React from 'react';
 
+  export type Href<TPath extends string = string> = TPath;
+
   export type LinkProps = {
-    href: string;
+    href: Href<string>;
     asChild?: boolean;
     children?: React.ReactNode;
     style?: unknown;

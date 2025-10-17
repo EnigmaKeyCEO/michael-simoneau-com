@@ -7,20 +7,34 @@ declare module 'react-native' {
   export type ViewStyle = Record<string, unknown>;
   export type StyleProp<T> = T | null | undefined | false | ReadonlyArray<StyleProp<T>>;
   export type PressableStateCallbackType = (state: { pressed: boolean }) => StyleProp<ViewStyle>;
+  export type LayoutChangeEvent = {
+    nativeEvent: {
+      layout: { width: number; height: number; x: number; y: number };
+    };
+  };
+  export type NativeScrollEvent = {
+    contentOffset: { x: number; y: number };
+  };
+  export type NativeSyntheticEvent<T> = { nativeEvent: T };
 
   export const View: React.ComponentType<{
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
     pointerEvents?: 'auto' | 'none' | 'box-none' | 'box-only';
+    onLayout?: (event: LayoutChangeEvent) => void;
   }>;
   export const Text: React.ComponentType<{
     style?: StyleProp<TextStyle>;
     children?: React.ReactNode;
+    numberOfLines?: number;
   }>;
   export const ScrollView: React.ComponentType<{
     contentContainerStyle?: StyleProp<ViewStyle>;
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
+    onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+    scrollEventThrottle?: number;
+    showsVerticalScrollIndicator?: boolean;
   }>;
 
   export const Pressable: React.ComponentType<{
@@ -29,11 +43,23 @@ declare module 'react-native' {
     onPress?: () => void;
     onPressIn?: () => void;
     onPressOut?: () => void;
+    onHoverIn?: () => void;
+    onHoverOut?: () => void;
+    accessibilityRole?: string;
   }>;
 
   export const StyleSheet: {
     create<T extends Record<string, unknown>>(styles: T): T;
     flatten<T>(style: StyleProp<T>): T;
+    absoluteFillObject: ViewStyle;
+  };
+
+  export const Easing: {
+    linear: (value: number) => number;
+    inOut: (easing: (value: number) => number) => (value: number) => number;
+    out: (easing: (value: number) => number) => (value: number) => number;
+    quad: (value: number) => number;
+    cubic: (value: number) => number;
   };
 
   export const Appearance: {
@@ -74,7 +100,12 @@ declare module 'react-native' {
 
     function timing(
       value: Value,
-      config: { toValue: number; duration: number; useNativeDriver: boolean },
+      config: {
+        toValue: number;
+        duration: number;
+        useNativeDriver: boolean;
+        easing?: (value: number) => number;
+      },
     ): AnimatedCompositeAnimation;
 
     function spring(
@@ -106,5 +137,12 @@ declare module 'react-native' {
     sequence: typeof Animated.sequence;
     loop: typeof Animated.loop;
     View: typeof Animated.View;
+  };
+
+  export function useWindowDimensions(): {
+    width: number;
+    height: number;
+    scale: number;
+    fontScale: number;
   };
 }

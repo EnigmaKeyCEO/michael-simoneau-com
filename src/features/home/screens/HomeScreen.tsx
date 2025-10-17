@@ -1,30 +1,17 @@
 import { useMemo } from 'react';
-import {
-  useFoundationBoundary,
-  useFoundationFeature,
-  useFoundationMetadata,
-  useFoundationPageView,
-  useFoundationRuntime,
-} from '../../../foundation';
-import { useFeaturedBlogArticles } from '../../blog/hooks/useBlogArticles';
-import { FeaturedBriefs } from '../components/FeaturedBriefs';
-import { NeuralHero } from '../components/NeuralHero';
-import { NeuralOperatingCanvas } from '../components/NeuralOperatingCanvas';
+import { useFoundationBoundary, useFoundationPageView } from '../../../foundation';
 import { ThoughtOrbitLayout } from '../components/ThoughtOrbitLayout';
-import type { ThoughtOrbitSection } from '../components/ThoughtOrbitLayout';
+import { useSitemapSections } from '../components/useSitemapSections';
+import { SCRAPED_CONTENT } from '../data/sitemapContent';
 
 export const HomeScreen = () => {
-  const metadata = useFoundationMetadata();
-  const runtime = useFoundationRuntime();
-  const cryptoFabricFeature = useFoundationFeature('cryptoFabricLaunch');
-  const voiceAssistantFeature = useFoundationFeature('voiceAssistant');
-  const featuredArticles = useFeaturedBlogArticles();
+  const sections = useSitemapSections();
+
   const boundary = useMemo(
     () => ({
       id: 'home',
-      label: 'Mission Control',
-      description:
-        'Entry deck for Michael Simoneau with live runtime signals and featured strategies.',
+      label: 'Michael Simoneau Cosmic Archive',
+      description: 'A three-dimensional reading of every published surface on michaelsimoneau.com.',
       href: '/',
     }),
     [],
@@ -34,47 +21,11 @@ export const HomeScreen = () => {
   useFoundationPageView(
     'page:view:home',
     {
-      featuredArticleCount: featuredArticles.length,
-      cryptoFabricEnabled: cryptoFabricFeature.enabled,
-      voiceAssistantEnabled: voiceAssistantFeature.enabled,
+      sectionCount: sections.length,
+      recordCount: SCRAPED_CONTENT.length,
     },
-    {
-      deps: [featuredArticles.length, cryptoFabricFeature.enabled, voiceAssistantFeature.enabled],
-    },
+    { deps: [sections.length] },
   );
-
-  const sections = useMemo<ThoughtOrbitSection[]>(() => {
-    const orbitSections: ThoughtOrbitSection[] = [
-      {
-        id: 'neural-hero',
-        content: <NeuralHero metadata={metadata} runtime={runtime} />,
-        alignment: 'center' as const,
-        tone: 'hero' as const,
-      },
-      {
-        id: 'operating-canvas',
-        content: (
-          <NeuralOperatingCanvas
-            metadata={metadata}
-            runtime={runtime}
-            cryptoFeature={cryptoFabricFeature}
-            voiceFeature={voiceAssistantFeature}
-            featuredArticles={featuredArticles}
-          />
-        ),
-        alignment: 'center' as const,
-        tone: 'surface' as const,
-      },
-      {
-        id: 'featured-briefs',
-        content: <FeaturedBriefs articles={featuredArticles} />,
-        alignment: 'center' as const,
-        tone: 'surface' as const,
-      },
-    ];
-
-    return orbitSections;
-  }, [cryptoFabricFeature, featuredArticles, metadata, runtime, voiceAssistantFeature]);
 
   return <ThoughtOrbitLayout sections={sections} />;
 };

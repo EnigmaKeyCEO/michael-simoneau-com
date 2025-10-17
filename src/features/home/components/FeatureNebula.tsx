@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import type { Href } from 'expo-router';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { FoundationFeatureConfig } from '../../../foundation/types';
 import { AmebaSurface } from '../../../ui/surfaces/AmebaSurface';
@@ -33,7 +34,7 @@ export const FeatureNebula = ({ feature }: FeatureNebulaProps) => {
           </View>
         ))}
       </View>
-      <Link href={feature.cta.href} asChild>
+      <Link href={feature.cta.href as Href<string>} asChild>
         <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
           <Animated.View style={[styles.cta, animatedStyle]}>
             <Text style={styles.ctaText}>{feature.cta.label}</Text>

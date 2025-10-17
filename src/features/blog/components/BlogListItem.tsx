@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'expo-router';
-import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  AccessibilityInfo,
+  Animated,
+  Easing,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import type { BlogArticleSummary } from '../types';
 
 interface BlogListItemProps {
@@ -10,7 +18,9 @@ interface BlogListItemProps {
 export const BlogListItem = ({ article }: BlogListItemProps) => {
   const [reduceMotion, setReduceMotion] = useState(false);
   useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion).catch(() => setReduceMotion(false));
+    AccessibilityInfo.isReduceMotionEnabled()
+      .then(setReduceMotion)
+      .catch(() => setReduceMotion(false));
   }, []);
 
   const lift = useRef(new Animated.Value(0)).current;
@@ -19,13 +29,29 @@ export const BlogListItem = ({ article }: BlogListItemProps) => {
 
   const setLift = (active: boolean) => {
     if (reduceMotion) return;
-    Animated.timing(lift, { toValue: active ? 1 : 0, duration: 180, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+    Animated.timing(lift, {
+      toValue: active ? 1 : 0,
+      duration: 180,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
   };
 
   return (
     <Link href={`/blog/${article.id}`} asChild>
-      <Pressable onHoverIn={() => setLift(true)} onHoverOut={() => setLift(false)} onPressIn={() => setLift(true)} onPressOut={() => setLift(false)}>
-        <Animated.View style={[styles.card, article.featured ? styles.featuredCard : undefined, { transform: [{ translateY }], shadowRadius: shadow as unknown as number }]}>
+      <Pressable
+        onHoverIn={() => setLift(true)}
+        onHoverOut={() => setLift(false)}
+        onPressIn={() => setLift(true)}
+        onPressOut={() => setLift(false)}
+      >
+        <Animated.View
+          style={[
+            styles.card,
+            article.featured ? styles.featuredCard : undefined,
+            { transform: [{ translateY }], shadowRadius: shadow as unknown as number },
+          ]}
+        >
           <View style={styles.metaRow}>
             <Text style={styles.date}>{article.date}</Text>
             <Text style={styles.readTime}>{article.readTime}</Text>
@@ -33,7 +59,7 @@ export const BlogListItem = ({ article }: BlogListItemProps) => {
           <Text style={styles.title}>{article.title}</Text>
           <Text style={styles.excerpt}>{article.excerpt}</Text>
           <View style={styles.tagRow}>
-            {article.tags.map(tag => (
+            {article.tags.map((tag) => (
               <View style={styles.tagPill} key={tag}>
                 <Text style={styles.tagText}>{tag}</Text>
               </View>

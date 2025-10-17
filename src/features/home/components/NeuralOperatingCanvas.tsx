@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import type { Href } from 'expo-router';
 import { useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import type {
@@ -254,7 +255,7 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
 
   if (module.cta) {
     return (
-      <Link href={module.cta.href} asChild>
+      <Link href={module.cta.href as Href<string>} asChild>
         <Pressable
           onPressIn={interactive.handlePressIn}
           onPressOut={interactive.handlePressOut}
