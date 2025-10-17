@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import type { Href } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import type { FoundationFeatureConfig } from '../../../foundation';
 import { useThoughtOrbitFocus } from './ThoughtOrbitFocusContext';
@@ -58,7 +59,7 @@ export const CryptoFabricSpotlight = ({ feature }: CryptoFabricSpotlightProps) =
           );
         })}
       </View>
-      <Link href={feature.cta.href} asChild>
+      <Link href={feature.cta.href as Href<string>} asChild>
         <View style={styles.primaryButton}>
           <Text style={styles.primaryButtonText}>{feature.cta.label}</Text>
         </View>
