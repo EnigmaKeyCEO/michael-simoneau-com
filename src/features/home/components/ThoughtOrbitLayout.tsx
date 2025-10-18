@@ -57,6 +57,7 @@ type SubsectionVisualState = {
   gaussianWeight: number;
   tone: ThoughtOrbitTone;
   alignment: OrbitAlignment;
+  dynamics: ThoughtOrbitDynamicState;
 };
 
 type LayoutMetrics = {
@@ -233,12 +234,23 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           const focus = Math.min(1, sectionVisual.focus * gaussian);
           const tone: ThoughtOrbitTone = subsection.tone ?? sectionVisual.tone;
           const alignment: OrbitAlignment = subsection.alignment ?? sectionVisual.alignment;
+          const distance = Math.sqrt(
+            sectionVisual.normalized * sectionVisual.normalized + relative * relative,
+          );
+
           return {
             focus,
             normalized: relative,
             gaussianWeight: gaussian,
             tone,
             alignment,
+            dynamics: {
+              id: `${section.id}::${subsection.id}`,
+              focus,
+              distance,
+              alignment,
+              tone,
+            },
           };
         });
       }),
@@ -253,40 +265,10 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
     ],
   );
 
-  const fieldSections = useMemo<ThoughtOrbitSectionDynamic[]>(() => {
-    return sections.reduce<ThoughtOrbitSectionDynamic[]>((accumulator, section, index) => {
-      const visual = sectionVisualStates[index];
-      if (!visual) {
-        return accumulator;
-      }
-
-      const subsectionStates = subsectionVisualStates[index] ?? [];
-      const subsectionDynamics: ThoughtOrbitSubsectionDynamic[] = section.subsections.map(
-        (subsection, subsectionIndex) => {
-          const subsectionVisual = subsectionStates[subsectionIndex];
-
-          return {
-            id: subsection.id,
-            focus: subsectionVisual?.focus ?? 0,
-            offset: subsectionVisual?.normalized ?? 0,
-            spread: subsectionVisual?.gaussianWeight ?? 0,
-            tone: subsectionVisual?.tone ?? visual.tone,
-          };
-        },
-      );
-
-      accumulator.push({
-        id: section.id,
-        focus: visual.focus,
-        distance: Math.abs(visual.normalized),
-        alignment: visual.alignment,
-        tone: visual.tone,
-        subsections: subsectionDynamics,
-      });
-
-      return accumulator;
-    }, []);
-  }, [sectionVisualStates, sections, subsectionVisualStates]);
+  const fieldDynamics = useMemo(
+    () => subsectionVisualStates.flatMap((states) => states.map((state) => state.dynamics)),
+    [subsectionVisualStates],
+  );
 
   const scrollToSection = useCallback(
     (sectionIndex: number, options?: { animated?: boolean }) => {
@@ -311,7 +293,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
       const maxIndex = Math.max(section.subsections.length - 1, 0);
       const clampedIndex = clamp(subsectionIndex, 0, maxIndex);
       const animated = options?.animated ?? !reduceMotion;
-      const targetOffset = clampedIndex * layoutMetrics.itemWidth + layoutMetrics.trackPadding;
+      const targetOffset = clampedIndex * layoutMetrics.itemWidth;
 
       setSectionSubIndices((previous) => {
         const next = [...previous];
@@ -329,7 +311,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         scrollView.scrollTo({ x: targetOffset, animated });
       }
     },
-    [layoutMetrics.itemWidth, layoutMetrics.trackPadding, reduceMotion, sections],
+    [layoutMetrics.itemWidth, reduceMotion, sections],
   );
 
   const handleHorizontalMomentumEnd = useCallback(
@@ -519,7 +501,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
 
   return (
     <View style={styles.scene}>
-      {!reduceMotion ? <ThoughtOrbitField sections={fieldSections} /> : null}
+      {!reduceMotion ? <ThoughtOrbitField dynamics={fieldDynamics} /> : null}
       <ScrollView
         ref={verticalScrollRef}
         style={styles.scrollOverlay}
@@ -574,10 +556,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   subsectionCard: {
-    borderWidth: 0.8,
+    borderWidth: 1,
     borderRadius: 32,
     shadowColor: '#2563EB',
-    backgroundColor: 'rgba(4, 12, 28, 0.72)',
+    backgroundColor: 'rgba(4, 12, 28, 0.86)',
     overflow: 'hidden',
   },
   sectionIndicators: {
