@@ -21,7 +21,8 @@ import { ThoughtOrbitField } from './ThoughtOrbitField';
 import { ThoughtOrbitFocusProvider } from './ThoughtOrbitFocusContext';
 import type {
   OrbitAlignment,
-  ThoughtOrbitDynamicState,
+  ThoughtOrbitSectionDynamic,
+  ThoughtOrbitSubsectionDynamic,
   ThoughtOrbitTone,
 } from './ThoughtOrbitTypes';
 import { useReducedMotion } from '../../../ui/animation/useReducedMotion';
@@ -48,7 +49,6 @@ type SectionVisualState = {
   gaussianWeight: number;
   normalized: number;
   tone: ThoughtOrbitTone;
-  dynamics: ThoughtOrbitDynamicState;
 };
 
 type SubsectionVisualState = {
@@ -200,21 +200,12 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
             : 0
           : Math.min(1, gaussianWeight * 1.12);
 
-        const dynamics: ThoughtOrbitDynamicState = {
-          id: section.id,
-          focus,
-          distance: Math.abs(normalized),
-          alignment,
-          tone,
-        };
-
         return {
           alignment,
           focus,
           gaussianWeight,
           normalized,
           tone,
-          dynamics,
         };
       }),
     [height, reduceMotion, sectionCenters, sections, viewportCenter],
