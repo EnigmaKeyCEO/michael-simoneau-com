@@ -25,17 +25,17 @@ const damp = (value: number, target: number, smoothing: number, delta: number) =
 };
 
 export type ThoughtOrbitFieldProps = {
-  sections: ThoughtOrbitSectionDynamic[];
+  dynamics: ThoughtOrbitSectionDynamic[];
 };
 
-export const ThoughtOrbitField = ({ sections }: ThoughtOrbitFieldProps) => {
+export const ThoughtOrbitField = ({ dynamics }: ThoughtOrbitFieldProps) => {
   const focusAverage = useMemo(() => {
-    if (sections.length === 0) {
+    if (dynamics.length === 0) {
       return 0;
     }
 
-    const sectionContribution = sections.reduce((total, current) => total + current.focus, 0);
-    const subsectionContribution = sections.reduce(
+    const sectionContribution = dynamics.reduce((total, current) => total + current.focus, 0);
+    const subsectionContribution = dynamics.reduce(
       (total, current) =>
         total +
         current.subsections.reduce((subTotal, subsection) => subTotal + subsection.focus, 0),
@@ -43,13 +43,13 @@ export const ThoughtOrbitField = ({ sections }: ThoughtOrbitFieldProps) => {
     );
 
     const denominator =
-      sections.length + sections.reduce((total, section) => total + section.subsections.length, 0);
+      dynamics.length + dynamics.reduce((total, section) => total + section.subsections.length, 0);
     if (denominator === 0) {
       return 0;
     }
 
     return (sectionContribution * 0.6 + subsectionContribution * 0.4) / denominator;
-  }, [sections]);
+  }, [dynamics]);
 
   return (
     <View style={styles.canvasContainer}>
@@ -63,8 +63,8 @@ export const ThoughtOrbitField = ({ sections }: ThoughtOrbitFieldProps) => {
           <pointLight position={[-6, -4, -12]} intensity={0.7} color="#f0abfc" distance={40} />
           <StarField />
           <NebulaMist focus={focusAverage} />
-          <OrbitSections sections={sections} />
-          <CameraRig sections={sections} />
+          <OrbitSections sections={dynamics} />
+          <CameraRig sections={dynamics} />
         </Suspense>
       </Canvas>
     </View>

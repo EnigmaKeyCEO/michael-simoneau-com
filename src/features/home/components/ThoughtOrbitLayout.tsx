@@ -57,7 +57,6 @@ type SubsectionVisualState = {
   gaussianWeight: number;
   tone: ThoughtOrbitTone;
   alignment: OrbitAlignment;
-  dynamics: ThoughtOrbitDynamicState;
 };
 
 type LayoutMetrics = {
@@ -234,23 +233,12 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           const focus = Math.min(1, sectionVisual.focus * gaussian);
           const tone: ThoughtOrbitTone = subsection.tone ?? sectionVisual.tone;
           const alignment: OrbitAlignment = subsection.alignment ?? sectionVisual.alignment;
-          const distance = Math.sqrt(
-            sectionVisual.normalized * sectionVisual.normalized + relative * relative,
-          );
-
           return {
             focus,
             normalized: relative,
             gaussianWeight: gaussian,
             tone,
             alignment,
-            dynamics: {
-              id: `${section.id}::${subsection.id}`,
-              focus,
-              distance,
-              alignment,
-              tone,
-            },
           };
         });
       }),
@@ -265,10 +253,34 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
     ],
   );
 
-  const fieldDynamics = useMemo(
-    () => subsectionVisualStates.flatMap((states) => states.map((state) => state.dynamics)),
-    [subsectionVisualStates],
-  );
+  const fieldDynamics = useMemo<ThoughtOrbitSectionDynamic[]>(() => {
+    return sections.map<ThoughtOrbitSectionDynamic>((section, sectionIndex) => {
+      const sectionVisual = sectionVisualStates[sectionIndex];
+      const subsectionStates = subsectionVisualStates[sectionIndex] ?? [];
+      const alignment: OrbitAlignment = sectionVisual?.alignment ?? section.alignment ?? 'center';
+      const tone: ThoughtOrbitTone = sectionVisual?.tone ?? section.tone ?? 'surface';
+
+      return {
+        id: section.id,
+        focus: sectionVisual?.focus ?? 0,
+        distance: Math.abs(sectionVisual?.normalized ?? 0),
+        alignment,
+        tone,
+        subsections: section.subsections.map<ThoughtOrbitSubsectionDynamic>(
+          (subsection, subsectionIndex) => {
+            const state = subsectionStates[subsectionIndex];
+            return {
+              id: subsection.id,
+              focus: state?.focus ?? 0,
+              offset: state?.normalized ?? 0,
+              spread: state?.gaussianWeight ?? 0,
+              tone: state?.tone ?? tone,
+            };
+          },
+        ),
+      };
+    });
+  }, [sectionVisualStates, sections, subsectionVisualStates]);
 
   const scrollToSection = useCallback(
     (sectionIndex: number, options?: { animated?: boolean }) => {
