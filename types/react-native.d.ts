@@ -28,14 +28,35 @@ declare module 'react-native' {
     children?: React.ReactNode;
     numberOfLines?: number;
   }>;
-  export const ScrollView: React.ComponentType<{
+  export type ScrollToOptions = {
+    x?: number;
+    y?: number;
+    animated?: boolean;
+  };
+
+  export type ScrollViewHandle = {
+    scrollTo: (options: ScrollToOptions) => void;
+  };
+
+  export type ScrollViewProps = {
     contentContainerStyle?: StyleProp<ViewStyle>;
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
     onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+    onMomentumScrollEnd?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
     scrollEventThrottle?: number;
     showsVerticalScrollIndicator?: boolean;
-  }>;
+    showsHorizontalScrollIndicator?: boolean;
+    horizontal?: boolean;
+    decelerationRate?: number | 'fast' | 'normal';
+    snapToInterval?: number;
+    snapToAlignment?: 'start' | 'center' | 'end';
+    pagingEnabled?: boolean;
+  };
+
+  export const ScrollView: React.ForwardRefExoticComponent<
+    ScrollViewProps & React.RefAttributes<ScrollViewHandle>
+  >;
 
   export const Pressable: React.ComponentType<{
     style?: StyleProp<ViewStyle> | PressableStateCallbackType;
