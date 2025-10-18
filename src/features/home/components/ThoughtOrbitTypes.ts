@@ -8,6 +8,9 @@ export type ThoughtOrbitSubsectionDynamic = {
   offset: number;
   spread: number;
   tone: ThoughtOrbitTone;
+  index: number;
+  count: number;
+  active: boolean;
 };
 
 export type ThoughtOrbitSectionDynamic = {

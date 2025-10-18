@@ -259,28 +259,34 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
       const subsectionStates = subsectionVisualStates[sectionIndex] ?? [];
       const alignment: OrbitAlignment = sectionVisual?.alignment ?? section.alignment ?? 'center';
       const tone: ThoughtOrbitTone = sectionVisual?.tone ?? section.tone ?? 'surface';
+      const activeIndex = sectionSubIndices[sectionIndex] ?? 0;
+      const count = Math.max(section.subsections.length, 1);
 
       return {
         id: section.id,
         focus: sectionVisual?.focus ?? 0,
-        distance: Math.abs(sectionVisual?.normalized ?? 0),
+        distance: sectionVisual?.normalized ?? 0,
         alignment,
         tone,
         subsections: section.subsections.map<ThoughtOrbitSubsectionDynamic>(
           (subsection, subsectionIndex) => {
             const state = subsectionStates[subsectionIndex];
+            const focus = state?.focus ?? 0;
             return {
               id: subsection.id,
-              focus: state?.focus ?? 0,
+              focus,
               offset: state?.normalized ?? 0,
               spread: state?.gaussianWeight ?? 0,
               tone: state?.tone ?? tone,
+              index: subsectionIndex,
+              count,
+              active: activeIndex === subsectionIndex,
             };
           },
         ),
       };
     });
-  }, [sectionVisualStates, sections, subsectionVisualStates]);
+  }, [sectionSubIndices, sectionVisualStates, sections, subsectionVisualStates]);
 
   const scrollToSection = useCallback(
     (sectionIndex: number, options?: { animated?: boolean }) => {
@@ -430,8 +436,8 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
               const focus = visual?.focus ?? 0;
               const normalized = visual?.normalized ?? 1;
               const isActive = activeSubIndex === subsectionIndex;
-              const baseScale = reduceMotion ? 1 : 0.84 + focus * 0.28;
-              const translateY = reduceMotion ? 0 : (1 - focus) * 36;
+              const baseScale = reduceMotion ? 1 : 0.76 + focus * 0.32;
+              const translateY = reduceMotion ? 0 : (1 - focus) * 40;
               const opacity = reduceMotion
                 ? Math.max(0.55, sectionVisual ? sectionVisual.focus : 0.5)
                 : 0.34 + focus * 0.62;
@@ -471,28 +477,6 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
               );
             })}
           </ScrollView>
-          <View style={styles.sectionIndicators}>
-            {section.subsections.map((_, indicatorIndex) => {
-              const visual = horizontalStates[indicatorIndex];
-              const focus = visual?.focus ?? 0;
-              const active = indicatorIndex === activeSubIndex;
-              const indicatorScale = reduceMotion ? (active ? 1 : 0.7) : 0.6 + focus * 0.6;
-              const indicatorOpacity = reduceMotion ? (active ? 0.9 : 0.4) : 0.22 + focus * 0.7;
-
-              return (
-                <View
-                  key={`${section.id}-indicator-${indicatorIndex}`}
-                  style={[
-                    styles.indicatorDot,
-                    {
-                      opacity: indicatorOpacity,
-                      transform: [{ scale: indicatorScale }],
-                    },
-                  ]}
-                />
-              );
-            })}
-          </View>
         </View>
       );
     });
@@ -573,17 +557,5 @@ const styles = StyleSheet.create({
     shadowColor: '#2563EB',
     backgroundColor: 'rgba(4, 12, 28, 0.86)',
     overflow: 'hidden',
-  },
-  sectionIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    paddingTop: 8,
-  },
-  indicatorDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: 'rgba(59, 130, 246, 0.86)',
   },
 });
