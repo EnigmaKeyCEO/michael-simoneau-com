@@ -108,18 +108,23 @@ const CameraRig = ({ sections }: { sections: ThoughtOrbitSectionDynamic[] }) => 
     const sectionFocus = activeSection?.focus ?? 0;
     const subsectionFocus = activeSubsection?.focus ?? 0;
     const alignment = activeSection?.alignment ?? 'center';
-
+    const sectionDisplacement = activeSection?.distance ?? 0;
     const lateralBias = alignment === 'left' ? -1 : alignment === 'right' ? 1 : 0;
-    const verticalBias = alignment === 'center' ? 0 : alignment === 'left' ? 0.45 : -0.45;
+    const verticalAlignment = alignment === 'center' ? 0 : alignment === 'left' ? 0.6 : -0.6;
 
-    const targetZ =
-      24 - sectionFocus * 5.8 - subsectionFocus * 2.6 + (activeSection?.distance ?? 0.5) * 2.3;
-    const targetX = lateralBias * (sectionFocus * 4.6 + subsectionFocus * 1.8);
-    const targetY = verticalBias * (sectionFocus * 3.4 + subsectionFocus * 0.8);
+    const orbitPhase =
+      activeSubsection && activeSubsection.count > 1
+        ? activeSubsection.index / (activeSubsection.count - 1)
+        : 0.5;
+    const orbitSwing = (0.5 - orbitPhase) * 2;
+    const orbitDrift = orbitSwing * (0.9 + subsectionFocus * 0.8);
+    const targetZ = 21 - sectionFocus * 3.8 - subsectionFocus * 1.6;
+    const targetX = lateralBias * (1.4 + sectionFocus * 2.4) + orbitDrift;
+    const targetY = sectionDisplacement * -6 + verticalAlignment * (sectionFocus * 1.1);
 
-    camera.position.z = damp(camera.position.z, targetZ, 2.6, delta);
-    camera.position.x = damp(camera.position.x, targetX, 3.1, delta);
-    camera.position.y = damp(camera.position.y, targetY, 2.4, delta);
+    camera.position.z = damp(camera.position.z, targetZ, 2.4, delta);
+    camera.position.x = damp(camera.position.x, targetX, 3, delta);
+    camera.position.y = damp(camera.position.y, targetY, 2.6, delta);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   });
@@ -260,9 +265,9 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
     focusRef.current = section.focus;
   }, [section.focus]);
 
-  const baseRadius = 4.8 + index * 2.2;
-  const depth = -index * 3.4 - 2.6;
-  const verticalOffset = (index - (total - 1) / 2) * 1.6;
+  const baseRadius = 4.8 + index * 2.1;
+  const depth = -3.2 - index * 0.12;
+  const verticalOffset = (index - (total - 1) / 2) * -1.6;
   const baseColor = section.tone === 'hero' ? '#60a5fa' : '#38bdf8';
   const emissiveColor = section.tone === 'hero' ? '#1d4ed8' : '#0369a1';
   const accentColor = section.tone === 'hero' ? '#bfdbfe' : '#7dd3fc';
@@ -272,23 +277,25 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
 
     if (clusterRef.current) {
       const currentScale = clusterRef.current.scale.x;
-      const targetScale = 0.7 + focusValue * 0.35;
-      const nextScale = damp(currentScale, targetScale, 3.1, delta);
+      const targetScale = 0.74 + focusValue * 0.28;
+      const nextScale = damp(currentScale, targetScale, 3, delta);
       clusterRef.current.scale.setScalar(nextScale);
-      clusterRef.current.rotation.y += delta * (0.12 + index * 0.025);
+      const pauseFactor = 0.08 + (1 - focusValue) * 0.32;
+      clusterRef.current.rotation.y += delta * (0.08 + index * 0.02) * pauseFactor;
     }
 
     if (satellitesRef.current) {
-      satellitesRef.current.rotation.y -= delta * (0.2 + focusValue * 0.35);
+      const orbitalSpeed = 0.18 + (1 - focusValue) * 0.42;
+      satellitesRef.current.rotation.y -= delta * orbitalSpeed;
     }
 
     if (ringMaterialRef.current) {
-      const nextOpacity = 0.18 + focusValue * 0.42;
-      const nextEmissive = 0.32 + focusValue * 0.9;
+      const nextOpacity = 0.2 + focusValue * 0.4;
+      const nextEmissive = 0.38 + focusValue * 0.8;
       ringMaterialRef.current.opacity = damp(
         ringMaterialRef.current.opacity,
         nextOpacity,
-        2.2,
+        2,
         delta,
       );
       ringMaterialRef.current.emissiveIntensity = damp(
@@ -300,21 +307,21 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
     }
 
     if (coreMaterialRef.current) {
-      const nextEmissive = 0.66 + focusValue * 1.1;
+      const nextEmissive = 0.64 + focusValue * 1;
       coreMaterialRef.current.emissiveIntensity = damp(
         coreMaterialRef.current.emissiveIntensity,
         nextEmissive,
-        2.4,
+        2.2,
         delta,
       );
     }
 
     if (haloMaterialRef.current) {
-      const nextOpacity = 0.16 + focusValue * 0.32;
+      const nextOpacity = 0.14 + focusValue * 0.3;
       haloMaterialRef.current.opacity = damp(
         haloMaterialRef.current.opacity,
         nextOpacity,
-        2.6,
+        2.4,
         delta,
       );
     }
@@ -389,12 +396,14 @@ const OrbitSatellite = ({ radius, subsection, tone, index, count }: OrbitSatelli
   const focusRef = useRef(subsection.focus);
   const offsetRef = useRef(subsection.offset);
   const spreadRef = useRef(subsection.spread);
+  const activeRef = useRef(subsection.active);
 
   useEffect(() => {
     focusRef.current = subsection.focus;
     offsetRef.current = subsection.offset;
     spreadRef.current = subsection.spread;
-  }, [subsection.focus, subsection.offset, subsection.spread]);
+    activeRef.current = subsection.active;
+  }, [subsection.active, subsection.focus, subsection.offset, subsection.spread]);
 
   const baseColor = tone === 'hero' ? '#bae6fd' : '#7dd3fc';
   const emissiveColor = tone === 'hero' ? '#1d4ed8' : '#0e7490';
@@ -403,50 +412,46 @@ const OrbitSatellite = ({ radius, subsection, tone, index, count }: OrbitSatelli
     const focusValue = focusRef.current;
     const offsetValue = offsetRef.current;
     const spreadValue = spreadRef.current;
+    const isActive = activeRef.current;
 
     if (containerRef.current) {
       const baseAngle = (index / Math.max(count, 1)) * Math.PI * 2;
       const targetAngle = baseAngle + offsetValue * 1.1;
-      const targetTilt = (index % 2 === 0 ? 1 : -1) * (0.16 + spreadValue * 0.24);
+      const targetTilt = (index % 2 === 0 ? 1 : -1) * (0.12 + spreadValue * 0.22);
       containerRef.current.rotation.y = damp(
         containerRef.current.rotation.y,
         targetAngle,
-        5.6,
+        isActive ? 7.2 : 5.2,
         delta,
       );
-      containerRef.current.rotation.x = damp(
-        containerRef.current.rotation.x,
-        targetTilt,
-        3.4,
-        delta,
-      );
+      containerRef.current.rotation.x = damp(containerRef.current.rotation.x, targetTilt, 3, delta);
     }
 
     if (meshRef.current) {
-      const nextScale = 0.6 + focusValue * 0.85;
+      const nextScale = 0.18 + focusValue * 1.12;
       const currentScale = meshRef.current.scale.x;
-      const dampedScale = damp(currentScale, nextScale, 4.5, delta);
+      const dampedScale = damp(currentScale, nextScale, 4.2, delta);
       meshRef.current.scale.setScalar(dampedScale);
     }
 
     if (materialRef.current) {
-      const targetOpacity = 0.42 + focusValue * 0.4;
-      const targetEmissive = 0.52 + focusValue * 1.4;
-      materialRef.current.opacity = damp(materialRef.current.opacity, targetOpacity, 3.2, delta);
+      const targetOpacity = 0.2 + focusValue * 0.52;
+      const targetEmissive = 0.44 + focusValue * 1.6;
+      materialRef.current.opacity = damp(materialRef.current.opacity, targetOpacity, 3, delta);
       materialRef.current.emissiveIntensity = damp(
         materialRef.current.emissiveIntensity,
         targetEmissive,
-        2.8,
+        2.6,
         delta,
       );
     }
 
     if (ringMaterialRef.current) {
-      const targetOpacity = focusValue > 0.6 ? 0.38 + focusValue * 0.4 : 0.08 + focusValue * 0.2;
+      const targetOpacity = focusValue > 0.6 ? 0.3 + focusValue * 0.32 : 0.05 + focusValue * 0.18;
       ringMaterialRef.current.opacity = damp(
         ringMaterialRef.current.opacity,
         targetOpacity,
-        3,
+        2.6,
         delta,
       );
     }
@@ -455,25 +460,25 @@ const OrbitSatellite = ({ radius, subsection, tone, index, count }: OrbitSatelli
   return (
     <group ref={containerRef}>
       <mesh ref={meshRef} position={[radius, 0, 0]}>
-        <sphereGeometry args={[0.22, 24, 24]} />
+        <sphereGeometry args={[0.18, 24, 24]} />
         <meshStandardMaterial
           ref={materialRef}
           color={baseColor}
           emissive={emissiveColor}
-          emissiveIntensity={0.6 + subsection.focus * 1.2}
+          emissiveIntensity={0.44 + subsection.focus * 1.6}
           transparent
-          opacity={0.48 + subsection.focus * 0.3}
+          opacity={0.2 + subsection.focus * 0.5}
           metalness={0.2}
           roughness={0.35}
         />
       </mesh>
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[radius, 0, 0]}>
-        <torusGeometry args={[0.3, 0.015, 16, 48]} />
+        <torusGeometry args={[0.3, 0.012, 16, 48]} />
         <meshBasicMaterial
           ref={ringMaterialRef}
           color={baseColor}
           transparent
-          opacity={0.12 + subsection.focus * 0.16}
+          opacity={0.08 + subsection.focus * 0.22}
         />
       </mesh>
     </group>
