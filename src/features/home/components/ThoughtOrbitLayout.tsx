@@ -302,7 +302,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
       const maxIndex = Math.max(section.subsections.length - 1, 0);
       const clampedIndex = clamp(subsectionIndex, 0, maxIndex);
       const animated = options?.animated ?? !reduceMotion;
-      const targetOffset = clampedIndex * layoutMetrics.itemWidth + layoutMetrics.trackPadding;
+      const targetOffset = clampedIndex * layoutMetrics.itemWidth;
 
       setSectionSubIndices((previous) => {
         const next = [...previous];
@@ -320,7 +320,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         scrollView.scrollTo({ x: targetOffset, animated });
       }
     },
-    [layoutMetrics.itemWidth, layoutMetrics.trackPadding, reduceMotion, sections],
+    [layoutMetrics.itemWidth, reduceMotion, sections],
   );
 
   const handleHorizontalMomentumEnd = useCallback(
