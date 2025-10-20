@@ -289,14 +289,17 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
     activeRef.current = active;
   }, [section.subsections]);
 
-  const baseRadius = 4 + index * 1.9;
-  const depth = -index * 3.4 - 2.2;
-  const verticalOffset = (index - (total - 1) / 2) * 2.1;
+  const normalizedIndex = total > 1 ? index / (total - 1) : 0;
+  const baseRadius = 2.8 + (6.6 - 2.8) * normalizedIndex;
+  const depth = -3 - normalizedIndex * 4.4;
+  const verticalOffset = (normalizedIndex - 0.5) * 3.4;
   const isHero = section.tone === 'hero';
   const baseColor = isHero ? '#60a5fa' : '#38bdf8';
   const emissiveColor = isHero ? '#1d4ed8' : '#0284c7';
   const accentColor = isHero ? '#bfdbfe' : '#7dd3fc';
-  const haloRadius = isHero ? baseRadius * 1.2 : baseRadius * 1.05;
+  const haloRadius = isHero
+    ? baseRadius * (1.12 + (1 - normalizedIndex) * 0.08)
+    : baseRadius * (1.03 + (1 - normalizedIndex) * 0.06);
 
   const satellites = useMemo(
     () => createSatelliteConfigs(section.subsections.length, baseRadius, index + 1),
