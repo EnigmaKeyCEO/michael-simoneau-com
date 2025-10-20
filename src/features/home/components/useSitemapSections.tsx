@@ -4,7 +4,7 @@ import type { ScrapedContent } from '../data/sitemapContent';
 import { SCRAPED_CONTENT } from '../data/sitemapContent';
 import { parseSitemapContentBlocks } from './sitemapContentParsing';
 import type { SitemapContentBlock } from './sitemapContentParsing';
-import { SitemapSubsectionCard } from './SitemapSubsectionCard';
+import { SitemapSubsectionSurface } from './SitemapSubsectionSurface';
 
 type SitemapGroup = {
   base: ScrapedContent;
@@ -13,88 +13,71 @@ type SitemapGroup = {
 
 const alignments: ThoughtOrbitSection['alignment'][] = ['left', 'center', 'right'];
 
-type BlockCluster = {
-  id: string;
-  title?: string;
-  blocks: SitemapContentBlock[];
+const fallbackBlocks = (
+  blocks: SitemapContentBlock[],
+  fallbackText: string,
+): SitemapContentBlock[] => {
+  if (blocks.length > 0) {
+    return blocks;
+  }
+
+  return [{ type: 'paragraph', text: fallbackText }];
 };
 
-const formatSegmentLabel = (segment: string) => {
-  return segment
-    .split('-')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+const formatSegmentLabel = (segment: string): string => {
+  const sanitized = segment
+    .replace(/^#/, '')
+    .replace(/\?.*$/, '')
+    .replace(/\/index$/i, '');
+  const tokens = sanitized
+    .split(/[-_]+/)
+    .map((token) => token.trim())
+    .filter(Boolean);
+
+  if (tokens.length === 0) {
+    const compact = sanitized.replace(/^\//, '');
+    return compact.length > 0 ? compact : 'Home';
+  }
+
+  return tokens.map((token) => token.charAt(0).toUpperCase() + token.slice(1)).join(' ');
 };
 
-const getUrlSegments = (url: string) => {
+const createEndpointTrails = (rawUrl: string): string[][] => {
   try {
-    const { pathname } = new URL(url);
-    return pathname
+    const parsed = new URL(rawUrl);
+    const segments = parsed.pathname
       .split('/')
       .map((segment) => segment.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .map(formatSegmentLabel);
+
+    const baseSegments = segments.length > 0 ? segments : ['Home'];
+
+    return baseSegments.map((_, index) => baseSegments.slice(0, index + 1));
   } catch {
-    return [];
+    const cleaned = rawUrl.replace(/^https?:\/\//, '');
+    return [[cleaned]];
   }
 };
 
-const createBreadcrumb = (url: string, fallback: string) => {
-  const segments = getUrlSegments(url).map(formatSegmentLabel);
+const createFragmentTrail = (record: ScrapedContent): string[] => {
+  try {
+    const parsed = new URL(record.url);
+    const segments = parsed.pathname
+      .split('/')
+      .map((segment) => segment.trim())
+      .filter(Boolean)
+      .map(formatSegmentLabel);
+    const hash = parsed.hash ? formatSegmentLabel(parsed.hash) : null;
 
-  if (segments.length === 0) {
-    return fallback;
-  }
-
-  return segments.join(' / ');
-};
-
-const clusterBlocksByHeading = (blocks: SitemapContentBlock[], baseId: string): BlockCluster[] => {
-  if (blocks.length === 0) {
-    return [];
-  }
-
-  const clusters: BlockCluster[] = [];
-  let current: SitemapContentBlock[] = [];
-  let currentTitle: string | undefined;
-  let clusterIndex = 0;
-
-  blocks.forEach((block) => {
-    if (block.type === 'heading' && block.level <= 2) {
-      if (current.length > 0) {
-        clusters.push({
-          id: `${baseId}::cluster-${clusterIndex}`,
-          title: currentTitle,
-          blocks: current,
-        });
-        clusterIndex += 1;
-        current = [];
-      }
-
-      currentTitle = block.text;
+    if (hash) {
+      segments.push(hash);
     }
 
-    current.push(block);
-  });
-
-  if (current.length > 0) {
-    clusters.push({
-      id: `${baseId}::cluster-${clusterIndex}`,
-      title: currentTitle,
-      blocks: current,
-    });
+    return segments.length > 0 ? segments : ['Home'];
+  } catch {
+    return [record.url];
   }
-
-  if (clusters.length === 0) {
-    return [
-      {
-        id: `${baseId}::cluster-fallback`,
-        title: undefined,
-        blocks,
-      },
-    ];
-  }
-
-  return clusters;
 };
 
 const createBaseSubsections = (
@@ -102,23 +85,29 @@ const createBaseSubsections = (
   sectionTone: ThoughtOrbitSection['tone'],
 ): ThoughtOrbitSubsection[] => {
   const baseBlocks = parseSitemapContentBlocks(group.base.content);
-  const clusters = clusterBlocksByHeading(baseBlocks, group.base.url);
-  const breadcrumb = createBreadcrumb(group.base.url, 'Root Surface');
+  const trails = createEndpointTrails(group.base.url);
+  const chunkCount = trails.length || 1;
+  const chunkSize = chunkCount > 0 ? Math.ceil(baseBlocks.length / chunkCount) || 1 : 1;
 
-  return clusters.map((cluster, index) => {
+  return trails.map((trail, index) => {
     const accent = index === 0 ? 'primary' : 'secondary';
     const tone = index === 0 ? sectionTone : 'surface';
-    const subtitle = cluster.title ? `${breadcrumb} • ${cluster.title}` : breadcrumb;
+    const subtitle = trail.join(' / ');
+    const sliceStart = index * chunkSize;
+    const sliceEnd = index === trails.length - 1 ? undefined : sliceStart + chunkSize;
+    const slice = baseBlocks.slice(sliceStart, sliceEnd);
+    const blocks = fallbackBlocks(slice, group.base.content.trim().slice(0, 240));
 
     return {
-      id: cluster.id,
+      id: group.base.url,
       tone,
       content: (
-        <SitemapSubsectionCard
+        <SitemapSubsectionSurface
           title={group.base.title}
           subtitle={subtitle}
           accent={accent}
-          blocks={cluster.blocks}
+          blocks={blocks}
+          endpointSegments={trail}
         />
       ),
     };
@@ -126,25 +115,25 @@ const createBaseSubsections = (
 };
 
 const createFragmentSubsections = (group: SitemapGroup): ThoughtOrbitSubsection[] =>
-  group.fragments.flatMap((fragment, index) => {
-    const fragmentBlocks = parseSitemapContentBlocks(fragment.content);
-    const clusters = clusterBlocksByHeading(fragmentBlocks, `${fragment.url}::fragment-${index}`);
-    const fragmentLabel = fragment.fragment
-      ? `${fragment.baseUrl}${fragment.fragment}`
-      : fragment.url;
+  group.fragments.map((fragment, index) => {
+    const fragmentBlocks = parseSitemapContentBlocks(fragment.content).slice(0, 4);
+    const trail = createFragmentTrail(fragment);
+    const subtitle = trail.join(' / ');
+    const blocks = fallbackBlocks(fragmentBlocks, fragment.content.trim().slice(0, 200));
 
-    return clusters.map((cluster, clusterIndex) => ({
-      id: `${cluster.id}-${clusterIndex}`,
+    return {
+      id: fragment.url,
       tone: 'surface',
       content: (
-        <SitemapSubsectionCard
+        <SitemapSubsectionSurface
           title={fragment.title}
-          subtitle={cluster.title ? `${fragmentLabel} • ${cluster.title}` : fragmentLabel}
+          subtitle={subtitle}
           accent="fragment"
-          blocks={cluster.blocks}
+          blocks={blocks}
+          endpointSegments={trail}
         />
       ),
-    }));
+    };
   });
 
 export const useSitemapSections = (): ThoughtOrbitSection[] => {

@@ -47,6 +47,10 @@ type SubsectionVisualState = {
   normalized: number;
   tone: ThoughtOrbitTone;
   alignment: OrbitAlignment;
+  orbitAngle: number;
+  orbitX: number;
+  orbitY: number;
+  orbitDepth: number;
 };
 
 const createFlattened = (sections: ThoughtOrbitSection[]): FlattenedSubsection[] => {
@@ -60,7 +64,7 @@ const createFlattened = (sections: ThoughtOrbitSection[]): FlattenedSubsection[]
 };
 
 export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection[] }) => {
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
   const scrollRaf = useRef<number | null>(null);
 
@@ -80,12 +84,16 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
     };
   }, []);
 
-  const registerSubsection = useCallback(
-    (index: number) => (event: LayoutChangeEvent) => {
-      const { y, height: itemHeight } = event.nativeEvent.layout;
+  const registerSection = useCallback(
+    (indices: number[]) => (event: LayoutChangeEvent) => {
+      const { y, height: layoutHeight } = event.nativeEvent.layout;
+      const center = y + layoutHeight / 2;
+
       setCenters((previous) => {
         const next = [...previous];
-        next[index] = y + itemHeight / 2;
+        indices.forEach((flatIndex) => {
+          next[flatIndex] = center;
+        });
         return next;
       });
     },
@@ -113,6 +121,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
   );
 
   const viewportCenter = scrollOffset + height / 2;
+  const orbitPhase = reduceMotion ? 0 : scrollOffset / Math.max(height, 1);
 
   const subsectionVisualStates = useMemo<SubsectionVisualState[]>(
     () =>
@@ -121,26 +130,38 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         const section = sections[item.sectionIndex];
         const subsection = section?.subsections[item.subsectionIndex];
         const hasLayout = Number.isFinite(center);
+        const verticalScale = Math.max(height * 0.8, 1);
         const baseDistance = hasLayout ? center - viewportCenter : Number.POSITIVE_INFINITY;
-        const normalized = hasLayout ? baseDistance / Math.max(height * 0.75, 1) : 0;
+        const normalized = hasLayout ? baseDistance / verticalScale : 0;
         const gaussianWeight = hasLayout ? Math.exp(-normalized * normalized) : 0;
         const alignment: OrbitAlignment = subsection?.alignment ?? section?.alignment ?? 'center';
         const tone: ThoughtOrbitTone = subsection?.tone ?? section?.tone ?? 'surface';
+        const count = section?.subsections.length ?? 1;
+        const step = count > 0 ? (Math.PI * 2) / count : Math.PI * 2;
+        const rawAngle = orbitPhase * 1.2 + item.subsectionIndex * step;
+        const orbitX = reduceMotion ? 0 : Math.sin(rawAngle);
+        const orbitY = reduceMotion ? 1 : Math.cos(rawAngle);
+        const orbitDepth = (orbitY + 1) / 2;
+        const adjustedNormalized = normalized + (reduceMotion ? 0 : orbitY * 0.18);
         const focus = reduceMotion
           ? hasLayout
             ? Math.max(0.45, Math.min(1, gaussianWeight + 0.2))
             : 0
-          : Math.min(1, gaussianWeight * 1.12);
+          : Math.min(1, gaussianWeight * (0.55 + orbitDepth * 0.9));
 
         return {
           focus,
           gaussianWeight,
-          normalized,
+          normalized: adjustedNormalized,
           tone,
           alignment,
+          orbitAngle: rawAngle,
+          orbitX,
+          orbitY,
+          orbitDepth,
         };
       }),
-    [centers, flattened, height, reduceMotion, sections, viewportCenter],
+    [centers, flattened, height, orbitPhase, reduceMotion, sections, viewportCenter],
   );
 
   const sectionIndexMap = useMemo(() => {
@@ -193,12 +214,13 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         subsections: indices.map<ThoughtOrbitSubsectionDynamic>((flatIndex, localIndex) => {
           const subsection = section.subsections[localIndex];
           const state = subsectionVisualStates[flatIndex];
+          const orbitAzimuth = state ? Math.atan2(state.orbitX, state.orbitY) : 0;
 
           return {
             id: subsection?.id ?? `sub-${localIndex}`,
             focus: state?.focus ?? 0,
-            offset: state?.normalized ?? 0,
-            spread: state?.gaussianWeight ?? 0,
+            offset: orbitAzimuth,
+            spread: state?.orbitDepth ?? 0,
             tone: state?.tone ?? primaryTone,
             index: localIndex,
             count: indices.length || 1,
@@ -209,73 +231,84 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
     });
   }, [sectionIndexMap, sections, subsectionVisualStates]);
 
-  const renderedSubsections = useMemo(() => {
-    return flattened.map((item, index) => {
-      const section = sections[item.sectionIndex];
-      const subsection = section?.subsections[item.subsectionIndex];
-      const visual = subsectionVisualStates[index];
+  const baseSurfaceWidth = Math.max(320, Math.min(620, width - 80));
+  const baseSurfaceHeight = 260;
 
-      if (!section || !subsection || !visual) {
-        return null;
-      }
-
-      const directionOffset =
-        visual.alignment === 'left' ? -128 : visual.alignment === 'right' ? 128 : 0;
-      const orbitalCurve = reduceMotion ? 0 : (1 - visual.gaussianWeight) ** 2.1;
-      const scrollPhase = reduceMotion ? 0 : (scrollOffset / Math.max(height, 1)) * 0.9;
-      const orbitSway = reduceMotion
-        ? 0
-        : Math.sin(scrollPhase + index * 0.45 + item.sectionIndex * 0.6) * (90 + visual.focus * 70);
-      const emergence = reduceMotion ? 1 : Math.min(1, visual.focus + visual.gaussianWeight * 0.28);
-      const translateX = reduceMotion ? 0 : directionOffset * orbitalCurve + orbitSway;
-      const scaleX = reduceMotion ? 1 : 0.52 + emergence * 0.68;
-      const scaleY = reduceMotion ? 1 : 0.46 + emergence * 0.76;
-      const contentScale = reduceMotion ? 1 : 0.76 + emergence * 0.34;
-      const opacity = reduceMotion ? 0.98 : 0.26 + emergence * 0.72;
-      const elevation = reduceMotion ? 6 : 4 + emergence * 14;
-      const bubbleRadius = 46 + emergence * 74;
-      const verticalPadding = 20 + emergence * 32;
-      const horizontalPadding = 20 + emergence * 34;
-      const haloSize = reduceMotion ? 24 : 36 + emergence * 38;
-      const blurShadow = reduceMotion ? 24 : 22 + emergence * 28;
-      const rotationDirection =
-        visual.alignment === 'left' ? -1 : visual.alignment === 'right' ? 1 : 0;
-      const tilt = reduceMotion ? 0 : (1 - emergence) * 0.32;
-      const backgroundColor =
-        visual.tone === 'hero'
-          ? emergence > 0.7
-            ? 'rgba(15, 40, 76, 0.94)'
-            : 'rgba(8, 27, 54, 0.86)'
-          : emergence > 0.68
-            ? 'rgba(1, 18, 40, 0.9)'
-            : 'rgba(1, 10, 24, 0.82)';
-      const borderColor = `rgba(59, 130, 246, ${(0.12 + emergence * 0.34).toFixed(3)})`;
-
+  const renderedSections = useMemo(() => {
+    return sections.map((section, sectionIndex) => {
+      const indices = sectionIndexMap[sectionIndex] ?? [];
+      const dynamics = fieldDynamics[sectionIndex];
+      const sectionFocus = dynamics?.focus ?? 0;
+      const sectionAlignment: OrbitAlignment = dynamics?.alignment ?? section.alignment ?? 'center';
       const wrapperAlignmentStyle =
-        visual.alignment === 'left'
+        sectionAlignment === 'left'
           ? styles.alignStart
-          : visual.alignment === 'right'
+          : sectionAlignment === 'right'
             ? styles.alignEnd
             : styles.alignCenter;
 
-      const bubbleTone = visual.tone === 'hero' ? styles.heroTone : styles.surfaceTone;
-      const showHeading =
-        item.subsectionIndex === 0 && (Boolean(section.title) || Boolean(section.subtitle));
+      const surfaces = indices.map((flatIndex, localIndex) => {
+        const subsection = section.subsections[localIndex];
+        const visual = subsectionVisualStates[flatIndex];
+
+        if (!subsection || !visual) {
+          return null;
+        }
+
+        const orbitRadius = reduceMotion ? 0 : (baseSurfaceWidth / 2) * (0.6 + sectionFocus * 0.3);
+        const translateX = reduceMotion ? 0 : visual.orbitX * orbitRadius;
+        const translateY = reduceMotion ? 0 : -visual.orbitY * 32;
+        const depthScale = reduceMotion ? 1 : 0.72 + visual.orbitDepth * 0.42;
+        const opacity = reduceMotion ? 0.98 : 0.28 + visual.orbitDepth * 0.7;
+        const zIndex = Math.round(visual.orbitDepth * 100);
+
+        return (
+          <View
+            key={`${section.id}::surface-${subsection.id}`}
+            style={[
+              styles.surfaceWrapper,
+              {
+                width: baseSurfaceWidth,
+                minHeight: baseSurfaceHeight,
+                transform: [
+                  { translateX: -baseSurfaceWidth / 2 },
+                  { translateY: -baseSurfaceHeight / 2 },
+                  { translateX },
+                  { translateY },
+                  { scale: depthScale },
+                  { rotateY: `${visual.orbitX * 0.32}rad` },
+                  { rotateX: `${-visual.orbitY * 0.18}rad` },
+                ],
+                opacity,
+                zIndex,
+              },
+            ]}
+          >
+            <ThoughtOrbitFocusProvider
+              value={{
+                focus: visual.focus,
+                distance: Math.abs(visual.normalized),
+              }}
+            >
+              <View style={styles.surfaceContent}>{subsection.content}</View>
+            </ThoughtOrbitFocusProvider>
+          </View>
+        );
+      });
 
       return (
         <View
-          key={item.id}
+          key={section.id}
           style={[
             styles.sectionWrapper,
             wrapperAlignmentStyle,
             {
-              minHeight: 220 * contentScale,
-              paddingVertical: 12 + (1 - emergence) * 18,
+              paddingVertical: 48 + (1 - sectionFocus) * 36,
             },
           ]}
-          onLayout={registerSubsection(index)}
+          onLayout={registerSection(indices)}
         >
-          {showHeading ? (
+          {Boolean(section.title) || Boolean(section.subtitle) ? (
             <View style={styles.sectionHeading}>
               {section.title ? (
                 <Text style={styles.sectionTitle} numberOfLines={2}>
@@ -294,12 +327,12 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
               style={[
                 styles.sectionSpeck,
                 {
-                  opacity: Math.max(0, 0.68 - emergence * 0.68),
+                  opacity: Math.max(0, 0.68 - sectionFocus * 0.68),
                   transform: [
-                    { translateX: translateX * 0.18 },
-                    { scale: 0.38 + (1 - emergence) * 0.8 },
+                    { translateX: orbitPhase * 0.18 },
+                    { scale: 0.38 + (1 - sectionFocus) * 0.8 },
                   ],
-                  shadowRadius: 18 + (1 - emergence) * 28,
+                  shadowRadius: 18 + (1 - sectionFocus) * 28,
                 },
               ]}
             />
@@ -308,69 +341,24 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
             style={[
               styles.sectionHalo,
               {
-                opacity: visual.focus,
-                shadowRadius: haloSize,
-                shadowOpacity: 0.52 * visual.focus,
-                transform: [{ scale: reduceMotion ? 1 : 0.68 + emergence * 0.66 }],
+                opacity: reduceMotion ? 0.35 : sectionFocus * 0.85,
+                transform: [{ scale: reduceMotion ? 0.9 : 0.7 + sectionFocus * 0.4 }],
               },
             ]}
           />
-          <View
-            style={[
-              styles.sectionBubble,
-              bubbleTone,
-              {
-                transform: [
-                  { perspective: 1400 },
-                  { translateX },
-                  { scaleX },
-                  { scaleY },
-                  { rotateY: `${rotationDirection * orbitalCurve * 0.42}rad` },
-                  { rotateX: `${tilt}rad` },
-                ],
-                opacity,
-                paddingVertical: verticalPadding,
-                paddingHorizontal: horizontalPadding,
-                borderRadius: bubbleRadius,
-                backgroundColor,
-                borderColor,
-                shadowOpacity: 0.18 + visual.focus * 0.34,
-                shadowRadius: blurShadow,
-                shadowOffset: { width: 0, height: 16 + visual.focus * 18 },
-                elevation,
-                maxWidth: visual.focus > 0.76 ? 780 : 720,
-              },
-            ]}
-          >
-            <View
-              style={[
-                styles.surfaceWindow,
-                {
-                  transform: reduceMotion
-                    ? undefined
-                    : [{ translateY: orbitSway * 0.02 }, { scale: contentScale }],
-                },
-              ]}
-            >
-              <ThoughtOrbitFocusProvider
-                value={{
-                  focus: visual.focus,
-                  distance: Math.abs(visual.normalized),
-                }}
-              >
-                {subsection.content}
-              </ThoughtOrbitFocusProvider>
-            </View>
+          <View style={[styles.orbitStage, { minHeight: baseSurfaceHeight + 180 }]}>
+            <View style={styles.surfaceStack}>{surfaces}</View>
           </View>
         </View>
       );
     });
   }, [
-    flattened,
-    height,
+    baseSurfaceHeight,
+    baseSurfaceWidth,
+    fieldDynamics,
     reduceMotion,
-    registerSubsection,
-    scrollOffset,
+    registerSection,
+    sectionIndexMap,
     sections,
     subsectionVisualStates,
   ]);
@@ -385,7 +373,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         onScroll={handleScroll}
         showsVerticalScrollIndicator={false}
       >
-        {renderedSubsections}
+        {renderedSections}
       </ScrollView>
     </View>
   );
@@ -402,15 +390,15 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 120,
-    paddingBottom: 180,
-    gap: 60,
+    paddingBottom: 200,
+    gap: 80,
   },
   sectionWrapper: {
     width: '100%',
     position: 'relative',
   },
   sectionHeading: {
-    marginBottom: 18,
+    marginBottom: 24,
     gap: 6,
   },
   sectionTitle: {
@@ -426,13 +414,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    width: 260,
-    height: 260,
-    marginLeft: -130,
-    marginTop: -130,
-    borderRadius: 130,
-    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+    width: 300,
+    height: 300,
+    marginLeft: -150,
+    marginTop: -150,
+    borderRadius: 150,
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
     shadowColor: '#38BDF8',
+    shadowOpacity: 0.4,
+    shadowRadius: 120,
+    shadowOffset: { width: 0, height: 24 },
     pointerEvents: 'none',
   },
   sectionSpeck: {
@@ -448,6 +439,26 @@ const styles = StyleSheet.create({
     shadowColor: '#38BDF8',
     pointerEvents: 'none',
   },
+  orbitStage: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  surfaceStack: {
+    width: '100%',
+    maxWidth: 920,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  surfaceWrapper: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+  },
+  surfaceContent: {
+    flex: 1,
+  },
   alignStart: {
     alignItems: 'flex-start',
   },
@@ -456,24 +467,5 @@ const styles = StyleSheet.create({
   },
   alignCenter: {
     alignItems: 'center',
-  },
-  sectionBubble: {
-    maxWidth: 720,
-    width: '100%',
-    borderRadius: 32,
-    padding: 28,
-    borderWidth: 1,
-    borderColor: 'rgba(37, 99, 235, 0.26)',
-    shadowColor: '#2563EB',
-    overflow: 'hidden',
-  },
-  heroTone: {
-    backgroundColor: 'rgba(15, 27, 58, 0.86)',
-  },
-  surfaceTone: {
-    backgroundColor: 'rgba(2, 8, 20, 0.82)',
-  },
-  surfaceWindow: {
-    width: '100%',
   },
 });

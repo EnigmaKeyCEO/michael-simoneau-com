@@ -289,17 +289,18 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
     activeRef.current = active;
   }, [section.subsections]);
 
-  const normalizedIndex = total > 1 ? index / (total - 1) : 0;
-  const baseRadius = 2.8 + (6.6 - 2.8) * normalizedIndex;
-  const depth = -3 - normalizedIndex * 4.4;
-  const verticalOffset = (normalizedIndex - 0.5) * 3.4;
+  const orbitProgress = total <= 1 ? 0 : index / (total - 1);
+  const baseRadius = 3.4 + orbitProgress * 2.8;
+  const depth = -2.2 - orbitProgress * 2.6;
+  const verticalSpread = total > 1 ? Math.min(2.9 + (total - 1) * 0.18, 3.8) : 1.4;
+  const verticalOffset = (orbitProgress - 0.5) * verticalSpread * 2;
   const isHero = section.tone === 'hero';
   const baseColor = isHero ? '#60a5fa' : '#38bdf8';
   const emissiveColor = isHero ? '#1d4ed8' : '#0284c7';
   const accentColor = isHero ? '#bfdbfe' : '#7dd3fc';
   const haloRadius = isHero
-    ? baseRadius * (1.12 + (1 - normalizedIndex) * 0.08)
-    : baseRadius * (1.03 + (1 - normalizedIndex) * 0.06);
+    ? baseRadius * (1.12 + (1 - orbitProgress) * 0.08)
+    : baseRadius * (1.03 + (1 - orbitProgress) * 0.06);
 
   const satellites = useMemo(
     () => createSatelliteConfigs(section.subsections.length, baseRadius, index + 1),
@@ -440,18 +441,22 @@ type OrbitSatelliteProps = {
 const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
   const containerRef = useRef<Group>(null);
   const bodyRef = useRef<Group>(null);
+  const surfaceRef = useRef<Group>(null);
   const materialRef = useRef<MeshStandardMaterial>(null);
   const ringMaterialRef = useRef<MeshBasicMaterial>(null);
   const highlightMaterialRef = useRef<MeshBasicMaterial>(null);
   const focusRef = useRef(subsection.focus);
   const activeRef = useRef(subsection.active);
   const spreadRef = useRef(subsection.spread);
+  const driftRef = useRef(subsection.offset);
+  const surfaceMaterialRef = useRef<MeshStandardMaterial>(null);
 
   useEffect(() => {
     focusRef.current = subsection.focus;
     activeRef.current = subsection.active;
     spreadRef.current = subsection.spread;
-  }, [subsection.active, subsection.focus, subsection.spread]);
+    driftRef.current = subsection.offset;
+  }, [subsection.active, subsection.focus, subsection.offset, subsection.spread]);
 
   const baseColor = tone === 'hero' ? '#bfdbfe' : '#7dd3fc';
   const emissiveColor = tone === 'hero' ? '#2563eb' : '#0ea5e9';
@@ -461,12 +466,21 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
     const focusValue = focusRef.current;
     const isActive = activeRef.current;
     const spread = spreadRef.current;
+    const drift = driftRef.current;
 
     if (containerRef.current) {
+      const targetTilt = config.tilt + drift * 0.04;
+      const targetAzimuth = config.angle + drift * 1.3;
       containerRef.current.rotation.x = damp(
         containerRef.current.rotation.x,
-        config.tilt,
+        targetTilt,
         2.6,
+        delta,
+      );
+      containerRef.current.rotation.y = damp(
+        containerRef.current.rotation.y,
+        targetAzimuth,
+        3.4,
         delta,
       );
     }
@@ -476,13 +490,16 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
       const targetScale = isActive ? 0.6 + focusValue * 0.9 : 0.32 + focusValue * 0.5;
       const nextScale = damp(currentScale, targetScale, 4.2, delta);
       bodyRef.current.scale.setScalar(nextScale);
-      const targetRadius = config.radius * (0.86 + spread * 0.28);
+      const targetRadius = config.radius * (0.82 + spread * 0.28);
+      const horizontalShift = drift * 0.9;
       bodyRef.current.position.x = damp(bodyRef.current.position.x, targetRadius, 3.4, delta);
+      bodyRef.current.position.z = damp(bodyRef.current.position.z, horizontalShift, 3, delta);
     }
 
     if (materialRef.current) {
-      const targetOpacity = isActive ? 0.42 + focusValue * 0.4 : 0.2 + focusValue * 0.3;
-      const targetEmissive = isActive ? 0.9 + focusValue * 1.2 : 0.5 + focusValue * 0.9;
+      const flattening = isActive ? Math.min(1, Math.max(0, focusValue - 0.35) * 1.6) : 0;
+      const targetOpacity = isActive ? 0.24 + (1 - flattening) * 0.38 : 0.2 + focusValue * 0.3;
+      const targetEmissive = isActive ? 0.7 + (1 - flattening * 0.6) * 1 : 0.5 + focusValue * 0.9;
       materialRef.current.opacity = damp(materialRef.current.opacity, targetOpacity, 3.2, delta);
       materialRef.current.emissiveIntensity = damp(
         materialRef.current.emissiveIntensity,
@@ -508,6 +525,41 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
         highlightMaterialRef.current.opacity,
         targetOpacity,
         4,
+        delta,
+      );
+    }
+
+    if (surfaceRef.current && surfaceMaterialRef.current) {
+      const activation = Math.max(0, Math.min(1, focusValue * 1.1 - 0.2));
+      const expansion = isActive ? 0.4 + activation * 1.6 : activation * 0.9;
+      const scaleVector = surfaceRef.current.scale as unknown as {
+        x: number;
+        y: number;
+        z: number;
+        set: (x: number, y: number, z: number) => void;
+      };
+      const nextWidth = damp(scaleVector.x, expansion * 1.8, 4, delta);
+      const nextHeight = damp(scaleVector.y, expansion * 1.1, 3.6, delta);
+      const nextDepth = damp(scaleVector.z, Math.max(0.24, expansion * 0.9), 4, delta);
+      scaleVector.set(nextWidth, nextHeight, nextDepth);
+      const planeOffset = isActive ? -0.62 - activation * 0.8 : -0.28;
+      surfaceRef.current.position.x = damp(
+        surfaceRef.current.position.x,
+        config.radius * 1.02,
+        3,
+        delta,
+      );
+      surfaceRef.current.position.z = damp(surfaceRef.current.position.z, planeOffset, 3.6, delta);
+      surfaceMaterialRef.current.opacity = damp(
+        surfaceMaterialRef.current.opacity,
+        Math.min(0.86, activation * 0.9),
+        4.2,
+        delta,
+      );
+      surfaceMaterialRef.current.emissiveIntensity = damp(
+        surfaceMaterialRef.current.emissiveIntensity,
+        0.4 + activation * 1.4,
+        3.6,
         delta,
       );
     }
@@ -543,6 +595,26 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
           <meshBasicMaterial ref={highlightMaterialRef} color={ringColor} transparent opacity={0} />
         </mesh>
       </group>
+      <group
+        ref={surfaceRef}
+        position={[config.radius * 1.02, 0, -0.28]}
+        scale={[0.001, 0.001, 0.001]}
+      >
+        <mesh rotation={[-Math.PI / 9, 0, 0]}>
+          <planeGeometry args={[config.size * 5.4, config.size * 3.1, 1, 1]} />
+          <meshStandardMaterial
+            ref={surfaceMaterialRef}
+            color={tone === 'hero' ? '#172554' : '#0f172a'}
+            emissive={tone === 'hero' ? '#3b82f6' : '#0ea5e9'}
+            emissiveIntensity={0.3}
+            transparent
+            opacity={0}
+            metalness={0.18}
+            roughness={0.68}
+            side={DoubleSide}
+          />
+        </mesh>
+      </group>
     </group>
   );
 };
@@ -558,9 +630,9 @@ const createSatelliteConfigs = (
 
   return new Array(count).fill(null).map((_, index) => {
     const baseSeed = seed * 97 + index * 53;
-    const radius = baseRadius * (0.72 + pseudoRandom(baseSeed) * 0.24);
-    const tilt = (pseudoRandom(baseSeed + 1) - 0.5) * 0.6;
-    const size = 0.26 + pseudoRandom(baseSeed + 2) * 0.34;
+    const radius = baseRadius * (0.68 + pseudoRandom(baseSeed) * 0.18);
+    const tilt = (pseudoRandom(baseSeed + 1) - 0.5) * 0.48;
+    const size = 0.24 + pseudoRandom(baseSeed + 2) * 0.28;
     const angle = (index / count) * Math.PI * 2;
 
     return {
