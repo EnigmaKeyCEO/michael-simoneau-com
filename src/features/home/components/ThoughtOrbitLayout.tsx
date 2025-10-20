@@ -1,12 +1,4 @@
-import {
-  type ElementRef,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   LayoutChangeEvent,
   NativeScrollEvent,
@@ -43,96 +35,64 @@ export type ThoughtOrbitSection = {
   tone?: ThoughtOrbitTone;
 };
 
-type SectionVisualState = {
-  alignment: OrbitAlignment;
-  focus: number;
-  gaussianWeight: number;
-  normalized: number;
-  tone: ThoughtOrbitTone;
+type FlattenedSubsection = {
+  id: string;
+  sectionIndex: number;
+  subsectionIndex: number;
 };
 
 type SubsectionVisualState = {
   focus: number;
-  normalized: number;
   gaussianWeight: number;
+  normalized: number;
   tone: ThoughtOrbitTone;
   alignment: OrbitAlignment;
 };
 
-type LayoutMetrics = {
-  cardWidth: number;
-  itemWidth: number;
-  trackGap: number;
-  trackPadding: number;
+const createFlattened = (sections: ThoughtOrbitSection[]): FlattenedSubsection[] => {
+  return sections.flatMap((section, sectionIndex) =>
+    section.subsections.map((subsection, subsectionIndex) => ({
+      id: `${section.id}::${subsection.id}`,
+      sectionIndex,
+      subsectionIndex,
+    })),
+  );
 };
 
-const clamp = (value: number, minimum: number, maximum: number) =>
-  Math.min(Math.max(value, minimum), maximum);
-
 export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection[] }) => {
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
   const scrollRaf = useRef<number | null>(null);
-  const horizontalRafs = useRef<Array<number | null>>([]);
-  type ScrollViewHandle = ElementRef<typeof ScrollView>;
-  const verticalScrollRef = useRef<ScrollViewHandle | null>(null);
-  const horizontalRefs = useRef<Array<ScrollViewHandle | null>>([]);
 
-  const layoutMetrics = useMemo<LayoutMetrics>(() => {
-    const safeWidth = Math.max(width, 1);
-    const cardWidth = Math.min(safeWidth - 80, 860);
-    const trackGap = safeWidth > 1200 ? 44 : safeWidth > 900 ? 36 : safeWidth > 640 ? 28 : 22;
-    const itemWidth = Math.max(cardWidth + trackGap, cardWidth + 16);
-    const trackPadding = Math.max((safeWidth - cardWidth) / 2 - trackGap / 2, 18);
-
-    return { cardWidth, itemWidth, trackGap, trackPadding };
-  }, [width]);
-
-  const [sectionCenters, setSectionCenters] = useState<number[]>(() =>
-    sections.map(() => Number.NaN),
-  );
+  const flattened = useMemo(() => createFlattened(sections), [sections]);
+  const [centers, setCenters] = useState<number[]>(() => flattened.map(() => Number.NaN));
   const [scrollOffset, setScrollOffset] = useState(0);
-  const [subsectionOffsets, setSubsectionOffsets] = useState<number[]>(() =>
-    sections.map(() => layoutMetrics.trackPadding),
-  );
-  const [sectionSubIndices, setSectionSubIndices] = useState<number[]>(() => sections.map(() => 0));
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
   useEffect(() => {
-    setSectionCenters(sections.map(() => Number.NaN));
-    setActiveSectionIndex(0);
-    setSectionSubIndices(sections.map(() => 0));
-    setSubsectionOffsets(sections.map(() => layoutMetrics.trackPadding));
-    horizontalRefs.current = [];
-    horizontalRafs.current = sections.map(() => null);
-  }, [layoutMetrics.trackPadding, sections]);
+    setCenters(flattened.map(() => Number.NaN));
+  }, [flattened]);
 
   useEffect(() => {
     return () => {
       if (scrollRaf.current !== null) {
         cancelAnimationFrame(scrollRaf.current);
       }
-      horizontalRafs.current.forEach((raf) => {
-        if (raf !== null) {
-          cancelAnimationFrame(raf);
-        }
-      });
     };
   }, []);
 
-  const registerSection = useCallback(
+  const registerSubsection = useCallback(
     (index: number) => (event: LayoutChangeEvent) => {
-      const { y, height: sectionHeight } = event.nativeEvent.layout;
-      setSectionCenters((previous) => {
+      const { y, height: itemHeight } = event.nativeEvent.layout;
+      setCenters((previous) => {
         const next = [...previous];
-        next[index] = y + sectionHeight / 2;
+        next[index] = y + itemHeight / 2;
         return next;
       });
     },
     [],
   );
 
-  const handleVerticalScroll = useCallback(
+  const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const nextOffset = event.nativeEvent.contentOffset.y;
 
@@ -152,382 +112,239 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
     [reduceMotion],
   );
 
-  const handleHorizontalScroll = useCallback(
-    (sectionIndex: number) => (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const nextOffset = event.nativeEvent.contentOffset.x;
-
-      if (reduceMotion) {
-        setSubsectionOffsets((previous) => {
-          const next = [...previous];
-          next[sectionIndex] = nextOffset;
-          return next;
-        });
-        return;
-      }
-
-      const rafs = horizontalRafs.current;
-      if (rafs[sectionIndex] !== null) {
-        cancelAnimationFrame(rafs[sectionIndex]!);
-      }
-
-      rafs[sectionIndex] = requestAnimationFrame(() => {
-        setSubsectionOffsets((previous) => {
-          const next = [...previous];
-          next[sectionIndex] = nextOffset;
-          return next;
-        });
-      });
-    },
-    [reduceMotion],
-  );
-
   const viewportCenter = scrollOffset + height / 2;
 
-  const sectionVisualStates = useMemo<SectionVisualState[]>(
+  const subsectionVisualStates = useMemo<SubsectionVisualState[]>(
     () =>
-      sections.map((section, index) => {
-        const center = sectionCenters[index];
+      flattened.map((item, index) => {
+        const center = centers[index];
+        const section = sections[item.sectionIndex];
+        const subsection = section?.subsections[item.subsectionIndex];
         const hasLayout = Number.isFinite(center);
         const baseDistance = hasLayout ? center - viewportCenter : Number.POSITIVE_INFINITY;
         const normalized = hasLayout ? baseDistance / Math.max(height * 0.75, 1) : 0;
         const gaussianWeight = hasLayout ? Math.exp(-normalized * normalized) : 0;
-        const alignment: OrbitAlignment = section.alignment ?? 'center';
-        const tone: ThoughtOrbitTone = section.tone ?? 'surface';
+        const alignment: OrbitAlignment = subsection?.alignment ?? section?.alignment ?? 'center';
+        const tone: ThoughtOrbitTone = subsection?.tone ?? section?.tone ?? 'surface';
         const focus = reduceMotion
           ? hasLayout
-            ? Math.max(0.4, 1 - Math.min(1, Math.abs(normalized)))
+            ? Math.max(0.45, Math.min(1, gaussianWeight + 0.2))
             : 0
           : Math.min(1, gaussianWeight * 1.12);
 
         return {
-          alignment,
           focus,
           gaussianWeight,
           normalized,
           tone,
+          alignment,
         };
       }),
-    [height, reduceMotion, sectionCenters, sections, viewportCenter],
+    [centers, flattened, height, reduceMotion, sections, viewportCenter],
   );
 
-  const subsectionVisualStates = useMemo<SubsectionVisualState[][]>(
-    () =>
-      sections.map((section, sectionIndex) => {
-        const sectionVisual = sectionVisualStates[sectionIndex];
-        if (!sectionVisual) {
-          return [];
-        }
+  const sectionIndexMap = useMemo(() => {
+    const map = sections.map(() => [] as number[]);
+    flattened.forEach((item, index) => {
+      const bucket = map[item.sectionIndex];
+      if (bucket) {
+        bucket.push(index);
+      }
+    });
 
-        const offset = subsectionOffsets[sectionIndex] ?? layoutMetrics.trackPadding;
-        const paddedOffset = Math.max(0, offset - layoutMetrics.trackPadding);
-        const normalizedOffset = paddedOffset / Math.max(layoutMetrics.itemWidth, 1);
-        const activeIndex = sectionSubIndices[sectionIndex] ?? 0;
-
-        return section.subsections.map((subsection, subsectionIndex) => {
-          const relative = normalizedOffset - subsectionIndex;
-          const gaussian = reduceMotion
-            ? subsectionIndex === activeIndex
-              ? 1
-              : 0.35
-            : Math.exp(-(relative * relative) * 1.45);
-          const focus = Math.min(1, sectionVisual.focus * gaussian);
-          const tone: ThoughtOrbitTone = subsection.tone ?? sectionVisual.tone;
-          const alignment: OrbitAlignment = subsection.alignment ?? sectionVisual.alignment;
-          return {
-            focus,
-            normalized: relative,
-            gaussianWeight: gaussian,
-            tone,
-            alignment,
-          };
-        });
-      }),
-    [
-      layoutMetrics.itemWidth,
-      layoutMetrics.trackPadding,
-      reduceMotion,
-      sectionSubIndices,
-      sectionVisualStates,
-      sections,
-      subsectionOffsets,
-    ],
-  );
+    return map;
+  }, [flattened, sections]);
 
   const fieldDynamics = useMemo<ThoughtOrbitSectionDynamic[]>(() => {
     return sections.map<ThoughtOrbitSectionDynamic>((section, sectionIndex) => {
-      const sectionVisual = sectionVisualStates[sectionIndex];
-      const subsectionStates = subsectionVisualStates[sectionIndex] ?? [];
-      const alignment: OrbitAlignment = sectionVisual?.alignment ?? section.alignment ?? 'center';
-      const tone: ThoughtOrbitTone = sectionVisual?.tone ?? section.tone ?? 'surface';
+      const indices = sectionIndexMap[sectionIndex] ?? [];
+      const sectionTone: ThoughtOrbitTone = section.tone ?? 'surface';
+      const sectionAlignment: OrbitAlignment = section.alignment ?? 'center';
+
+      let focus = 0;
+      let primaryIndex = indices[0] ?? -1;
+      let primaryFocus = -1;
+
+      indices.forEach((flatIndex) => {
+        const state = subsectionVisualStates[flatIndex];
+        if (!state) {
+          return;
+        }
+
+        if (state.focus > primaryFocus) {
+          primaryFocus = state.focus;
+          primaryIndex = flatIndex;
+        }
+
+        focus = Math.max(focus, state.focus);
+      });
+
+      const primaryState = primaryIndex >= 0 ? subsectionVisualStates[primaryIndex] : undefined;
+      const primaryAlignment = primaryState?.alignment ?? sectionAlignment;
+      const primaryTone = primaryState?.tone ?? sectionTone;
+      const distance = primaryState?.normalized ?? 0;
 
       return {
         id: section.id,
-        focus: sectionVisual?.focus ?? 0,
-        distance: Math.abs(sectionVisual?.normalized ?? 0),
-        alignment,
-        tone,
-        subsections: section.subsections.map<ThoughtOrbitSubsectionDynamic>(
-          (subsection, subsectionIndex) => {
-            const state = subsectionStates[subsectionIndex];
-            return {
-              id: subsection.id,
-              focus: state?.focus ?? 0,
-              offset: state?.normalized ?? 0,
-              spread: state?.gaussianWeight ?? 0,
-              tone: state?.tone ?? tone,
-            };
-          },
-        ),
+        focus,
+        distance,
+        alignment: primaryAlignment,
+        tone: primaryTone,
+        subsections: indices.map<ThoughtOrbitSubsectionDynamic>((flatIndex, localIndex) => {
+          const subsection = section.subsections[localIndex];
+          const state = subsectionVisualStates[flatIndex];
+
+          return {
+            id: subsection?.id ?? `sub-${localIndex}`,
+            focus: state?.focus ?? 0,
+            offset: state?.normalized ?? 0,
+            spread: state?.gaussianWeight ?? 0,
+            tone: state?.tone ?? primaryTone,
+            index: localIndex,
+            count: indices.length || 1,
+            active: primaryIndex === flatIndex,
+          };
+        }),
       };
     });
-  }, [sectionVisualStates, sections, subsectionVisualStates]);
+  }, [sectionIndexMap, sections, subsectionVisualStates]);
 
-  const scrollToSection = useCallback(
-    (sectionIndex: number, options?: { animated?: boolean }) => {
-      if (!verticalScrollRef.current) {
-        return;
+  const renderedSubsections = useMemo(() => {
+    return flattened.map((item, index) => {
+      const section = sections[item.sectionIndex];
+      const subsection = section?.subsections[item.subsectionIndex];
+      const visual = subsectionVisualStates[index];
+
+      if (!section || !subsection || !visual) {
+        return null;
       }
 
-      const animated = options?.animated ?? !reduceMotion;
-      const targetOffset = clamp(sectionIndex, 0, sections.length - 1) * height;
-      verticalScrollRef.current.scrollTo({ y: targetOffset, animated });
-    },
-    [height, reduceMotion, sections.length],
-  );
+      const directionOffset =
+        visual.alignment === 'left' ? -128 : visual.alignment === 'right' ? 128 : 0;
+      const orbitalCurve = reduceMotion ? 0 : (1 - visual.gaussianWeight) ** 2.1;
+      const translateX = reduceMotion ? 0 : directionOffset * orbitalCurve;
+      const scale = reduceMotion ? 1 : 0.62 + visual.gaussianWeight * 0.6;
+      const contentScale = reduceMotion ? 1 : 0.8 + visual.gaussianWeight * 0.32;
+      const opacity = reduceMotion ? 0.98 : 0.3 + visual.gaussianWeight * 0.68;
+      const elevation = reduceMotion ? 6 : 4 + visual.focus * 12;
+      const bubbleRadius = 72 + visual.focus * 42;
+      const verticalPadding = 24 + visual.focus * 22;
+      const horizontalPadding = 24 + visual.focus * 28;
+      const haloSize = reduceMotion ? 24 : 54 * visual.focus;
+      const blurShadow = reduceMotion ? 24 : 20 + visual.focus * 28;
+      const rotationDirection =
+        visual.alignment === 'left' ? -1 : visual.alignment === 'right' ? 1 : 0;
+      const tilt = reduceMotion ? 0 : (1 - visual.gaussianWeight) * 0.28;
+      const backgroundColor =
+        visual.tone === 'hero'
+          ? visual.focus > 0.7
+            ? 'rgba(15, 40, 76, 0.92)'
+            : 'rgba(8, 27, 54, 0.86)'
+          : visual.focus > 0.68
+            ? 'rgba(1, 16, 36, 0.88)'
+            : 'rgba(1, 10, 24, 0.82)';
+      const borderColor = `rgba(59, 130, 246, ${(0.16 + visual.focus * 0.3).toFixed(3)})`;
 
-  const updateHorizontalIndex = useCallback(
-    (sectionIndex: number, subsectionIndex: number, options?: { animated?: boolean }) => {
-      const section = sections[sectionIndex];
-      if (!section) {
-        return;
-      }
+      const wrapperAlignmentStyle =
+        visual.alignment === 'left'
+          ? styles.alignStart
+          : visual.alignment === 'right'
+            ? styles.alignEnd
+            : styles.alignCenter;
 
-      const maxIndex = Math.max(section.subsections.length - 1, 0);
-      const clampedIndex = clamp(subsectionIndex, 0, maxIndex);
-      const animated = options?.animated ?? !reduceMotion;
-      const targetOffset = clampedIndex * layoutMetrics.itemWidth;
-
-      setSectionSubIndices((previous) => {
-        const next = [...previous];
-        next[sectionIndex] = clampedIndex;
-        return next;
-      });
-      setSubsectionOffsets((previous) => {
-        const next = [...previous];
-        next[sectionIndex] = targetOffset;
-        return next;
-      });
-
-      const scrollView = horizontalRefs.current[sectionIndex];
-      if (scrollView) {
-        scrollView.scrollTo({ x: targetOffset, animated });
-      }
-    },
-    [layoutMetrics.itemWidth, reduceMotion, sections],
-  );
-
-  const handleHorizontalMomentumEnd = useCallback(
-    (sectionIndex: number) => (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const offset = event.nativeEvent.contentOffset.x;
-      const paddedOffset = Math.max(0, offset - layoutMetrics.trackPadding);
-      const rawIndex = paddedOffset / Math.max(layoutMetrics.itemWidth, 1);
-      const clampedIndex = Math.round(rawIndex);
-
-      updateHorizontalIndex(sectionIndex, clampedIndex);
-    },
-    [layoutMetrics.itemWidth, layoutMetrics.trackPadding, updateHorizontalIndex],
-  );
-
-  const handleVerticalMomentumEnd = useCallback(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const offsetY = event.nativeEvent.contentOffset.y;
-      const rawIndex = Math.round(offsetY / Math.max(height, 1));
-      const clampedIndex = clamp(rawIndex, 0, sections.length - 1);
-      const currentIndex = activeSectionIndex;
-
-      if (clampedIndex > currentIndex) {
-        const subIndex = sectionSubIndices[currentIndex] ?? 0;
-        const subsectionCount = sections[currentIndex]?.subsections.length ?? 1;
-        const lastIndex = Math.max(subsectionCount - 1, 0);
-
-        if (subIndex < lastIndex) {
-          scrollToSection(currentIndex, { animated: false });
-          updateHorizontalIndex(currentIndex, subIndex + 1);
-          return;
-        }
-      }
-
-      if (clampedIndex < currentIndex) {
-        const subIndex = sectionSubIndices[currentIndex] ?? 0;
-        if (subIndex > 0) {
-          scrollToSection(currentIndex, { animated: false });
-          updateHorizontalIndex(currentIndex, subIndex - 1);
-          return;
-        }
-      }
-
-      setActiveSectionIndex(clampedIndex);
-
-      if (clampedIndex > currentIndex) {
-        updateHorizontalIndex(clampedIndex, 0, { animated: false });
-      } else if (clampedIndex < currentIndex) {
-        const targetSection = sections[clampedIndex];
-        const lastSubIndex = Math.max(targetSection?.subsections.length ?? 1, 1) - 1;
-        updateHorizontalIndex(clampedIndex, lastSubIndex, { animated: false });
-      }
-    },
-    [
-      activeSectionIndex,
-      height,
-      scrollToSection,
-      sectionSubIndices,
-      sections,
-      updateHorizontalIndex,
-    ],
-  );
-
-  const renderedSections = useMemo(() => {
-    return sections.map((section, sectionIndex) => {
-      const sectionVisual = sectionVisualStates[sectionIndex];
-      const horizontalStates = subsectionVisualStates[sectionIndex] ?? [];
-      const activeSubIndex = sectionSubIndices[sectionIndex] ?? 0;
+      const bubbleTone = visual.tone === 'hero' ? styles.heroTone : styles.surfaceTone;
+      const showHeading =
+        item.subsectionIndex === 0 && (Boolean(section.title) || Boolean(section.subtitle));
 
       return (
         <View
-          key={section.id}
-          style={[styles.sectionPage, { height }]}
-          onLayout={registerSection(sectionIndex)}
+          key={item.id}
+          style={[
+            styles.sectionWrapper,
+            wrapperAlignmentStyle,
+            {
+              minHeight: 220 * contentScale,
+              paddingVertical: 14 + (1 - visual.focus) * 14,
+            },
+          ]}
+          onLayout={registerSubsection(index)}
         >
-          <View style={styles.sectionHeader}>
-            {section.title ? (
-              <Text style={styles.sectionTitle} numberOfLines={2}>
-                {section.title}
-              </Text>
-            ) : null}
-            {section.subtitle ? (
-              <Text style={styles.sectionSubtitle} numberOfLines={1}>
-                {section.subtitle}
-              </Text>
-            ) : null}
-          </View>
-          <ScrollView
-            horizontal
-            ref={(ref: ScrollViewHandle | null) => {
-              horizontalRefs.current[sectionIndex] = ref;
-            }}
-            scrollEventThrottle={16}
-            onScroll={handleHorizontalScroll(sectionIndex)}
-            onMomentumScrollEnd={handleHorizontalMomentumEnd(sectionIndex)}
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="fast"
-            snapToInterval={layoutMetrics.itemWidth}
-            contentContainerStyle={{
-              paddingHorizontal: layoutMetrics.trackPadding,
-            }}
+          {showHeading ? (
+            <View style={styles.sectionHeading}>
+              {section.title ? (
+                <Text style={styles.sectionTitle} numberOfLines={2}>
+                  {section.title}
+                </Text>
+              ) : null}
+              {section.subtitle ? (
+                <Text style={styles.sectionSubtitle} numberOfLines={1}>
+                  {section.subtitle}
+                </Text>
+              ) : null}
+            </View>
+          ) : null}
+          <View
+            style={[
+              styles.sectionHalo,
+              {
+                opacity: visual.focus,
+                shadowRadius: haloSize,
+                shadowOpacity: 0.52 * visual.focus,
+                transform: [{ scale: reduceMotion ? 1 : 0.72 + visual.focus * 0.6 }],
+              },
+            ]}
+          />
+          <View
+            style={[
+              styles.sectionBubble,
+              bubbleTone,
+              {
+                transform: [
+                  { perspective: 1400 },
+                  { translateX },
+                  { scale },
+                  { rotateY: `${rotationDirection * orbitalCurve * 0.42}rad` },
+                  { rotateX: `${tilt}rad` },
+                ],
+                opacity,
+                paddingVertical: verticalPadding,
+                paddingHorizontal: horizontalPadding,
+                borderRadius: bubbleRadius,
+                backgroundColor,
+                borderColor,
+                shadowOpacity: 0.18 + visual.focus * 0.34,
+                shadowRadius: blurShadow,
+                shadowOffset: { width: 0, height: 16 + visual.focus * 18 },
+                elevation,
+                maxWidth: visual.focus > 0.76 ? 780 : 720,
+              },
+            ]}
           >
-            {section.subsections.map((subsection, subsectionIndex) => {
-              const visual = horizontalStates[subsectionIndex];
-              const focus = visual?.focus ?? 0;
-              const normalized = visual?.normalized ?? 1;
-              const isActive = activeSubIndex === subsectionIndex;
-              const baseScale = reduceMotion ? 1 : 0.84 + focus * 0.28;
-              const translateY = reduceMotion ? 0 : (1 - focus) * 36;
-              const opacity = reduceMotion
-                ? Math.max(0.55, sectionVisual ? sectionVisual.focus : 0.5)
-                : 0.34 + focus * 0.62;
-              const shadowOpacity = reduceMotion ? 0.24 + focus * 0.2 : 0.18 + focus * 0.32;
-
-              return (
-                <View
-                  key={subsection.id}
-                  style={[styles.subsectionSlot, { width: layoutMetrics.itemWidth }]}
-                >
-                  <View
-                    style={[
-                      styles.subsectionCard,
-                      {
-                        width: layoutMetrics.cardWidth,
-                        opacity,
-                        shadowOpacity,
-                        shadowRadius: 18 + focus * 28,
-                        elevation: 4 + focus * 8,
-                        transform: [{ translateY }, { scale: baseScale }],
-                        borderColor: isActive
-                          ? 'rgba(59, 130, 246, 0.44)'
-                          : 'rgba(59, 130, 246, 0.2)',
-                      },
-                    ]}
-                  >
-                    <ThoughtOrbitFocusProvider
-                      value={{
-                        focus,
-                        distance: Math.abs(normalized),
-                      }}
-                    >
-                      {subsection.content}
-                    </ThoughtOrbitFocusProvider>
-                  </View>
-                </View>
-              );
-            })}
-          </ScrollView>
-          <View style={styles.sectionIndicators}>
-            {section.subsections.map((_, indicatorIndex) => {
-              const visual = horizontalStates[indicatorIndex];
-              const focus = visual?.focus ?? 0;
-              const active = indicatorIndex === activeSubIndex;
-              const indicatorScale = reduceMotion ? (active ? 1 : 0.7) : 0.6 + focus * 0.6;
-              const indicatorOpacity = reduceMotion ? (active ? 0.9 : 0.4) : 0.22 + focus * 0.7;
-
-              return (
-                <View
-                  key={`${section.id}-indicator-${indicatorIndex}`}
-                  style={[
-                    styles.indicatorDot,
-                    {
-                      opacity: indicatorOpacity,
-                      transform: [{ scale: indicatorScale }],
-                    },
-                  ]}
-                />
-              );
-            })}
+            <ThoughtOrbitFocusProvider
+              value={{
+                focus: visual.focus,
+                distance: Math.abs(visual.normalized),
+              }}
+            >
+              {subsection.content}
+            </ThoughtOrbitFocusProvider>
           </View>
         </View>
       );
     });
-  }, [
-    handleHorizontalMomentumEnd,
-    handleHorizontalScroll,
-    height,
-    layoutMetrics.cardWidth,
-    layoutMetrics.itemWidth,
-    layoutMetrics.trackPadding,
-    reduceMotion,
-    registerSection,
-    sectionSubIndices,
-    sectionVisualStates,
-    sections,
-    subsectionVisualStates,
-  ]);
+  }, [flattened, reduceMotion, registerSubsection, sections, subsectionVisualStates]);
 
   return (
     <View style={styles.scene}>
       {!reduceMotion ? <ThoughtOrbitField dynamics={fieldDynamics} /> : null}
       <ScrollView
-        ref={verticalScrollRef}
         style={styles.scrollOverlay}
-        pagingEnabled
-        decelerationRate="fast"
-        snapToInterval={Math.max(height, 1)}
-        snapToAlignment="start"
         contentContainerStyle={styles.container}
         scrollEventThrottle={16}
-        onScroll={handleVerticalScroll}
-        onMomentumScrollEnd={handleVerticalMomentumEnd}
+        onScroll={handleScroll}
         showsVerticalScrollIndicator={false}
       >
-        {renderedSections}
+        {renderedSubsections}
       </ScrollView>
     </View>
   );
@@ -542,17 +359,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flexGrow: 1,
-  },
-  sectionPage: {
-    width: '100%',
     paddingHorizontal: 20,
-    paddingTop: 96,
-    paddingBottom: 72,
-    gap: 32,
+    paddingTop: 120,
+    paddingBottom: 180,
+    gap: 60,
   },
-  sectionHeader: {
-    gap: 10,
+  sectionWrapper: {
+    width: '100%',
+    position: 'relative',
+  },
+  sectionHeading: {
+    marginBottom: 18,
+    gap: 6,
   },
   sectionTitle: {
     fontSize: 22,
@@ -563,27 +381,42 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#A5F3FC',
   },
-  subsectionSlot: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+  sectionHalo: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: 260,
+    height: 260,
+    marginLeft: -130,
+    marginTop: -130,
+    borderRadius: 130,
+    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+    shadowColor: '#38BDF8',
+    pointerEvents: 'none',
   },
-  subsectionCard: {
-    borderWidth: 1,
+  alignStart: {
+    alignItems: 'flex-start',
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
+  },
+  alignCenter: {
+    alignItems: 'center',
+  },
+  sectionBubble: {
+    maxWidth: 720,
+    width: '100%',
     borderRadius: 32,
+    padding: 28,
+    borderWidth: 1,
+    borderColor: 'rgba(37, 99, 235, 0.26)',
     shadowColor: '#2563EB',
-    backgroundColor: 'rgba(4, 12, 28, 0.86)',
     overflow: 'hidden',
   },
-  sectionIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    paddingTop: 8,
+  heroTone: {
+    backgroundColor: 'rgba(15, 27, 58, 0.86)',
   },
-  indicatorDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: 'rgba(59, 130, 246, 0.86)',
+  surfaceTone: {
+    backgroundColor: 'rgba(2, 8, 20, 0.82)',
   },
 });
