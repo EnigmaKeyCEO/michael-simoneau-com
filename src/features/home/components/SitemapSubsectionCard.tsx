@@ -1,6 +1,7 @@
 import { type ReactNode, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { SitemapContentBlock } from './sitemapContentParsing';
+import { useThoughtOrbitFocus } from './ThoughtOrbitFocusContext';
 
 type SitemapSubsectionCardProps = {
   title: string;
@@ -8,6 +9,7 @@ type SitemapSubsectionCardProps = {
   accent?: 'primary' | 'secondary' | 'fragment';
   blocks: SitemapContentBlock[];
   footer?: ReactNode;
+  endpointSegments?: string[];
 };
 
 const renderBlock = (block: SitemapContentBlock, index: number) => {
@@ -57,6 +59,7 @@ export const SitemapSubsectionCard = ({
   accent = 'primary',
   blocks,
   footer,
+  endpointSegments,
 }: SitemapSubsectionCardProps) => {
   const accentStyle = useMemo(() => {
     switch (accent) {
@@ -70,8 +73,32 @@ export const SitemapSubsectionCard = ({
     }
   }, [accent]);
 
+  const { focus, distance } = useThoughtOrbitFocus();
+  const surfacePresence = useMemo(() => Math.min(1, Math.max(0, focus)), [focus]);
+  const orbitLean = distance === 0 ? 0 : distance > 0 ? 1 : -1;
+  const surfaceStyle = useMemo(
+    () => ({
+      transform: [
+        { perspective: 1200 },
+        { rotateX: `${(0.18 - surfacePresence * 0.12) * orbitLean}rad` },
+        { rotateY: `${(accent === 'fragment' ? 1 : -1) * surfacePresence * 0.08}rad` },
+        { translateY: (1 - surfacePresence) * 18 * orbitLean },
+      ],
+      shadowOpacity: 0.22 + surfacePresence * 0.38,
+      shadowRadius: 14 + surfacePresence * 12,
+    }),
+    [accent, orbitLean, surfacePresence],
+  );
+
+  const contentShift = useMemo(() => distance * 18, [distance]);
+  const contentOpacity = useMemo(() => 0.68 + surfacePresence * 0.32, [surfacePresence]);
+  const segmentTrail = useMemo(
+    () => (endpointSegments ? endpointSegments.filter(Boolean) : []),
+    [endpointSegments],
+  );
+
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, surfaceStyle]}>
       <View style={styles.headerRow}>
         <View style={[styles.accentDot, accentStyle]} />
         <View style={styles.headerText}>
@@ -85,7 +112,25 @@ export const SitemapSubsectionCard = ({
           ) : null}
         </View>
       </View>
-      <View style={styles.body}>{blocks.map(renderBlock)}</View>
+      {segmentTrail.length > 0 ? (
+        <View style={styles.segmentTrail}>
+          {segmentTrail.map((segment, index) => (
+            <View key={`${segment}-${index}`} style={styles.segmentChip}>
+              <Text style={styles.segmentText}>{segment}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
+      <View style={styles.bodyTrack}>
+        <View
+          style={[
+            styles.body,
+            { transform: [{ translateY: contentShift }], opacity: contentOpacity },
+          ]}
+        >
+          {blocks.map(renderBlock)}
+        </View>
+      </View>
       {footer ? <View style={styles.footer}>{footer}</View> : null}
     </View>
   );
@@ -100,7 +145,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(4, 18, 36, 0.88)',
     borderWidth: 1,
     borderColor: 'rgba(56, 189, 248, 0.28)',
-    gap: 18,
+    gap: 16,
+    overflow: 'hidden',
   },
   headerRow: {
     flexDirection: 'row',
@@ -140,6 +186,29 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#A5F3FC',
     letterSpacing: 0.3,
+  },
+  segmentTrail: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  segmentChip: {
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(125, 211, 252, 0.28)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: 'rgba(14, 165, 233, 0.12)',
+  },
+  segmentText: {
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: '#BAE6FD',
+    textTransform: 'uppercase',
+  },
+  bodyTrack: {
+    overflow: 'hidden',
+    maxHeight: 260,
   },
   body: {
     gap: 14,
