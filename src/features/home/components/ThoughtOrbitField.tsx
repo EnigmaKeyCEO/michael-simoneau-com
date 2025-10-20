@@ -366,7 +366,7 @@ const OrbitSection = ({ section, index, total }: OrbitSectionProps) => {
       haloMaterialRef.current.opacity = damp(
         haloMaterialRef.current.opacity,
         nextOpacity,
-        2.6,
+        2.4,
         delta,
       );
     }
@@ -443,6 +443,7 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
   const focusRef = useRef(subsection.focus);
   const activeRef = useRef(subsection.active);
   const spreadRef = useRef(subsection.spread);
+  const activeRef = useRef(subsection.active);
 
   useEffect(() => {
     focusRef.current = subsection.focus;
@@ -466,6 +467,7 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
         2.6,
         delta,
       );
+      containerRef.current.rotation.x = damp(containerRef.current.rotation.x, targetTilt, 3, delta);
     }
 
     if (bodyRef.current) {
@@ -494,7 +496,7 @@ const OrbitSatellite = ({ config, subsection, tone }: OrbitSatelliteProps) => {
       ringMaterialRef.current.opacity = damp(
         ringMaterialRef.current.opacity,
         targetOpacity,
-        3,
+        2.6,
         delta,
       );
     }
