@@ -1,5 +1,7 @@
 import { type ReactNode, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useThoughtOrbitFocus } from './ThoughtOrbitFocusContext';
+import { useReducedMotion } from '../../../ui/animation/useReducedMotion';
 import type { SitemapContentBlock } from './sitemapContentParsing';
 
 type SitemapSubsectionCardProps = {
@@ -58,6 +60,12 @@ export const SitemapSubsectionCard = ({
   blocks,
   footer,
 }: SitemapSubsectionCardProps) => {
+  const { focus, distance } = useThoughtOrbitFocus();
+  const reduceMotion = useReducedMotion();
+  const emergence = reduceMotion ? 1 : Math.min(1, focus + 0.25);
+  const verticalDrift = reduceMotion ? 0 : (0.5 - emergence) * 16;
+  const surfaceTilt = reduceMotion ? 0 : 0.18 - emergence * 0.12;
+  const surfaceGlow = 0.24 + emergence * 0.46;
   const accentStyle = useMemo(() => {
     switch (accent) {
       case 'fragment':
@@ -71,7 +79,22 @@ export const SitemapSubsectionCard = ({
   }, [accent]);
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          shadowOpacity: surfaceGlow,
+          shadowRadius: 18 + emergence * 18,
+          transform: reduceMotion
+            ? undefined
+            : [
+                { perspective: 1200 },
+                { rotateX: `${surfaceTilt}rad` },
+                { translateY: verticalDrift - distance * 10 },
+              ],
+        },
+      ]}
+    >
       <View style={styles.headerRow}>
         <View style={[styles.accentDot, accentStyle]} />
         <View style={styles.headerText}>
@@ -85,7 +108,20 @@ export const SitemapSubsectionCard = ({
           ) : null}
         </View>
       </View>
-      <View style={styles.body}>{blocks.map(renderBlock)}</View>
+      <View style={styles.bodyFrame}>
+        <View
+          style={[
+            styles.body,
+            {
+              transform: reduceMotion
+                ? undefined
+                : [{ translateY: verticalDrift * 0.4 }, { scaleY: 0.92 + emergence * 0.08 }],
+            },
+          ]}
+        >
+          {blocks.map(renderBlock)}
+        </View>
+      </View>
       {footer ? <View style={styles.footer}>{footer}</View> : null}
     </View>
   );
@@ -101,6 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(56, 189, 248, 0.28)',
     gap: 18,
+    shadowColor: '#1D4ED8',
   },
   headerRow: {
     flexDirection: 'row',
@@ -140,6 +177,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#A5F3FC',
     letterSpacing: 0.3,
+  },
+  bodyFrame: {
+    overflow: 'hidden',
+    borderRadius: 20,
   },
   body: {
     gap: 14,
