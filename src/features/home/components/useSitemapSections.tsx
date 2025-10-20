@@ -3,7 +3,8 @@ import type { ThoughtOrbitSection, ThoughtOrbitSubsection } from './ThoughtOrbit
 import type { ScrapedContent } from '../data/sitemapContent';
 import { SCRAPED_CONTENT } from '../data/sitemapContent';
 import { parseSitemapContentBlocks } from './sitemapContentParsing';
-import { SitemapSubsectionCard } from './SitemapSubsectionCard';
+import type { SitemapContentBlock } from './sitemapContentParsing';
+import { SitemapSubsectionSurface } from './SitemapSubsectionSurface';
 
 type SitemapGroup = {
   base: ScrapedContent;
@@ -12,16 +13,71 @@ type SitemapGroup = {
 
 const alignments: ThoughtOrbitSection['alignment'][] = ['left', 'center', 'right'];
 
-const chunkBlocks = <T,>(items: T[], chunkSize: number): T[][] => {
-  if (chunkSize <= 0) {
-    return [items];
+const fallbackBlocks = (
+  blocks: SitemapContentBlock[],
+  fallbackText: string,
+): SitemapContentBlock[] => {
+  if (blocks.length > 0) {
+    return blocks;
   }
 
-  const chunks: T[][] = [];
-  for (let index = 0; index < items.length; index += chunkSize) {
-    chunks.push(items.slice(index, index + chunkSize));
+  return [{ type: 'paragraph', text: fallbackText }];
+};
+
+const formatSegmentLabel = (segment: string): string => {
+  const sanitized = segment
+    .replace(/^#/, '')
+    .replace(/\?.*$/, '')
+    .replace(/\/index$/i, '');
+  const tokens = sanitized
+    .split(/[-_]+/)
+    .map((token) => token.trim())
+    .filter(Boolean);
+
+  if (tokens.length === 0) {
+    const compact = sanitized.replace(/^\//, '');
+    return compact.length > 0 ? compact : 'Home';
   }
-  return chunks;
+
+  return tokens.map((token) => token.charAt(0).toUpperCase() + token.slice(1)).join(' ');
+};
+
+const createEndpointTrails = (rawUrl: string): string[][] => {
+  try {
+    const parsed = new URL(rawUrl);
+    const segments = parsed.pathname
+      .split('/')
+      .map((segment) => segment.trim())
+      .filter(Boolean)
+      .map(formatSegmentLabel);
+
+    const baseSegments = segments.length > 0 ? segments : ['Home'];
+
+    return baseSegments.map((_, index) => baseSegments.slice(0, index + 1));
+  } catch {
+    const cleaned = rawUrl.replace(/^https?:\/\//, '');
+    return [[cleaned]];
+  }
+};
+
+const createFragmentTrail = (record: ScrapedContent): string[] => {
+  try {
+    const parsed = new URL(record.url);
+    const segments = parsed.pathname
+      .split('/')
+      .map((segment) => segment.trim())
+      .filter(Boolean)
+      .map(formatSegmentLabel);
+    const hash = parsed.hash ? formatSegmentLabel(parsed.hash) : null;
+
+    if (hash) {
+      segments.push(hash);
+    }
+
+    return segments.length > 0 ? segments : ['Home'];
+  } catch {
+    return [record.url];
+  }
 };
 
 const createBaseSubsections = (
@@ -29,22 +85,29 @@ const createBaseSubsections = (
   sectionTone: ThoughtOrbitSection['tone'],
 ): ThoughtOrbitSubsection[] => {
   const baseBlocks = parseSitemapContentBlocks(group.base.content);
-  const chunks = chunkBlocks(baseBlocks, baseBlocks.length > 6 ? 3 : 2);
+  const trails = createEndpointTrails(group.base.url);
+  const chunkCount = trails.length || 1;
+  const chunkSize = chunkCount > 0 ? Math.ceil(baseBlocks.length / chunkCount) || 1 : 1;
 
-  return chunks.map((blocks, index) => {
+  return trails.map((trail, index) => {
     const accent = index === 0 ? 'primary' : 'secondary';
     const tone = index === 0 ? sectionTone : 'surface';
-    const subtitle = index === 0 ? group.base.url : `Continuum ${index + 1}`;
+    const subtitle = trail.join(' / ');
+    const sliceStart = index * chunkSize;
+    const sliceEnd = index === trails.length - 1 ? undefined : sliceStart + chunkSize;
+    const slice = baseBlocks.slice(sliceStart, sliceEnd);
+    const blocks = fallbackBlocks(slice, group.base.content.trim().slice(0, 240));
 
     return {
       id: `${group.base.url}::base-${index}`,
       tone,
       content: (
-        <SitemapSubsectionCard
+        <SitemapSubsectionSurface
           title={group.base.title}
           subtitle={subtitle}
           accent={accent}
           blocks={blocks}
+          endpointSegments={trail}
         />
       ),
     };
@@ -54,17 +117,20 @@ const createBaseSubsections = (
 const createFragmentSubsections = (group: SitemapGroup): ThoughtOrbitSubsection[] =>
   group.fragments.map((fragment, index) => {
     const fragmentBlocks = parseSitemapContentBlocks(fragment.content).slice(0, 4);
-    const subtitle = fragment.fragment ? `${fragment.baseUrl}${fragment.fragment}` : fragment.url;
+    const trail = createFragmentTrail(fragment);
+    const subtitle = trail.join(' / ');
+    const blocks = fallbackBlocks(fragmentBlocks, fragment.content.trim().slice(0, 200));
 
     return {
       id: `${fragment.url}::fragment-${index}`,
       tone: 'surface',
       content: (
-        <SitemapSubsectionCard
+        <SitemapSubsectionSurface
           title={fragment.title}
           subtitle={subtitle}
           accent="fragment"
-          blocks={fragmentBlocks}
+          blocks={blocks}
+          endpointSegments={trail}
         />
       ),
     };
