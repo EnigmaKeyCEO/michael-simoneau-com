@@ -1,5 +1,5 @@
 import { type ReactNode, useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { SitemapContentBlock } from './sitemapContentParsing';
 import { useThoughtOrbitFocus } from './ThoughtOrbitFocusContext';
 
@@ -128,8 +128,14 @@ export const SitemapSubsectionSurface = ({
             ))}
           </View>
         ) : null}
-        <View style={styles.surfaceBody}>{blocks.map(renderBlock)}</View>
-        {footer ? <View style={styles.surfaceFooter}>{footer}</View> : null}
+        <ScrollView
+          style={styles.surfaceScroll}
+          contentContainerStyle={styles.surfaceScrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.surfaceBody}>{blocks.map(renderBlock)}</View>
+          {footer ? <View style={styles.surfaceFooter}>{footer}</View> : null}
+        </ScrollView>
       </View>
     </View>
   );
@@ -198,6 +204,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#E0F2FE',
     letterSpacing: 0.4,
+  },
+  surfaceScroll: {
+    flex: 1,
+  },
+  surfaceScrollContent: {
+    paddingBottom: 16,
+    gap: 18,
   },
   surfaceBody: {
     gap: 12,

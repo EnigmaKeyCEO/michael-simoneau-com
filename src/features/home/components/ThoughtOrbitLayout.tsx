@@ -3,11 +3,13 @@ import {
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
+  type ScrollViewHandle,
 } from 'react-native';
 import { ThoughtOrbitField } from './ThoughtOrbitField';
 import { ThoughtOrbitFocusProvider } from './ThoughtOrbitFocusContext';
@@ -67,14 +69,21 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
   const { height, width } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
   const scrollRaf = useRef<number | null>(null);
+  const sectionScrollRefs = useRef<Array<ScrollViewHandle | null>>([]);
 
   const flattened = useMemo(() => createFlattened(sections), [sections]);
   const [centers, setCenters] = useState<number[]>(() => flattened.map(() => Number.NaN));
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [activeBySection, setActiveBySection] = useState<number[]>(() => sections.map(() => 0));
 
   useEffect(() => {
     setCenters(flattened.map(() => Number.NaN));
   }, [flattened]);
+
+  useEffect(() => {
+    setActiveBySection(sections.map(() => 0));
+    sectionScrollRefs.current = [];
+  }, [sections]);
 
   useEffect(() => {
     return () => {
@@ -143,11 +152,13 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
         const orbitY = reduceMotion ? 1 : Math.cos(rawAngle);
         const orbitDepth = (orbitY + 1) / 2;
         const adjustedNormalized = normalized + (reduceMotion ? 0 : orbitY * 0.18);
-        const focus = reduceMotion
+        const isActive = activeBySection[item.sectionIndex] === item.subsectionIndex;
+        const focusBase = reduceMotion
           ? hasLayout
             ? Math.max(0.45, Math.min(1, gaussianWeight + 0.2))
             : 0
           : Math.min(1, gaussianWeight * (0.55 + orbitDepth * 0.9));
+        const focus = isActive ? Math.max(focusBase, 0.75) : focusBase * 0.25;
 
         return {
           focus,
@@ -161,7 +172,16 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           orbitDepth,
         };
       }),
-    [centers, flattened, height, orbitPhase, reduceMotion, sections, viewportCenter],
+    [
+      activeBySection,
+      centers,
+      flattened,
+      height,
+      orbitPhase,
+      reduceMotion,
+      sections,
+      viewportCenter,
+    ],
   );
 
   const sectionIndexMap = useMemo(() => {
@@ -184,7 +204,8 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
 
       let focus = 0;
       let primaryIndex = indices[0] ?? -1;
-      let primaryFocus = -1;
+      const activeLocalIndex = activeBySection[sectionIndex] ?? 0;
+      const activeFlatIndex = indices[activeLocalIndex];
 
       indices.forEach((flatIndex) => {
         const state = subsectionVisualStates[flatIndex];
@@ -192,8 +213,7 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           return;
         }
 
-        if (state.focus > primaryFocus) {
-          primaryFocus = state.focus;
+        if (flatIndex === activeFlatIndex) {
           primaryIndex = flatIndex;
         }
 
@@ -215,24 +235,28 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           const subsection = section.subsections[localIndex];
           const state = subsectionVisualStates[flatIndex];
           const orbitAzimuth = state ? Math.atan2(state.orbitX, state.orbitY) : 0;
+          const isActive = activeBySection[sectionIndex] === localIndex;
 
           return {
             id: subsection?.id ?? `sub-${localIndex}`,
-            focus: state?.focus ?? 0,
+            focus: isActive ? (state?.focus ?? 0) : (state?.focus ?? 0) * 0.3,
             offset: orbitAzimuth,
             spread: state?.orbitDepth ?? 0,
             tone: state?.tone ?? primaryTone,
             index: localIndex,
             count: indices.length || 1,
-            active: primaryIndex === flatIndex,
+            active: isActive,
           };
         }),
       };
     });
-  }, [sectionIndexMap, sections, subsectionVisualStates]);
+  }, [activeBySection, sectionIndexMap, sections, subsectionVisualStates]);
 
-  const baseSurfaceWidth = Math.max(320, Math.min(620, width - 80));
-  const baseSurfaceHeight = 260;
+  const baseSurfaceWidth = Math.max(280, Math.min(680, width - 40));
+  const maxStageHeight = Math.min(height, Math.max(240, height - 48));
+  const desiredStageHeight = Math.max(260, Math.min(640, height * 0.78));
+  const stageHeight = Math.min(maxStageHeight, desiredStageHeight);
+  const surfaceHeight = Math.min(stageHeight, Math.max(220, stageHeight - 64));
 
   const renderedSections = useMemo(() => {
     return sections.map((section, sectionIndex) => {
@@ -246,48 +270,26 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
           : sectionAlignment === 'right'
             ? styles.alignEnd
             : styles.alignCenter;
+      const activeIndex = activeBySection[sectionIndex] ?? 0;
 
       const surfaces = indices.map((flatIndex, localIndex) => {
         const subsection = section.subsections[localIndex];
         const visual = subsectionVisualStates[flatIndex];
+        const isActive = activeIndex === localIndex;
 
         if (!subsection || !visual) {
           return null;
         }
 
-        const orbitRadius = reduceMotion ? 0 : (baseSurfaceWidth / 2) * (0.6 + sectionFocus * 0.3);
-        const translateX = reduceMotion ? 0 : visual.orbitX * orbitRadius;
-        const translateY = reduceMotion ? 0 : -visual.orbitY * 32;
-        const depthScale = reduceMotion ? 1 : 0.72 + visual.orbitDepth * 0.42;
-        const opacity = reduceMotion ? 0.98 : 0.28 + visual.orbitDepth * 0.7;
-        const zIndex = Math.round(visual.orbitDepth * 100);
-
         return (
           <View
             key={`${section.id}::surface-${subsection.id}`}
-            style={[
-              styles.surfaceWrapper,
-              {
-                width: baseSurfaceWidth,
-                minHeight: baseSurfaceHeight,
-                transform: [
-                  { translateX: -baseSurfaceWidth / 2 },
-                  { translateY: -baseSurfaceHeight / 2 },
-                  { translateX },
-                  { translateY },
-                  { scale: depthScale },
-                  { rotateY: `${visual.orbitX * 0.32}rad` },
-                  { rotateX: `${-visual.orbitY * 0.18}rad` },
-                ],
-                opacity,
-                zIndex,
-              },
-            ]}
+            style={[styles.surfacePage, { width: baseSurfaceWidth, height: surfaceHeight }]}
           >
             <ThoughtOrbitFocusProvider
               value={{
-                focus: visual.focus,
-                distance: Math.abs(visual.normalized),
+                focus: isActive ? visual.focus : Math.min(0.4, visual.focus),
+                distance: isActive ? 0 : Math.abs(visual.normalized) + 0.5,
               }}
             >
               <View style={styles.surfaceContent}>{subsection.content}</View>
@@ -346,21 +348,130 @@ export const ThoughtOrbitLayout = ({ sections }: { sections: ThoughtOrbitSection
               },
             ]}
           />
-          <View style={[styles.orbitStage, { minHeight: baseSurfaceHeight + 180 }]}>
-            <View style={styles.surfaceStack}>{surfaces}</View>
+          <View style={[styles.orbitStage, { height: stageHeight }]}>
+            <View
+              style={[styles.surfaceViewport, { width: baseSurfaceWidth, height: surfaceHeight }]}
+            >
+              <ScrollView
+                horizontal
+                pagingEnabled
+                ref={(node) => {
+                  sectionScrollRefs.current[sectionIndex] = node;
+                }}
+                style={styles.surfaceCarousel}
+                contentContainerStyle={[styles.surfaceCarouselContent, { height: surfaceHeight }]}
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={(event) => {
+                  const offsetX = event.nativeEvent.contentOffset.x;
+                  const nextIndex = Math.max(
+                    0,
+                    Math.min(
+                      section.subsections.length - 1,
+                      Math.round(offsetX / Math.max(baseSurfaceWidth, 1)),
+                    ),
+                  );
+
+                  setActiveBySection((previous) => {
+                    const next = [...previous];
+                    next[sectionIndex] = nextIndex;
+                    return next;
+                  });
+                }}
+              >
+                {surfaces}
+              </ScrollView>
+            </View>
+            {section.subsections.length > 1 ? (
+              <View style={styles.carouselControls}>
+                <Pressable
+                  accessibilityLabel={`View previous ${section.title ?? 'subsection'}`}
+                  accessibilityRole="button"
+                  disabled={activeIndex === 0}
+                  onPress={() => {
+                    const current = activeBySection[sectionIndex] ?? 0;
+                    if (current <= 0) {
+                      return;
+                    }
+
+                    const target = current - 1;
+                    setActiveBySection((previous) => {
+                      const next = [...previous];
+                      next[sectionIndex] = target;
+                      return next;
+                    });
+
+                    const ref = sectionScrollRefs.current[sectionIndex];
+                    ref?.scrollTo({ x: target * baseSurfaceWidth, animated: true });
+                  }}
+                  style={[
+                    styles.carouselButton,
+                    activeIndex === 0 ? styles.carouselButtonDisabled : null,
+                  ]}
+                >
+                  <Text style={styles.carouselButtonLabel}>‹</Text>
+                </Pressable>
+                <View style={styles.carouselDots}>
+                  {section.subsections.map((_, dotIndex) => {
+                    const active = dotIndex === activeIndex;
+                    return (
+                      <View
+                        key={`${section.id}-dot-${dotIndex}`}
+                        style={[
+                          styles.carouselDot,
+                          active ? styles.carouselDotActive : styles.carouselDotInactive,
+                        ]}
+                      />
+                    );
+                  })}
+                </View>
+                <Pressable
+                  accessibilityLabel={`View next ${section.title ?? 'subsection'}`}
+                  accessibilityRole="button"
+                  disabled={activeIndex === section.subsections.length - 1}
+                  onPress={() => {
+                    const current = activeBySection[sectionIndex] ?? 0;
+                    const lastIndex = section.subsections.length - 1;
+                    if (current >= lastIndex) {
+                      return;
+                    }
+
+                    const target = current + 1;
+                    setActiveBySection((previous) => {
+                      const next = [...previous];
+                      next[sectionIndex] = target;
+                      return next;
+                    });
+
+                    const ref = sectionScrollRefs.current[sectionIndex];
+                    ref?.scrollTo({ x: target * baseSurfaceWidth, animated: true });
+                  }}
+                  style={[
+                    styles.carouselButton,
+                    activeIndex === section.subsections.length - 1
+                      ? styles.carouselButtonDisabled
+                      : null,
+                  ]}
+                >
+                  <Text style={styles.carouselButtonLabel}>›</Text>
+                </Pressable>
+              </View>
+            ) : null}
           </View>
         </View>
       );
     });
   }, [
-    baseSurfaceHeight,
     baseSurfaceWidth,
     fieldDynamics,
+    activeBySection,
     reduceMotion,
     registerSection,
     sectionIndexMap,
     sections,
     subsectionVisualStates,
+    stageHeight,
+    surfaceHeight,
+    orbitPhase,
   ]);
 
   return (
@@ -444,20 +555,69 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  surfaceStack: {
-    width: '100%',
-    maxWidth: 920,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  surfaceViewport: {
+    borderRadius: 28,
+    overflow: 'hidden',
   },
-  surfaceWrapper: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+  surfaceCarousel: {
+    flex: 1,
+  },
+  surfaceCarouselContent: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  surfacePage: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   surfaceContent: {
     flex: 1,
+    width: '100%',
+  },
+  carouselControls: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    gap: 12,
+  },
+  carouselButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+  },
+  carouselButtonDisabled: {
+    opacity: 0.35,
+  },
+  carouselButtonLabel: {
+    fontSize: 24,
+    color: '#E0F2FE',
+    lineHeight: 26,
+  },
+  carouselDots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  carouselDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  carouselDotActive: {
+    backgroundColor: '#38BDF8',
+  },
+  carouselDotInactive: {
+    backgroundColor: 'rgba(148, 163, 184, 0.4)',
   },
   alignStart: {
     alignItems: 'flex-start',
