@@ -67,6 +67,8 @@ declare module 'react-native' {
     onHoverIn?: () => void;
     onHoverOut?: () => void;
     accessibilityRole?: string;
+    disabled?: boolean;
+    accessibilityLabel?: string;
   }>;
 
   export const StyleSheet: {

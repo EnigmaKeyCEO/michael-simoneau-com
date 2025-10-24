@@ -115,7 +115,7 @@ const createBaseSubsections = (
 };
 
 const createFragmentSubsections = (group: SitemapGroup): ThoughtOrbitSubsection[] =>
-  group.fragments.map((fragment, index) => {
+  group.fragments.map((fragment) => {
     const fragmentBlocks = parseSitemapContentBlocks(fragment.content).slice(0, 4);
     const trail = createFragmentTrail(fragment);
     const subtitle = trail.join(' / ');
