@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "expo-router";
-import { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   useFoundationBoundary,

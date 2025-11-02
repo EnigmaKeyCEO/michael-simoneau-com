@@ -1,6 +1,4 @@
-import React from "react";
-import { Appearance } from "react-native";
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -8,6 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { Appearance } from "react-native";
 import { defaultFoundationConfig } from "./defaultConfig";
 import type {
   Foundation,
