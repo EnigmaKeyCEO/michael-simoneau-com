@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { AppProviders } from "../AppProviders";
 import { Text } from "react-native";
 import { jest, describe, it, expect } from "@jest/globals";
+import type { ReactNode } from "react";
 
 // Mock expo-constants to prevent native module access
 jest.mock("expo-constants", () => ({

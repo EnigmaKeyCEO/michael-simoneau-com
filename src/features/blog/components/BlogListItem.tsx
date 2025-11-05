@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import type { BlogArticleSummary } from "../types";
