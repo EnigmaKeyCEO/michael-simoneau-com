@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FoundationProvider } from "../foundation";
 import { foundationConfig } from "../foundation/config";

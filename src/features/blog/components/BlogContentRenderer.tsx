@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import type { TextStyle } from "react-native";
 import type { ContentBlock } from "../types";

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Link, usePathname } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import {

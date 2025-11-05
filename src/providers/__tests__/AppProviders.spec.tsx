@@ -1,8 +1,8 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { AppProviders } from "../AppProviders";
 import { Text } from "react-native";
 import { jest, describe, it, expect } from "@jest/globals";
+import type { ReactNode } from "react";
 
 // Mock expo-constants to prevent native module access
 jest.mock("expo-constants", () => ({
@@ -19,11 +19,11 @@ jest.mock("expo-router", () => ({
 }));
 
 jest.mock("react-native-safe-area-context", () => ({
-  SafeAreaProvider: ({ children }: { children: React.ReactNode }) => children,
+  SafeAreaProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 jest.mock("../../foundation", () => ({
-  FoundationProvider: ({ children }: { children: React.ReactNode }) => children,
+  FoundationProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 describe("AppProviders", () => {
