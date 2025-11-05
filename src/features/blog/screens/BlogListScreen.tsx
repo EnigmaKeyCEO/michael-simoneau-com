@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   useFoundationBoundary,
@@ -11,11 +11,11 @@ import {
   useFeaturedBlogArticles,
 } from "../hooks/useBlogArticles";
 
-export const BlogListScreen = () => {
+export const BlogListScreen = (): React.ReactElement => {
   const metadata = useFoundationMetadata();
   const featuredArticles = useFeaturedBlogArticles();
   const articles = useBlogArticles();
-  const boundary = useMemo(
+  const boundary = React.useMemo(
     () => ({
       id: "blog-list",
       label: "Briefing Library",

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   useFoundationBoundary,
@@ -24,9 +24,9 @@ const serviceCatalog = [
   },
 ];
 
-export const CryptoFabricScreen = () => {
+export const CryptoFabricScreen = (): React.ReactElement => {
   const cryptoFabric = useFoundationFeature("cryptoFabricLaunch");
-  const boundary = useMemo(
+  const boundary = React.useMemo(
     () => ({
       id: "crypto-fabric",
       label: "Crypto Fabric",

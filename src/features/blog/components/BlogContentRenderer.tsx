@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import type { TextStyle } from "react-native";
 import type { ContentBlock } from "../types";
@@ -11,7 +11,9 @@ export const BlogContentRenderer = ({ blocks }: BlogContentRendererProps) => {
   return (
     <View style={styles.container}>
       {blocks.map((block, index) => (
-        <Fragment key={`${block.type}-${index}`}>{renderBlock(block)}</Fragment>
+        <React.Fragment key={`${block.type}-${index}`}>
+          {renderBlock(block)}
+        </React.Fragment>
       ))}
     </View>
   );

@@ -1,3 +1,4 @@
+import React, { type ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { AppProviders } from "../AppProviders";
 import { Text } from "react-native";
@@ -28,12 +29,14 @@ jest.mock("../../foundation", () => ({
 
 describe("AppProviders", () => {
   it("renders children within SafeAreaProvider and FoundationProvider", () => {
-    const TestChild = () => <Text testID="test-child">Test Child Content</Text>;
+    const TestChild: React.FC = () => (
+      <Text testID="test-child">Test Child Content</Text>
+    );
 
     render(
-        <AppProviders>
-          <TestChild />
-        </AppProviders>
+      <AppProviders>
+        <TestChild />
+      </AppProviders>,
     );
 
     // Check if the child component is rendered within FoundationProvider

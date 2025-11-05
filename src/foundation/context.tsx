@@ -1,5 +1,4 @@
-import {
-  createContext,
+import React, {
   useCallback,
   useContext,
   useEffect,
@@ -16,7 +15,9 @@ import type {
 import { resolveDefaultRuntime } from "./runtime";
 import { deepMerge } from "./utils";
 
-const FoundationContext = createContext<Foundation>(defaultFoundationConfig);
+const FoundationContext = React.createContext<Foundation>(
+  defaultFoundationConfig,
+);
 
 export const FoundationProvider = ({
   config,
