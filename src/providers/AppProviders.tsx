@@ -7,7 +7,9 @@ interface AppProvidersProps {
   children: ReactNode;
 }
 
-export const AppProviders = ({ children }: AppProvidersProps) => {
+export const AppProviders = ({
+  children,
+}: AppProvidersProps): React.ReactElement => {
   return (
     <SafeAreaProvider testID="safe-area-provider">
       <FoundationProvider

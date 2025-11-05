@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link, usePathname } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import {
@@ -6,9 +6,9 @@ import {
   useFoundationPageView,
 } from "../src/foundation";
 
-export default function NotFound() {
+export default function NotFound(): React.ReactElement {
   const pathname = usePathname();
-  const boundary = useMemo(
+  const boundary = React.useMemo(
     () => ({
       id: "not-found",
       label: "Signal Lost",

@@ -7,7 +7,9 @@ interface BlogListItemProps {
   article: BlogArticleSummary;
 }
 
-export const BlogListItem = ({ article }: BlogListItemProps) => {
+const BlogListItemComponent = ({
+  article,
+}: BlogListItemProps): React.ReactElement => {
   return (
     <Link href={`/blog/${article.id}`} asChild>
       <View
@@ -33,6 +35,10 @@ export const BlogListItem = ({ article }: BlogListItemProps) => {
     </Link>
   );
 };
+
+export const BlogListItem = React.memo(BlogListItemComponent);
+
+BlogListItem.displayName = "BlogListItem";
 
 const styles = StyleSheet.create({
   card: {

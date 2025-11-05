@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
@@ -11,13 +11,13 @@ import {
 import { useFeaturedBlogArticles } from "../../blog/hooks/useBlogArticles";
 import { BlogListItem } from "../../blog/components/BlogListItem";
 
-export const HomeScreen = () => {
+export const HomeScreen = (): React.ReactElement => {
   const metadata = useFoundationMetadata();
   const runtime = useFoundationRuntime();
   const cryptoFabricFeature = useFoundationFeature("cryptoFabricLaunch");
   const voiceAssistantFeature = useFoundationFeature("voiceAssistant");
   const featuredArticles = useFeaturedBlogArticles();
-  const boundary = useMemo(
+  const boundary = React.useMemo(
     () => ({
       id: "home",
       label: "Mission Control",

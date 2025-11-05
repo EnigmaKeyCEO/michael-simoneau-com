@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
@@ -8,12 +8,12 @@ import {
 import { BlogContentRenderer } from "../components/BlogContentRenderer";
 import { useBlogArticle } from "../hooks/useBlogArticles";
 
-export const BlogArticleScreen = () => {
+export const BlogArticleScreen = (): React.ReactElement | null => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const articleId = useMemo(() => (Array.isArray(id) ? id[0] : id), [id]);
+  const articleId = React.useMemo(() => (Array.isArray(id) ? id[0] : id), [id]);
   const article = useBlogArticle(articleId);
-  const boundary = useMemo(() => {
+  const boundary = React.useMemo(() => {
     if (!article) {
       return undefined;
     }
@@ -25,7 +25,7 @@ export const BlogArticleScreen = () => {
       href: `/blog/${article.id}`,
     };
   }, [article]);
-  const articleViewPayload = useMemo(() => {
+  const articleViewPayload = React.useMemo(() => {
     if (!article) {
       return undefined;
     }
@@ -56,7 +56,7 @@ export const BlogArticleScreen = () => {
     },
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!articleId) {
       return;
     }
