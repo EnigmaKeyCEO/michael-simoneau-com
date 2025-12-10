@@ -10,6 +10,12 @@ type SeoProps = {
   image?: string;
   noIndex?: boolean;
   structuredData?: StructuredData | StructuredData[];
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  section?: string;
+  tags?: string[];
 };
 
 const updateMetaTag = (
@@ -80,9 +86,20 @@ export const Seo: FC<SeoProps> = ({
   image = 'https://www.michaelsimoneau.com/profile-image.png',
   noIndex,
   structuredData,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author = 'Michael Simoneau',
+  section,
+  tags,
 }) => {
   const keywordContent = keywords?.join(', ');
   const serializedStructuredData = structuredData ? JSON.stringify(structuredData) : null;
+  
+  // Ensure image URL is absolute
+  const absoluteImage = image.startsWith('http') 
+    ? image 
+    : `https://www.michaelsimoneau.com${image.startsWith('/') ? image : '/' + image}`;
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -99,18 +116,43 @@ export const Seo: FC<SeoProps> = ({
 
     updateMetaTag('og:title', title, 'property', managedElements);
     updateMetaTag('og:description', description, 'property', managedElements);
-    updateMetaTag('og:type', 'website', 'property', managedElements);
+    updateMetaTag('og:type', type, 'property', managedElements);
     updateMetaTag('og:url', canonicalUrl, 'property', managedElements);
-    updateMetaTag('og:image', image, 'property', managedElements);
+    updateMetaTag('og:image', absoluteImage, 'property', managedElements);
+    updateMetaTag('og:image:width', '1200', 'property', managedElements);
+    updateMetaTag('og:image:height', '630', 'property', managedElements);
+    updateMetaTag('og:image:alt', title, 'property', managedElements);
     updateMetaTag('og:site_name', 'Michael Simoneau', 'property', managedElements);
     updateMetaTag('og:locale', 'en_US', 'property', managedElements);
+    
+    // Article-specific meta tags
+    if (type === 'article') {
+      if (publishedTime) {
+        updateMetaTag('article:published_time', publishedTime, 'property', managedElements);
+      }
+      if (modifiedTime) {
+        updateMetaTag('article:modified_time', modifiedTime, 'property', managedElements);
+      }
+      if (author) {
+        updateMetaTag('article:author', author, 'property', managedElements);
+      }
+      if (section) {
+        updateMetaTag('article:section', section, 'property', managedElements);
+      }
+      if (tags && tags.length > 0) {
+        tags.forEach(tag => {
+          updateMetaTag('article:tag', tag, 'property', managedElements);
+        });
+      }
+    }
 
     updateMetaTag('twitter:card', 'summary_large_image', 'name', managedElements);
     updateMetaTag('twitter:title', title, 'name', managedElements);
     updateMetaTag('twitter:description', description, 'name', managedElements);
     updateMetaTag('twitter:creator', '@enigmakeyceo', 'name', managedElements);
     updateMetaTag('twitter:site', '@enigmakeyceo', 'name', managedElements);
-    updateMetaTag('twitter:image', image, 'name', managedElements);
+    updateMetaTag('twitter:image', absoluteImage, 'name', managedElements);
+    updateMetaTag('twitter:image:alt', title, 'name', managedElements);
 
     updateLinkTag('canonical', canonicalUrl, managedElements);
 
@@ -147,7 +189,7 @@ export const Seo: FC<SeoProps> = ({
         script.remove();
       });
     };
-  }, [title, description, canonicalUrl, keywordContent, image, noIndex, serializedStructuredData]);
+  }, [title, description, canonicalUrl, keywordContent, absoluteImage, noIndex, serializedStructuredData, type, publishedTime, modifiedTime, author, section, tags]);
 
   return null;
 };

@@ -12,6 +12,7 @@ import { BlogPost } from "./components/BlogPost";
 import { Interview } from "./components/Interview";
 import { ZeroTruth } from "./components/ZeroTruth";
 import { FullProfile } from "./pages/FullProfile";
+import { CryptoFabric } from "./pages/CryptoFabric";
 
 // Lazy load NEW main page component
 const LazyNewMainPage = lazy(() => 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "full-profile",
         element: <FullProfile />,
+      },
+      {
+        path: "crypto-fabric",
+        element: <CryptoFabric />,
       },
       {
         path: "*",

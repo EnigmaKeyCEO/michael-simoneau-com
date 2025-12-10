@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Twitter, Facebook, Copy } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, Share2, LinkedinIcon, Facebook, Copy } from 'lucide-react';
 import { MainNav } from './MainNav';
 import { blogData } from '../data/blogData'; // Import data
 import { ContentBlock as ContentBlockType } from '../models/BlogPost'; // Import ContentBlock type definition
 import { useScrollToTop } from '../hooks/useScrollToTop'; // Added import
 import { parseInlineMarkdown } from '../utils/markdown';
+import { Seo } from './Seo';
+import { XIcon } from './XIcon';
 
 // Removed unused local ContentBlock type definition, as ContentBlockType from models is used
 
@@ -75,8 +77,9 @@ const CodeBlock: React.FC<{ language: string; content: string }> = ({ language, 
 const ShareButton: React.FC<{ platform: string; url: string; title: string }> = ({ platform, url, title }) => {
   const getShareUrl = () => {
     switch (platform) {
+      case 'x':
       case 'twitter':
-        return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+        return `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
       case 'linkedin':
         return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
       case 'facebook':
@@ -88,8 +91,9 @@ const ShareButton: React.FC<{ platform: string; url: string; title: string }> = 
 
   const getIcon = () => {
     switch (platform) {
+      case 'x':
       case 'twitter':
-        return <Twitter size={18} />;
+        return <XIcon size={18} />;
       case 'linkedin':
         return <LinkedinIcon size={18} />;
       case 'facebook':
@@ -169,7 +173,7 @@ export const BlogPost: React.FC = () => {
         return React.createElement(`h${level}`, {
           key: index.toString(),
           className: `
-              font-bold text-white
+              font-bold text-white [&_strong]:font-bold [&_strong]:text-white
               ${level === 2 ? 'text-2xl md:text-3xl mt-12 mb-6' : ''}
               ${level === 3 ? 'text-xl md:text-2xl mt-8 mb-4' : ''}
               ${level > 3 ? 'text-lg md:text-xl mt-6 mb-3' : ''}
@@ -181,7 +185,7 @@ export const BlogPost: React.FC = () => {
         return (
           <p
             key={index.toString()}
-            className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed"
+            className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed [&_strong]:font-bold [&_strong]:text-white"
             dangerouslySetInnerHTML={{ __html: parseInlineMarkdown(block.content) }}
           />
         );
@@ -189,7 +193,7 @@ export const BlogPost: React.FC = () => {
         return <CodeBlock key={index.toString()} language={block.language} content={block.content} />;
       case 'list':
         return (
-          <ul key={index.toString()} className="list-disc pl-6 mb-6 space-y-2">
+          <ul key={index.toString()} className="list-disc pl-6 mb-6 space-y-2 [&_strong]:font-bold [&_strong]:text-white">
             {block.items.map((item, i) => (
               <li
                 key={i.toString()}
@@ -201,7 +205,7 @@ export const BlogPost: React.FC = () => {
         );
       case 'callout':
         return (
-          <div key={index.toString()} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg">
+          <div key={index.toString()} className="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 my-8 rounded-r-lg [&_strong]:font-bold [&_strong]:text-cyan-200">
             <p
               className="text-cyan-300 italic"
               dangerouslySetInnerHTML={{ __html: parseInlineMarkdown(block.content) }}
@@ -221,10 +225,66 @@ export const BlogPost: React.FC = () => {
     }
   };
 
+  // Get absolute image URL for SEO
+  const heroImageUrl = post.heroImage.startsWith('http')
+    ? post.heroImage
+    : `https://www.michaelsimoneau.com${post.heroImage.startsWith('/') ? post.heroImage : '/' + post.heroImage}`;
+
+  // Parse date for article meta tags (handles formats like "December 9, 2025")
+  const parseDate = (dateStr: string): string | undefined => {
+    try {
+      // Try parsing the date string directly
+      const date = new Date(dateStr);
+      if (!isNaN(date.getTime()) && date.getFullYear() > 2000) {
+        return date.toISOString();
+      }
+    } catch {
+      // If parsing fails, return undefined
+    }
+    return undefined;
+  };
+
+  const publishedTime = parseDate(post.date);
+
   return (
     <>
+      <Seo
+        title={`${post.title} | Michael Simoneau`}
+        description={post.excerpt}
+        canonicalUrl={`https://www.michaelsimoneau.com/blog/${post.id}`}
+        keywords={post.tags}
+        image={heroImageUrl}
+        type="article"
+        publishedTime={publishedTime}
+        author={post.author}
+        section="Blog"
+        tags={post.tags}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.excerpt,
+          image: heroImageUrl,
+          datePublished: publishedTime,
+          dateModified: publishedTime,
+          author: {
+            '@type': 'Person',
+            name: post.author,
+            url: 'https://www.michaelsimoneau.com',
+          },
+          publisher: {
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            url: 'https://www.michaelsimoneau.com',
+          },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': `https://www.michaelsimoneau.com/blog/${post.id}`,
+          },
+        }}
+      />
       <MainNav />
-      <section className="min-h-screen bg-black text-white py-12 md:py-20 px-4 pt-20 md:pt-24">
+      <section className="min-h-screen bg-black text-white py-12 md:py-20 px-6 sm:px-8 md:px-12 lg:px-16 pt-20 md:pt-24">
         <div className="container mx-auto max-w-4xl">
           <div>
             <div className="flex items-center justify-between mb-8">
@@ -246,7 +306,7 @@ export const BlogPost: React.FC = () => {
                 
                 {showShareOptions && (
                   <div className="absolute right-0 mt-2 flex items-center gap-2 bg-gray-800 p-2 rounded-lg shadow-xl z-50">
-                    <ShareButton platform="twitter" url={currentUrl} title={post.title} />
+                    <ShareButton platform="x" url={currentUrl} title={post.title} />
                     <ShareButton platform="linkedin" url={currentUrl} title={post.title} />
                     <ShareButton platform="facebook" url={currentUrl} title={post.title} />
                   </div>
@@ -293,14 +353,20 @@ export const BlogPost: React.FC = () => {
               </div>
             </div>
 
-            <div className="prose prose-sm md:prose-lg prose-invert max-w-none">
+            <div className="prose prose-sm md:prose-lg prose-invert max-w-none px-2 sm:px-4 md:px-0 [&_strong]:font-bold [&_strong]:text-white">
               {post.content.map((block, index) => renderContentBlock(block, index))}
             </div>
 
             <div className="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-4">About the Author</h3>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:space-x-4">
-                <div className="w-20 h-20 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex-shrink-0" />
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-cyan-400 shadow-lg flex-shrink-0">
+                  <img
+                    src="/profile-image.png"
+                    alt="Michael Simoneau"
+                    className="object-cover w-full h-full"
+                  />
+                </div>
                 <div>
                   <h4 className="text-lg font-bold text-center md:text-left">{post.author}</h4>
                   <p className="text-gray-300 text-center md:text-left mt-2">

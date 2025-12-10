@@ -22,6 +22,221 @@ export interface BlogData {
 
 export const blogData: BlogData[] = [
   {
+    id: "crypto-fabric-business-plan",
+    title: "Crypto Fabric Business Plan & Architecture Snapshot",
+    excerpt:
+      "A comprehensive overview of EtherHive LLC's profitability-first automation platform, covering the business model, architecture, and vision for democratizing crypto revenue generation.",
+    date: "December 9, 2025",
+    readTime: "15 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Crypto Fabric",
+      "EtherHive",
+      "Business Strategy",
+      "Architecture",
+      "Automation",
+    ],
+    heroImage: "/EtherHiveLLC.JPEG",
+    featured: true,
+    content: [
+      createParagraph(
+        "EtherHive LLC is the operational and legal entity behind CryptoFabric, an autonomous, profitability-first automation platform for digital asset income generation. CryptoFabric enables users—technical or not—to run revenue-producing crypto operations such as Ethereum staking, AI-driven trading, and DePIN node workloads, all with essentially zero configuration."
+      ),
+      createHeading("Executive Summary", 2),
+      createParagraph(
+        "The platform delivers the simplest value proposition in the digital-asset economy: \"It pays the bills for you. You don't have to do anything. The AI does it all for you.\" The platform's freemium, profit-sharing model means users pay nothing upfront; EtherHive only earns when there is net profit, aligning incentives between EtherHive and users."
+      ),
+      createHeading("Booming Ethereum Market", 2),
+      createParagraph(
+        "Ethereum's ecosystem is thriving, with ~37.8M ETH staked (≈$85B) and over 1M active validators. Major institutions (e.g., BlackRock) manage multi-billion-dollar Ethereum funds and are now pursuing staked Ethereum ETF products. CryptoFabric taps directly into this growth by automating Ethereum-based income streams (staking, trading, DeFi, DePIN)."
+      ),
+      createHeading("Unique Business Model", 2),
+      createParagraph(
+        "Unlike traditional businesses that rely on selling products or subscriptions, CryptoFabric generates revenue without traditional customers. It uses AI-driven modules to actively earn crypto (trading, staking, DePIN) and takes a 10% profit share only when users are profitable. This means the product can generate revenue even if never \"sold\" in the conventional sense—EtherHive can run CryptoFabric on its own capital, making every deployment a self-sustaining profit center."
+      ),
+      createHeading("Architecture Overview", 2),
+      createParagraph(
+        "CryptoFabric is a hybrid cloud/on-premise platform consisting of two primary components:"
+      ),
+      createList([
+        "**Control Plane (Cloud):** A cloud-based coordination layer (built on Google Firebase) that handles the user interface, authentication (Google OAuth), orchestration, and marketplace functionality. This is the \"brain\" that tells the system what to deploy and monitors performance.",
+        "**Data Plane (Edge Compute):** A localized deployment (MicroK8s Kubernetes cluster on on-prem servers) that runs the actual workloads—trading bots, blockchain nodes, staking validators, etc. By default it runs on a solar-powered server rig, dramatically lowering operating costs.",
+      ]),
+      createHeading("Key Features & Modules", 2),
+      createList([
+        "**Automated Ethereum Trading:** Algorithmic trades via Coinbase's API, ensuring compliance with U.S. regulations.",
+        "**Ethereum Staking Service:** Runs validator nodes to earn ETH protocol rewards (~4–5% APY), lowering the barrier to entry.",
+        "**DePIN Workloads:** Integrations for decentralized infrastructure projects (Pocket, Akash, Storj, Lava, etc.) that earn reward tokens.",
+        "**AI Orchestrator:** Monitors performance of all active modules and market conditions, allocating capital toward highest Profitability Index (PI) opportunities.",
+      ]),
+      createHeading("Sustainable & Cost-Efficient Infrastructure", 2),
+      createParagraph(
+        "Initial infrastructure is 100% solar-powered and on-premises. Upfront ~$3,000 hardware (servers + solar + batteries) plus ~$300/month in connectivity and maintenance replaces cloud workloads that would otherwise cost thousands per month. This cost efficiency boosts profit margins and appeals to ESG-conscious stakeholders."
+      ),
+      createHeading("Compliance & Security Focus", 2),
+      createParagraph(
+        "All trading is executed through regulated exchanges (Coinbase). Staking and node operations earn native protocol rewards, aligning activities with existing regulatory expectations. EtherHive does not custody user funds; users keep assets in their own Coinbase accounts or wallets. Strong security foundation includes encrypted key storage, firewalls, Kubernetes sandboxing, and AI-based anomaly detection."
+      ),
+      createCallout(
+        "EtherHive's vision is to democratize crypto revenue generation through automation, so anyone can have an AI-run, solar-powered digital business paying their bills in the background."
+      ),
+    ],
+  },
+  {
+    id: "crypto-fabric-telemetry-guardrails",
+    title: "Guardrails, Telemetry, and the Mobile Control Center",
+    excerpt:
+      "Progress update on Crypto Fabric's profitability-first architecture: implementing guardrails, real-time telemetry, and the mobile Super Admin control center that enables white-labeled deployments.",
+    date: "October 15, 2025",
+    readTime: "12 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Crypto Fabric",
+      "Architecture",
+      "Mobile Development",
+      "Telemetry",
+      "Guardrails",
+    ],
+    heroImage: "/EtherHiveLLC.JPEG",
+    featured: true,
+    content: [
+      createParagraph(
+        "Since launching Crypto Fabric in August, we've made significant progress on the core architecture that makes profitability-first automation possible. This update covers three critical areas: guardrails that prevent costly experiments, real-time telemetry that surfaces actual margins, and the mobile Super Admin control center that enables white-labeled deployments."
+      ),
+      createHeading("Profitability Guardrails", 2),
+      createParagraph(
+        "One of Crypto Fabric's core differentiators is that the orchestrator only scales services when their profitability index stays above zero. This isn't just a nice-to-have—it's fundamental to the business model. Every module reports revenue, spend, and profit indices back to the Control Center, so new strategies compete on actual margins instead of projections."
+      ),
+      createParagraph(
+        "We've implemented guardrails at multiple levels:"
+      ),
+      createList([
+        "**Service-Level Guardrails:** Each service manifest exposes per-service revenue and spend assumptions, allowing the orchestrator to enforce `revenue_per_hour >= spend_per_hour` in rolling windows.",
+        "**Cost Discipline:** The `core/costs.py` module models profitability and enforces scaling budgets, preventing runaway cloud costs.",
+        "**Policy Gates:** Manifests are policy-checked before rollout, ensuring only opted-in environments spend money.",
+      ]),
+      createHeading("Real-Time Profit Telemetry", 2),
+      createParagraph(
+        "Every module now reports profitability metrics through the shared `ProfitTelemetry` structure. The exporter publishes to `metrics.raw.v1`, and the metrics bridge binds those signals into Cloud Monitoring dashboards. This gives operators day-to-day telemetry without custom dashboards."
+      ),
+      createParagraph(
+        "The telemetry system provides:"
+      ),
+      createList([
+        "**Profit Indices:** Real-time profitability scores per module, updated as market conditions change.",
+        "**Burn Rates:** Cost tracking that surfaces when services become unprofitable.",
+        "**Guardrail Audits:** Status checks that show which services are compliant with profitability thresholds.",
+        "**Treasury Movements:** Revenue sweeps, ETH payouts, and reinvestment policies tracked in real-time.",
+      ]),
+      createHeading("Mobile Super Admin Control Center", 2),
+      createParagraph(
+        "One of the most exciting developments is the mobile Super Admin control center. Built with Expo and React Native, it ships white-labeled iOS and Android binaries for both Super Admins and client tenants, generated straight from Firebase Remote Config + Expo profiles."
+      ),
+      createParagraph(
+        "Key capabilities:"
+      ),
+      createList([
+        "**Native Mobile Apps:** Super Admins can promote new configurations and trigger branded builds directly from their phones, keeping releases in lockstep with profitability guardrails.",
+        "**Real-Time Dashboards:** Mobile dashboards surface the same profitability, burn, and guardrail scores as the web Control Center, so field teams can pivot strategies with current margins instead of lagging reports.",
+        "**Firebase-Native Distribution:** Teams can schedule over-the-air config pushes, queue App Store / Play Store submissions, and roll back missteps instantly—eliminating expensive mobile DevOps cycles.",
+      ]),
+      createHeading("Two-Speed Delivery", 2),
+      createParagraph(
+        "Development stays Python-only and bill-free, while production uses Cloud Run + Artifact Registry with the same manifests. The launcher defaults to `DEV_NO_COST=true` and swaps Google Cloud APIs for local adapters (Secret Manager stubs, Pub/Sub emulator, mock AI providers). Developers can run the entire wizard without installing gcloud."
+      ),
+      createParagraph(
+        "When ready to promote, flipping the Control Center toggle sets `DEV_NO_COST=false` and `CLOUD_DEPLOY=true`, deploying the curated stack to Cloud Run behind IAP. Policy gates ensure only opted-in environments spend money."
+      ),
+      createHeading("What's Next", 2),
+      createParagraph(
+        "With guardrails, telemetry, and mobile control in place, we're now focusing on expanding the service catalog and refining the AI orchestrator's decision-making. The next major milestone is launching the marketplace where third-party developers can publish modules, expanding the ecosystem while maintaining the same profitability-first principles."
+      ),
+      createCallout(
+        "The combination of profitability guardrails, real-time telemetry, and mobile-first control creates a platform where operators can confidently deploy new strategies knowing that the system will automatically shut down unprofitable experiments before they become costly mistakes."
+      ),
+    ],
+  },
+  {
+    id: "crypto-fabric-kickoff",
+    title: "Crypto Fabric Kickoff: Profit-First Automation",
+    excerpt:
+      "Announcing Crypto Fabric, a profitability-first automation platform that enables anyone to deploy revenue-generating crypto services with zero configuration. Built by EtherHive LLC.",
+    date: "August 1, 2025",
+    readTime: "10 min",
+    author: "Michael Simoneau",
+    tags: [
+      "Crypto Fabric",
+      "EtherHive",
+      "Launch",
+      "Automation",
+      "Ethereum",
+    ],
+    heroImage: "/EtherHiveLLC.JPEG",
+    featured: true,
+    content: [
+      createParagraph(
+        "Today marks the official kickoff of Crypto Fabric, a profitability-first automation platform for digital-asset operators. Born from a conversation about crypto trading software and built with the support of EtherHive LLC, Crypto Fabric represents a new approach to crypto revenue generation: one where complexity is abstracted away, and profitability is the primary metric."
+      ),
+      createHeading("The Origin Story", 2),
+      createParagraph(
+        "The idea for Crypto Fabric emerged from a serendipitous encounter. I was renting a room from Richard Deniz, a veteran, when he inquired about crypto trading software. That casual conversation sparked the initial vision. With Richard's support—capital, housing, and encouragement—and my prior work on \"YachtOffice\" trading systems, Crypto Fabric's first lines of code were written."
+      ),
+      createParagraph(
+        "EtherHive LLC was established in 2025 to bring this project to market, with Richard as the founding stakeholder and myself serving as the technology and product lead."
+      ),
+      createHeading("The Core Value Proposition", 2),
+      createParagraph(
+        "Crypto Fabric's value proposition is simple: \"It pays the bills for you. You don't have to do anything. The AI does it all for you.\""
+      ),
+      createParagraph(
+        "The platform enables anyone—technical or not—to deploy revenue-generating crypto services such as:"
+      ),
+      createList([
+        "**Ethereum Staking:** Run validator nodes to earn ETH protocol rewards (~4–5% APY)",
+        "**Automated Trading:** Execute algorithmic trades via Coinbase's API",
+        "**DePIN Workloads:** Run nodes for networks like Pocket, Akash, Storj, and others",
+      ]),
+      createParagraph(
+        "All with essentially zero configuration. Sign in with Google, click \"Setup,\" and the system begins generating income."
+      ),
+      createHeading("A Unique Business Model", 2),
+      createParagraph(
+        "Unlike traditional businesses that rely on selling products or subscriptions, Crypto Fabric generates revenue without traditional customers. The platform's freemium, profit-sharing model means:"
+      ),
+      createList([
+        "Users pay nothing upfront",
+        "EtherHive only earns a 10% profit share when users are profitable",
+        "The product can make money even if never \"sold\" in a conventional sense",
+        "Every deployment is a self-sustaining profit center",
+      ]),
+      createParagraph(
+        "This alignment ensures that if users profit, the company profits—creating a win-win ecosystem."
+      ),
+      createHeading("The Architecture", 2),
+      createParagraph(
+        "Crypto Fabric is a hybrid cloud/on-premise platform with two main components:"
+      ),
+      createList([
+        "**Control Plane (Cloud):** Built on Google Firebase, handles the web portal, authentication, orchestration, and marketplace functionality.",
+        "**Data Plane (Edge Compute):** A MicroK8s Kubernetes cluster that runs the actual workloads. By default, it runs on solar-powered servers, dramatically lowering operating costs.",
+      ]),
+      createHeading("Why Now?", 2),
+      createParagraph(
+        "Ethereum's ecosystem is thriving, with ~37.8M ETH staked (≈$85B) and over 1M active validators. Major institutions like BlackRock are entering the space, managing multi-billion-dollar Ethereum funds. Crypto Fabric taps directly into this growth by automating Ethereum-based income streams."
+      ),
+      createParagraph(
+        "The timing is right for a platform that democratizes access to crypto revenue generation while maintaining compliance, security, and profitability as core principles."
+      ),
+      createHeading("What's Next", 2),
+      createParagraph(
+        "Over the coming months, we'll be building out the core infrastructure, implementing profitability guardrails, and developing the mobile Super Admin control center. The goal is to create a platform where anyone can deploy a crypto income engine as easily as opening an app—no technical skill required."
+      ),
+      createCallout(
+        "EtherHive's mission is to \"make money work for people, not people work for money,\" by leveraging AI and blockchain. This is just the beginning."
+      ),
+    ],
+  },
+  {
     id: "zero",
     title: "Zero: \"Why?\" The Numerical Trinity and the Fabric of Reality",
     excerpt:

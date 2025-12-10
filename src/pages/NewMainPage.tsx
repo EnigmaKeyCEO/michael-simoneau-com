@@ -12,6 +12,7 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { useScrollContext } from '../contexts/ScrollContext';
 import { Seo } from '../components/Seo';
 import { SearchOptimizedSummary } from '../components/SearchOptimizedSummary';
+import { CryptoFabricHero } from '../components/CryptoFabricHero';
 
 export const NewMainPage: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -120,6 +121,7 @@ export const NewMainPage: React.FC = () => {
         description="Discover how Michael Simoneau leads enterprise architecture, AI strategy, and large-scale transformations for highly regulated organizations."
         canonicalUrl="https://www.michaelsimoneau.com/"
         keywords={keywords}
+        image="https://www.michaelsimoneau.com/profile-image.png"
         structuredData={structuredData}
       />
       <AnimatedBackground />
@@ -135,6 +137,8 @@ export const NewMainPage: React.FC = () => {
         </section>
 
         <SearchOptimizedSummary />
+
+        <CryptoFabricHero />
 
         <motion.section
           id="about-me-section"
