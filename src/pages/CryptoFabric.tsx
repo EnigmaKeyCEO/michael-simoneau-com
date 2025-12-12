@@ -9,19 +9,71 @@ export const CryptoFabric: React.FC = () => {
     <>
       <Seo
         title="Crypto Fabric | EtherHive LLC - Profitability-First Automation Platform"
-        description="Crypto Fabric is a profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, trading, and DePIN workloads with zero configuration through our AI-driven Control Center."
+        description="Crypto Fabric is a profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by EtherHive LLC with 100% solar-powered infrastructure and a unique profit-sharing model."
         canonicalUrl="https://www.michaelsimoneau.com/crypto-fabric"
         keywords={[
           "Crypto Fabric",
           "EtherHive",
+          "EtherHive LLC",
           "Ethereum staking",
           "crypto automation",
-          "profitability-first",
+          "profitability-first automation",
           "DePIN",
+          "DePIN networks",
+          "Pocket Network",
+          "Akash Provider",
+          "Storj Storage",
+          "Saturn CDN",
+          "HOPR Privacy",
+          "NYM Gateway",
+          "Lava RPC",
+          "EigenLayer Operator",
+          "SSV Distributed Validators",
+          "Freqtrade",
+          "Hummingbot",
+          "MEV-Share",
           "digital asset operations",
           "AI orchestration",
+          "crypto revenue generation",
+          "solar-powered crypto infrastructure",
+          "profit-sharing model",
+          "zero configuration crypto",
+          "Firebase Remote Config",
+          "MicroK8s Kubernetes",
+          "Google Secret Manager",
         ]}
         image="https://www.michaelsimoneau.com/EtherHiveLLC.JPEG"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'Crypto Fabric',
+          applicationCategory: 'FinanceApplication',
+          operatingSystem: 'Linux, Kubernetes',
+          description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN workloads with zero configuration.',
+          url: 'https://www.michaelsimoneau.com/crypto-fabric',
+          image: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
+          publisher: {
+            '@type': 'Organization',
+            name: 'EtherHive LLC',
+            url: 'https://www.michaelsimoneau.com/crypto-fabric',
+          },
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+            description: 'Freemium profit-sharing model - pay nothing upfront, EtherHive earns 10% of profits generated',
+          },
+          featureList: [
+            'Zero Configuration Setup',
+            'Ethereum Staking',
+            'AI-Driven Trading',
+            'DePIN Node Deployment',
+            'Profitability Telemetry',
+            'Native Mobile Apps',
+            'Solar-Powered Infrastructure',
+            'Profit-Sharing Model',
+          ],
+        }}
       />
       <AnimatedBackground />
       <MainNav />
