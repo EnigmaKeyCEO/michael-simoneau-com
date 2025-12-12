@@ -2,10 +2,64 @@ import React from "react";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "../components/AnimatedBackground";
 import { MainNav } from "../components/MainNav";
+import { Seo } from "../components/Seo";
 
 export const FullProfile: React.FC = () => {
   return (
     <>
+      <Seo
+        title="Michael Simoneau - Full Professional Profile | Enterprise Architect & Technology Leader"
+        description="Complete professional profile of Michael Simoneau: 20+ years of experience in mobile, web, and native application development. Expertise in DevOps, Hybrid Mobile, Native Mobile, Full-Stack, and Web3 engineering. Leader, Inventor & Investor at Enigma Key Co."
+        canonicalUrl="https://www.michaelsimoneau.com/full-profile"
+        keywords={[
+          "Michael Simoneau",
+          "Full Profile",
+          "Resume",
+          "CV",
+          "Enterprise Architect",
+          "Technology Leader",
+          "Software Engineer",
+          "Mobile Development",
+          "React Native",
+          "iOS Development",
+          "Android Development",
+          "Full Stack",
+          "Web3",
+          "Blockchain",
+          "JPMorgan",
+          "StoneX",
+          "Enigma Key",
+        ]}
+        image="https://www.michaelsimoneau.com/profile-image.png"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Michael Simoneau',
+          jobTitle: 'Enterprise Architect & Technology Leader',
+          description: 'Leader, Inventor & Investor. Innovator & Expert Engineer. Founder @ Enigma Key Co.',
+          url: 'https://www.michaelsimoneau.com/full-profile',
+          image: 'https://www.michaelsimoneau.com/profile-image.png',
+          sameAs: [
+            'https://www.linkedin.com/in/EnigmaKeyCEO',
+            'https://github.com/EnigmaKeyCEO',
+            'https://twitter.com/enigmakeyceo',
+          ],
+          alumniOf: [
+            {
+              '@type': 'EducationalOrganization',
+              name: 'University of London',
+            },
+            {
+              '@type': 'EducationalOrganization',
+              name: 'Cleveland State University',
+            },
+          ],
+          worksFor: {
+            '@type': 'Organization',
+            name: 'Enigma Key Industries, LLC',
+          },
+        }}
+      />
       <AnimatedBackground />
       <MainNav />
       <motion.div

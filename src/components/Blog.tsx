@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ChevronRight, Search } from 'lucide-react';
 import { MainNav } from './MainNav';
+import { Seo } from './Seo';
 import { blogData } from '../data/blogData'; // Import the new blog data source
 import { BlogData as BlogPostType } from '../data/blogData'; // Import the type for clarity
 import { useScrollToTop } from '../hooks/useScrollToTop'; // Added import
@@ -150,6 +151,36 @@ export const Blog: React.FC = () => {
 
   return (
     <>
+      <Seo
+        title="Strategic Insights & Perspectives | Blog | Michael Simoneau"
+        description="Perspectives on technology transformation, enterprise architecture, and leadership from Michael Simoneau. Explore insights on AI integration, quantum cryptography, legacy system modernization, and more."
+        canonicalUrl="https://www.michaelsimoneau.com/blog"
+        keywords={[
+          "Technology Leadership",
+          "Enterprise Architecture",
+          "AI Strategy",
+          "Digital Transformation",
+          "CTO Advisory",
+          "Software Engineering",
+          "System Modernization",
+          "Quantum Computing",
+          "Blockchain",
+          "Crypto Fabric",
+        ]}
+        image="https://www.michaelsimoneau.com/profile-image.png"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Michael Simoneau Blog',
+          description: 'Strategic insights and perspectives on technology transformation, enterprise architecture, and leadership.',
+          url: 'https://www.michaelsimoneau.com/blog',
+          author: {
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            url: 'https://www.michaelsimoneau.com',
+          },
+        }}
+      />
       <MainNav />
       <section 
         id="blog"

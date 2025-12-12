@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MainNav } from './MainNav';
+import { Seo } from './Seo';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AnimatedBackground } from './AnimatedBackground';
@@ -8,6 +9,33 @@ import { AnimatedBackground } from './AnimatedBackground';
 export const Interview: React.FC = () => {
   return (
     <>
+      <Seo
+        title="An Interview with Michael Simoneau | Technology Leadership Journey"
+        description="A deep dive into Michael Simoneau's journey in technology, from building his first computer at age 12 to leading enterprise transformations. Learn about his philosophy on teaching problem-solving, continuous learning, and turning challenges into opportunities."
+        canonicalUrl="https://www.michaelsimoneau.com/interview"
+        keywords={[
+          "Michael Simoneau Interview",
+          "Technology Leadership",
+          "Problem Solving",
+          "Enterprise Architecture",
+          "Career Journey",
+          "Software Engineering",
+          "CTO",
+          "Technology Philosophy",
+        ]}
+        image="https://www.michaelsimoneau.com/profile-image.png"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: 'An Interview with Michael Simoneau',
+          description: 'A Journey in Technology and Problem-Solving',
+          author: {
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            url: 'https://www.michaelsimoneau.com',
+          },
+        }}
+      />
       <AnimatedBackground />
       <MainNav />
       <section className="min-h-screen text-white py-20 px-4 pt-24 relative z-10">

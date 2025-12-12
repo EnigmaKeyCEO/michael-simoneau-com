@@ -4,11 +4,46 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { AnimatedBackground } from './AnimatedBackground';
 import { MainNav } from './MainNav';
+import { Seo } from './Seo';
 import truthText from '/zero.txt?raw';
 
 export const ZeroTruth: React.FC = () => {
   return (
     <>
+      <Seo
+        title="Zero: The Truth of Zero, Energy, and the Nature of Existence | Michael Simoneau"
+        description="All That Was, All That Is, All That Ever Will Be - The Living Truth of Zero, Energy, and the Nature of Existence. A philosophical exploration of Zero as convergence, completeness, and truth."
+        canonicalUrl="https://www.michaelsimoneau.com/zero"
+        keywords={[
+          "Zero",
+          "Philosophy",
+          "Mathematics",
+          "Existence",
+          "Energy",
+          "Truth",
+          "Convergence",
+          "Numerical Trinity",
+          "Quantum",
+          "Computation",
+        ]}
+        image="https://www.michaelsimoneau.com/profile-image.png"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: 'Zero: The Truth of Zero, Energy, and the Nature of Existence',
+          description: 'All That Was, All That Is, All That Ever Will Be - The Living Truth of Zero, Energy, and the Nature of Existence.',
+          author: {
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            url: 'https://www.michaelsimoneau.com',
+          },
+          publisher: {
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            url: 'https://www.michaelsimoneau.com',
+          },
+        }}
+      />
       <AnimatedBackground />
       <MainNav />
       <section className="relative min-h-screen overflow-hidden py-20 px-4 pt-24 text-white">
