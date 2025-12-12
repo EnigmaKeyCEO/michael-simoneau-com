@@ -9,7 +9,8 @@ export const CryptoFabricHero: React.FC = () => {
       id="crypto-fabric"
       className="w-full flex flex-col items-center text-white px-4 py-16 md:py-24 relative overflow-hidden snap-start bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900"
       style={{ 
-        minHeight: '100vh',
+        minHeight: 'max-content',
+        height: '100vh',
         scrollMarginTop: '50vh',
         scrollMarginBottom: '50vh',
         scrollSnapAlign: 'start',
