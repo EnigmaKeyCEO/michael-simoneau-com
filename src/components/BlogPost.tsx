@@ -259,29 +259,55 @@ export const BlogPost: React.FC = () => {
         author={post.author}
         section="Blog"
         tags={post.tags}
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: post.title,
-          description: post.excerpt,
-          image: heroImageUrl,
-          datePublished: publishedTime,
-          dateModified: publishedTime,
-          author: {
-            '@type': 'Person',
-            name: post.author,
-            url: 'https://www.michaelsimoneau.com',
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.excerpt,
+            image: heroImageUrl,
+            datePublished: publishedTime,
+            dateModified: publishedTime,
+            author: {
+              '@type': 'Person',
+              name: post.author,
+              url: 'https://www.michaelsimoneau.com',
+            },
+            publisher: {
+              '@type': 'Person',
+              name: 'Michael Simoneau',
+              url: 'https://www.michaelsimoneau.com',
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `https://www.michaelsimoneau.com/blog/${post.id}`,
+            },
           },
-          publisher: {
-            '@type': 'Person',
-            name: 'Michael Simoneau',
-            url: 'https://www.michaelsimoneau.com',
-          },
-          mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': `https://www.michaelsimoneau.com/blog/${post.id}`,
-          },
-        }}
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://www.michaelsimoneau.com/'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: 'https://www.michaelsimoneau.com/blog'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: `https://www.michaelsimoneau.com/blog/${post.id}`
+              }
+            ]
+          }
+        ]}
       />
       <MainNav />
       <section className="min-h-screen bg-black text-white py-12 md:py-20 px-6 sm:px-8 md:px-12 lg:px-16 pt-20 md:pt-24">

@@ -96,6 +96,38 @@ export const NewMainPage: React.FC = () => {
               text: 'Michael Simoneau guides transformation with outcome-first roadmaps, collaborative architecture councils, and transparent metrics that align engineering, product, and executive stakeholders.',
             },
           },
+          {
+            '@type': 'Question',
+            name: 'What services does Michael Simoneau offer?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Michael Simoneau offers CTO advisory, enterprise architecture consulting, AI strategy development, legacy system modernization, and fractional executive leadership for regulated industries.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What are Michael Simoneau\'s key achievements?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Michael Simoneau led a $200M system rebuild at StoneX, architected mobile platforms for JPMorgan Chase, and founded Enigma Key Industries and EtherHive LLC.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is Michael Simoneau available for CTO advisory roles?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, Michael Simoneau is available for fractional CTO roles, technical due diligence, and high-level advisory engagements for companies seeking rapid scaling or stabilization.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is Michael Simoneau\'s experience with AI?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Michael Simoneau integrates AI into enterprise workflows, focusing on practical automation, anomaly detection, and secure LLM deployment for financial and operational efficiency.',
+            },
+          },
         ],
       },
     ],
@@ -107,7 +139,30 @@ export const NewMainPage: React.FC = () => {
     if (scrollContainerRef.current) {
       registerMainScrollContainer(scrollContainerRef);
     }
-    if (!window.location.hash && scrollContainerRef.current) {
+    
+    const hash = window.location.hash;
+    if (hash && scrollContainerRef.current) {
+      // Remove the # from the hash to get the section ID
+      const sectionId = hash.substring(1);
+      const targetElement = document.getElementById(sectionId);
+      
+      if (targetElement) {
+        // Small delay to ensure the page is fully rendered
+        setTimeout(() => {
+          if (scrollContainerRef.current) {
+            const offset = 80; // MainNav height
+            const containerRect = scrollContainerRef.current.getBoundingClientRect();
+            const elementRect = targetElement.getBoundingClientRect();
+            const scrollTop = elementRect.top - containerRect.top + scrollContainerRef.current.scrollTop - offset;
+            
+            scrollContainerRef.current.scrollTo({
+              top: scrollTop,
+              behavior: 'smooth',
+            });
+          }
+        }, 100);
+      }
+    } else if (!hash && scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({top: 0, behavior: 'auto'});
     }
   }, [registerMainScrollContainer]);
@@ -118,11 +173,44 @@ export const NewMainPage: React.FC = () => {
     <>
       <Seo
         title="Michael Simoneau | Enterprise Architect & Technology Leader"
-        description="Discover how Michael Simoneau leads enterprise architecture, AI strategy, and large-scale transformations for highly regulated organizations."
+        description="Michael Simoneau is an Enterprise Architect & Technology Leader specializing in AI strategy, quantum cryptography, and digital transformation for JPMorgan, StoneX, and regulated industries. Discover his approach to resilient systems."
         canonicalUrl="https://www.michaelsimoneau.com/"
         keywords={keywords}
         image="https://www.michaelsimoneau.com/profile-image.png"
-        structuredData={structuredData}
+        structuredData={[
+          ...structuredData,
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://www.michaelsimoneau.com/'
+              }
+            ]
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Enigma Key Industries, LLC',
+            url: 'https://www.michaelsimoneau.com/',
+            logo: 'https://www.michaelsimoneau.com/profile-image.png',
+            founder: {
+              '@type': 'Person',
+              name: 'Michael Simoneau'
+            },
+            foundingDate: '2019',
+            description: 'Enigma Key Industries, LLC is a technology consultancy led by Michael Simoneau, specializing in enterprise architecture, AI strategy, and digital transformation.',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Chesterland',
+              addressRegion: 'OH',
+              addressCountry: 'US'
+            }
+          }
+        ]}
       />
       <AnimatedBackground />
       <div
@@ -140,16 +228,18 @@ export const NewMainPage: React.FC = () => {
 
         <CryptoFabricHero />
 
-        <motion.section
-          id="about-me-section"
-          className={`${sectionWrapperClasses}`}
-          initial={{opacity: 0}}
-          whileInView={{opacity: 1}} 
-          viewport={{once: true, amount: 0.2}}
-          transition={{duration: 0.7}}
-        >
-          <AboutMeSection />
-        </motion.section>
+        <div id="profile">
+          <motion.section
+            id="about-me-section"
+            className={`${sectionWrapperClasses}`}
+            initial={{opacity: 0}}
+            whileInView={{opacity: 1}} 
+            viewport={{once: true, amount: 0.2}}
+            transition={{duration: 0.7}}
+          >
+            <AboutMeSection />
+          </motion.section>
+        </div>
 
         <motion.section 
           id="expertise-section" 

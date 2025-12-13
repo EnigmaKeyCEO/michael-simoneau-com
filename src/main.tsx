@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         element: <ZeroTruth />,
       },
       {
-        path: "full-profile",
+        path: "profile",
         element: <FullProfile />,
       },
       {

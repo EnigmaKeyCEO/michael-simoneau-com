@@ -9,7 +9,7 @@ export const CryptoFabric: React.FC = () => {
     <>
       <Seo
         title="Crypto Fabric | EtherHive LLC - Profitability-First Automation Platform"
-        description="Crypto Fabric is a profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by EtherHive LLC with 100% solar-powered infrastructure and a unique profit-sharing model."
+        description="Crypto Fabric, architected by Michael Simoneau and EtherHive LLC, is a profitability-first automation platform. Deploy Ethereum staking, AI-driven trading, and DePIN nodes with zero configuration and 100% solar power."
         canonicalUrl="https://www.michaelsimoneau.com/crypto-fabric"
         keywords={[
           "Crypto Fabric",
@@ -43,37 +43,71 @@ export const CryptoFabric: React.FC = () => {
           "Google Secret Manager",
         ]}
         image="https://www.michaelsimoneau.com/EtherHiveLLC.JPEG"
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'SoftwareApplication',
-          name: 'Crypto Fabric',
-          applicationCategory: 'FinanceApplication',
-          operatingSystem: 'Linux, Kubernetes',
-          description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN workloads with zero configuration.',
-          url: 'https://www.michaelsimoneau.com/crypto-fabric',
-          image: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
-          publisher: {
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'Crypto Fabric',
+            applicationCategory: 'FinanceApplication',
+            operatingSystem: 'Linux, Kubernetes',
+            description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by EtherHive LLC with 100% solar-powered infrastructure and a unique profit-sharing model.',
+            url: 'https://www.michaelsimoneau.com/crypto-fabric',
+            image: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
+            publisher: {
+              '@type': 'Organization',
+              name: 'EtherHive LLC',
+              url: 'https://www.michaelsimoneau.com/crypto-fabric',
+            },
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'USD',
+              description: 'Freemium profit-sharing model - pay nothing upfront, EtherHive earns 10% of profits generated',
+            },
+            featureList: [
+              'Zero Configuration Setup',
+              'Ethereum Staking',
+              'AI-Driven Trading',
+              'DePIN Node Deployment',
+              'Profitability Telemetry',
+              'Native Mobile Apps',
+              'Solar-Powered Infrastructure',
+              'Profit-Sharing Model',
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://www.michaelsimoneau.com/'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Crypto Fabric',
+                item: 'https://www.michaelsimoneau.com/crypto-fabric'
+              }
+            ]
+          },
+          {
+            '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'EtherHive LLC',
             url: 'https://www.michaelsimoneau.com/crypto-fabric',
-          },
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'USD',
-            description: 'Freemium profit-sharing model - pay nothing upfront, EtherHive earns 10% of profits generated',
-          },
-          featureList: [
-            'Zero Configuration Setup',
-            'Ethereum Staking',
-            'AI-Driven Trading',
-            'DePIN Node Deployment',
-            'Profitability Telemetry',
-            'Native Mobile Apps',
-            'Solar-Powered Infrastructure',
-            'Profit-Sharing Model',
-          ],
-        }}
+            logo: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
+            founder: {
+              '@type': 'Person',
+              name: 'Michael Simoneau'
+            },
+            foundingDate: '2024',
+            description: 'EtherHive LLC develops Crypto Fabric, a profitability-first automation platform for digital asset operations, Ethereum staking, and DePIN infrastructure.',
+            slogan: 'Profitability-First Automation Platform'
+          }
+        ]}
       />
       <AnimatedBackground />
       <MainNav />

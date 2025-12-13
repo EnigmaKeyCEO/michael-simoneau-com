@@ -26,7 +26,7 @@ export const AboutMeSection: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <p className="text-lg text-gray-300 mb-4">
-            With over two decades in the tech industry, I've evolved from a self-taught programmer building my first computer at 12, to an architect shaping multi-million dollar enterprise systems. My path has been unconventional, driven by an obsessive curiosity and a relentless pursuit of elegant solutions to complex problems.
+            With over two decades in the tech industry, I, <span className="text-cyan-400 font-semibold">Michael Simoneau</span>, have evolved from a self-taught programmer building my first computer at 12, to an architect shaping multi-million dollar enterprise systems. My path has been unconventional, driven by an obsessive curiosity and a relentless pursuit of elegant solutions to complex problems.
           </p>
           <p className="text-lg text-gray-300 mb-6">
             I thrive on deconstructing legacy challenges and re-engineering them into future-proof, high-performance platforms. My experience spans mobile, web, and native application development, with a deep focus on system architecture, DevOps, and fostering innovative, high-performing teams.
@@ -35,7 +35,7 @@ export const AboutMeSection: React.FC = () => {
             My leadership philosophy is grounded in transparency, continuous learning, and empowering teams to challenge assumptions and achieve extraordinary results. While my vision is often inspired by cutting-edge concepts, my execution is always rooted in pragmatic, impactful solutions.
           </p>
           <Link 
-            to="/full-profile" 
+            to="/profile" 
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-8 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
           >
             Discover My Full Profile & Expertise
