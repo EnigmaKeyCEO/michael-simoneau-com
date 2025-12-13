@@ -16,8 +16,7 @@ console.log(chalk.cyan.bold('🔍 Running pre-deployment checks...\n'));
 const requiredFiles = [
   { path: 'public/robots.txt', name: 'Robots.txt' },
   { path: 'public/sitemap.xml', name: 'Sitemap' },
-  { path: 'firebase.json', name: 'Firebase config' },
-  { path: '.firebaserc', name: 'Firebase project settings' },
+  { path: 'netlify.toml', name: 'Netlify config' },
 ];
 
 // Check for required files
@@ -86,40 +85,35 @@ if (fs.existsSync(packageJsonPath)) {
   packageJsonValid = false;
 }
 
-// Check for Firebase config validity
-console.log('\n' + chalk.yellow('Checking Firebase configuration:'));
-let firebaseConfigValid = true;
+// Check for Netlify config validity
+console.log('\n' + chalk.yellow('Checking Netlify configuration:'));
+let netlifyConfigValid = true;
 
-const firebaseConfigPath = path.resolve(process.cwd(), 'firebase.json');
-if (fs.existsSync(firebaseConfigPath)) {
+const netlifyConfigPath = path.resolve(process.cwd(), 'netlify.toml');
+if (fs.existsSync(netlifyConfigPath)) {
   try {
-    const firebaseConfig = JSON.parse(fs.readFileSync(firebaseConfigPath, 'utf8'));
+    const netlifyConfig = fs.readFileSync(netlifyConfigPath, 'utf8');
     
-    // Check for hosting configuration
-    if (firebaseConfig.hosting) {
-      if (firebaseConfig.hosting.public && firebaseConfig.hosting.ignore) {
-        console.log(chalk.green(`✓ Firebase hosting config is valid (public: ${firebaseConfig.hosting.public})`));
-      } else {
-        console.log(chalk.red('✗ Firebase hosting config is missing required fields (public, ignore)'));
-        firebaseConfigValid = false;
-      }
+    // Check for build configuration
+    if (netlifyConfig.includes('[build]') && netlifyConfig.includes('publish')) {
+      console.log(chalk.green('✓ Netlify config is valid'));
     } else {
-      console.log(chalk.red('✗ Firebase config is missing hosting section'));
-      firebaseConfigValid = false;
+      console.log(chalk.red('✗ Netlify config is missing required [build] section'));
+      netlifyConfigValid = false;
     }
   } catch (e) {
-    console.log(chalk.red('✗ Error parsing firebase.json'));
-    firebaseConfigValid = false;
+    console.log(chalk.red('✗ Error parsing netlify.toml'));
+    netlifyConfigValid = false;
   }
 } else {
   // Already reported as missing in requiredFiles check
-  firebaseConfigValid = false;
+  netlifyConfigValid = false;
 }
 
 // Overall status
 console.log('\n' + chalk.cyan.bold('📋 Pre-deployment check summary:'));
 
-if (allFilesExist && allSocialMediaAssetsExist && packageJsonValid && firebaseConfigValid) {
+if (allFilesExist && allSocialMediaAssetsExist && packageJsonValid && netlifyConfigValid) {
   console.log(chalk.green.bold('✅ All checks passed! You are ready to deploy.\n'));
   process.exit(0);
 } else {

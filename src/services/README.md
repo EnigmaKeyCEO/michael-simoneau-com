@@ -1,19 +1,15 @@
 # Frontend Services Directory
 
-This directory houses client-side services responsible for encapsulating business logic, interacting with external APIs (like Firebase), and managing application-wide concerns.
+This directory houses client-side services responsible for encapsulating business logic, interacting with external APIs, and managing application-wide concerns.
 
 ## Architecture Overview
 
 Services here are designed to be modular and injectable, promoting separation of concerns and testability. They handle tasks such as:
-- Firebase interactions (authentication, Firestore, Storage).
 - Application configuration management.
 - Error handling and reporting.
 - Cookie management.
 
 ### Key Files:
-- `firebase.ts`: Initializes Firebase and provides utility functions for interacting with its services (Auth, Firestore, Storage).
-- `auth.ts`: Handles user authentication logic, session management, and user profile interactions.
-- `storage.ts`: Manages file uploads/downloads to Firebase Storage, including progress tracking and error handling.
 - `config.ts`: Provides access to application configuration and environment variables with appropriate typing.
 - `errorHandler.ts`: Centralized client-side error handling and reporting mechanisms.
 - `cookieService.ts`: Utilities for managing browser cookies, particularly for user consent and preferences.
@@ -30,21 +26,21 @@ Services here are designed to be modular and injectable, promoting separation of
 
 ## Performance Metrics
 
-- **API Response Times**: Monitor the performance of Firebase calls and other external API interactions.
+- **API Response Times**: Monitor the performance of external API interactions.
 - **Initialization Time**: Ensure services initialize efficiently and do not block the main thread.
 - **Resource Usage**: Be mindful of resource consumption, especially for services that might handle large data or run continuously.
 
 ## Security Measures
 
-- **API Keys & Credentials**: Securely manage API keys and credentials. For client-side Firebase, this is handled by Firebase configurations, but any other service keys should be managed via environment variables and not exposed directly in the codebase.
+- **API Keys & Credentials**: Securely manage API keys and credentials. All service keys should be managed via environment variables and not exposed directly in the codebase.
 - **Data Sanitization**: While primary sanitization should occur server-side, client-side services should not inadvertently introduce vulnerabilities when handling data.
 - **Error Handling**: Avoid leaking sensitive information in error messages passed to the UI.
 - **Authentication**: Ensure `auth.ts` correctly handles token management and secure communication with authentication endpoints.
 
 ## Testing Requirements
 
-- **Unit Tests**: Each public method of a service should have corresponding unit tests (e.g., using Jest/Vitest with mocking for external dependencies like Firebase).
-- **Integration Tests**: Test the interaction between services where applicable (e.g., a service that uses `auth.ts` and then `firebase.ts`).
+- **Unit Tests**: Each public method of a service should have corresponding unit tests (e.g., using Jest/Vitest with mocking for external dependencies).
+- **Integration Tests**: Test the interaction between services where applicable.
 - **Coverage**: Aim for high test coverage for all services due to their critical role.
 
 ## Documentation Requirements

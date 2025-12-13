@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "NODE_OPTIONS='--max_old_space_size=8192' vite build",
@@ -11,15 +14,12 @@
     "preview": "vite preview",
     "pre-deploy-check": "node scripts/pre-deploy-check.cjs",
     "deploy": "npm run pre-deploy-check && bash deploy.sh",
-    "firebase:init": "firebase init",
-    "firebase:deploy": "firebase deploy --only hosting",
     "clean": "rm -rf dist",
     "test:selenium": "tsx src/__tests__/e2e/FullProfile.test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.99.7",
     "@react-three/fiber": "^8.15.19",
-    "firebase": "^11.5.0",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.344.0",
     "maath": "^0.10.8",
@@ -38,7 +38,6 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "chalk": "^4.1.2",
-    "chromedriver": "^122.0.0",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",

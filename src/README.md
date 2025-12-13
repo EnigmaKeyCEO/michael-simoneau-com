@@ -10,7 +10,6 @@ This directory contains the core frontend application code, built with React (Vi
 - **Tailwind CSS**: For utility-first styling.
 - **Framer Motion**: For declarative animations.
 - **React Router**: For client-side routing.
-- **Firebase**: Used for backend services (though blog content will move to Firestore).
 
 ### Directory Structure:
 ```
@@ -96,7 +95,6 @@ import { HeroSection } from './features/profile/components/HeroSection';
 
 - **Input Validation**: Validate user inputs on the client-side where appropriate, with primary validation on the backend.
 - **Dependency Management**: Regularly update dependencies to patch known vulnerabilities (e.g., using `npm audit`).
-- **Firebase Security Rules**: Ensure Firestore and Storage rules are correctly configured for proper data access control (managed server-side).
 - **Cross-Site Scripting (XSS)**: Mitigate XSS risks by properly sanitizing and encoding data, especially when rendering user-generated content (though current blog content is static from `blogData.ts`).
 - **API Communication**: Use HTTPS for all API calls.
 

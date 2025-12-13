@@ -4,8 +4,7 @@
  */
 
 import { Builder, type WebDriver } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
-import { Options } from 'selenium-webdriver/chrome';
+import { Options, ServiceBuilder } from 'selenium-webdriver/chrome';
 
 /**
  * Base URL for the application
@@ -22,7 +21,7 @@ export async function createDriver(headless: boolean = false): Promise<WebDriver
   const chromeOptions = new Options();
   
   if (headless) {
-    chromeOptions.addArguments('--headless');
+    chromeOptions.addArguments('--headless=new');
   }
   
   // Additional Chrome options for stability
@@ -31,9 +30,16 @@ export async function createDriver(headless: boolean = false): Promise<WebDriver
   chromeOptions.addArguments('--disable-gpu');
   chromeOptions.addArguments('--window-size=1920,1080');
   
+  // Use ChromeDriverService - will use system ChromeDriver if available
+  // In CI, ChromeDriver is installed to match Chrome version
+  const service = new ServiceBuilder();
+  
+  // If ChromeDriver is in PATH (like in CI), use it
+  // Otherwise, selenium-webdriver will try to find it automatically
   const driver = await new Builder()
     .forBrowser('chrome')
     .setChromeOptions(chromeOptions)
+    .setChromeService(service)
     .build();
   
   // Set implicit wait timeout

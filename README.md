@@ -31,7 +31,7 @@ This website is built with a modern, performant tech stack:
 *   **Language:** [TypeScript](https://www.typescriptlang.org/)
 *   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 *   **Animations:** [Framer Motion](https://www.framer.com/motion/)
-*   **Deployment:** [Firebase](https://firebase.google.com/)
+*   **Deployment:** [Netlify](https://www.netlify.com/)
 
 ## Architecture
 
