@@ -16,7 +16,7 @@ export const CTOTriage: React.FC = () => {
         className="container w-full mx-auto px-4"
       >
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">
-          <span className="block text-cyan-400">Strategic Technology Consulting</span>
+          <span className="block text-cyan-400">Strategic Technology Consulting with Michael Simoneau</span>
           <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl block mt-4">Enterprise Modernization & Growth</span>
         </h2>
 

@@ -9,13 +9,14 @@ export const FullProfile: React.FC = () => {
     <>
       <Seo
         title="Michael Simoneau - Full Professional Profile | Enterprise Architect & Technology Leader"
-        description="Complete professional profile of Michael Simoneau: 20+ years of experience in mobile, web, and native application development. Expertise in DevOps, Hybrid Mobile, Native Mobile, Full-Stack, and Web3 engineering. Leader, Inventor & Investor at Enigma Key Co."
-        canonicalUrl="https://www.michaelsimoneau.com/full-profile"
+        description="Michael Simoneau's professional profile: 20+ years architecting secure systems for JPMorgan and StoneX. Expert in React Native, AI strategy, and Web3 engineering. Founder of Enigma Key and EtherHive. View full resume and portfolio."
+        canonicalUrl="https://www.michaelsimoneau.com/profile"
         keywords={[
           "Michael Simoneau",
           "Full Profile",
           "Resume",
           "CV",
+          "Professional Profile",
           "Enterprise Architect",
           "Technology Leader",
           "Software Engineer",
@@ -29,36 +30,59 @@ export const FullProfile: React.FC = () => {
           "JPMorgan",
           "StoneX",
           "Enigma Key",
+          "Contact Information",
+          "LinkedIn Profile",
         ]}
         image="https://www.michaelsimoneau.com/profile-image.png"
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'Person',
-          name: 'Michael Simoneau',
-          jobTitle: 'Enterprise Architect & Technology Leader',
-          description: 'Leader, Inventor & Investor. Innovator & Expert Engineer. Founder @ Enigma Key Co.',
-          url: 'https://www.michaelsimoneau.com/full-profile',
-          image: 'https://www.michaelsimoneau.com/profile-image.png',
-          sameAs: [
-            'https://www.linkedin.com/in/EnigmaKeyCEO',
-            'https://github.com/EnigmaKeyCEO',
-            'https://twitter.com/enigmakeyceo',
-          ],
-          alumniOf: [
-            {
-              '@type': 'EducationalOrganization',
-              name: 'University of London',
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: 'Michael Simoneau',
+            jobTitle: 'Enterprise Architect & Technology Leader',
+            description: 'Leader, Inventor & Investor. Innovator & Expert Engineer. Founder @ Enigma Key Co.',
+            url: 'https://www.michaelsimoneau.com/profile',
+            image: 'https://www.michaelsimoneau.com/profile-image.png',
+            email: 'email@michaelsimoneau.com',
+            sameAs: [
+              'https://www.linkedin.com/in/michaelsimoneau',
+              'https://github.com/MichaelSimoneau',
+              'https://twitter.com/michaelsimoneau',
+            ],
+            alumniOf: [
+              {
+                '@type': 'EducationalOrganization',
+                name: 'University of London',
+              },
+              {
+                '@type': 'EducationalOrganization',
+                name: 'Cleveland State University',
+              },
+            ],
+            worksFor: {
+              '@type': 'Organization',
+              name: 'Enigma Key Industries, LLC',
             },
-            {
-              '@type': 'EducationalOrganization',
-              name: 'Cleveland State University',
-            },
-          ],
-          worksFor: {
-            '@type': 'Organization',
-            name: 'Enigma Key Industries, LLC',
           },
-        }}
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://www.michaelsimoneau.com/'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Full Profile',
+                item: 'https://www.michaelsimoneau.com/profile'
+              }
+            ]
+          }
+        ]}
       />
       <AnimatedBackground />
       <MainNav />
@@ -123,13 +147,24 @@ export const FullProfile: React.FC = () => {
               <h2 className="text-2xl font-bold mb-4">Contact Me</h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-cyan-300">Phone</h3>
-                  <p>Mobile: +1.312.919.9542</p>
-                  <p>Business: +1.872.899.1355</p>
+                  <h3 className="text-cyan-300">Contact</h3>
+                  <a
+                    href="https://linkedin.com/in/michaelsimoneau"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:text-cyan-200 transition-colors"
+                  >
+                    Contact on LinkedIn
+                  </a>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">Email</h3>
-                  <p>mike@brainycouch.com</p>
+                  <a
+                    href="mailto:email@michaelsimoneau.com"
+                    className="text-cyan-400 hover:text-cyan-200 transition-colors"
+                  >
+                    email@michaelsimoneau.com
+                  </a>
                 </div>
               </div>
             </div>
@@ -140,19 +175,23 @@ export const FullProfile: React.FC = () => {
                 <div>
                   <h3 className="text-cyan-300">LinkedIn</h3>
                   <a
-                    href="https://linkedin.com/in/EnigmaKeyCEO"
-                    className="hover:text-cyan-200"
+                    href="https://linkedin.com/in/michaelsimoneau"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:text-cyan-200 transition-colors"
                   >
-                    EnigmaKeyCEO
+                    MichaelSimoneau
                   </a>
                 </div>
                 <div>
                   <h3 className="text-cyan-300">GitHub</h3>
                   <a
-                    href="https://github.com/EnigmaKeyCEO"
-                    className="hover:text-cyan-200"
+                    href="https://github.com/MichaelSimoneau"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:text-cyan-200 transition-colors"
                   >
-                    EnigmaKeyCEO
+                    MichaelSimoneau
                   </a>
                 </div>
               </div>
@@ -171,6 +210,9 @@ export const FullProfile: React.FC = () => {
             <p>
               May 2024 - Current: Hollywood, Los Angeles, California, USA 90038
             </p>
+            <p className="mt-4 text-gray-300">
+              Michael Simoneau is open to remote work opportunities and has extensive experience working with distributed teams across multiple time zones.
+            </p>
           </motion.div>
 
           {/* Personal Summary */}
@@ -182,11 +224,12 @@ export const FullProfile: React.FC = () => {
           >
             <h2 className="text-2xl font-bold mb-4">PERSONAL SUMMARY</h2>
             <p className="mb-4">
-              I leverage over 20 years of extensive experience in mobile, web,
+              Michael Simoneau leverages over 20 years of extensive experience in mobile, web,
               and native application development to create user-friendly and
-              secure applications that enhance the user experience. My expertise
+              secure applications that enhance the user experience. Michael Simoneau's expertise
               spans DevOps, Hybrid Mobile, Native Mobile, Full-Stack, and Web3
-              engineering.
+              engineering. Throughout his career, Michael Simoneau has consistently delivered innovative solutions
+              that drive business value and technical excellence.
             </p>
 
             <div className="space-y-4">
@@ -221,11 +264,11 @@ export const FullProfile: React.FC = () => {
                   Passion for Learning:
                 </h3>
                 <p>
-                  I am passionate about advancing my skills in leadership,
-                  business, and engineering. I continuously seek to learn new
+                  Michael Simoneau is passionate about advancing skills in leadership,
+                  business, and engineering. Michael Simoneau continuously seeks to learn new
                   technologies and best practices, always striving to keep
-                  learning and teaching myself. I am a lifelong learner and a
-                  dedicated mentor.
+                  learning and teaching. As a lifelong learner and
+                  dedicated mentor, Michael Simoneau believes in sharing knowledge and growing together with teams.
                 </p>
               </div>
 
@@ -234,19 +277,21 @@ export const FullProfile: React.FC = () => {
                   Teamwork & Innovation:
                 </h3>
                 <p>
-                  I thrive in a collaborative environment that values innovation
-                  and quality. Working with a passionate team that shares these
-                  values is one of my greatest joys.
+                  Michael Simoneau thrives in a collaborative environment that values innovation
+                  and quality. Working with passionate teams that share these
+                  values is one of Michael Simoneau's greatest joys. Michael Simoneau brings a unique perspective
+                  to every project, combining technical depth with strategic thinking.
                 </p>
               </div>
 
               <div>
                 <h3 className="text-xl font-semibold mb-2">Career Goal:</h3>
                 <p>
-                  My goal is to continue to grow as a leader and innovator in
-                  the tech industry. I am excited to take on new challenges and
-                  opportunities that allow me to leverage my skills and
-                  experience to create innovative solutions.
+                  Michael Simoneau's goal is to continue growing as a leader and innovator in
+                  the tech industry. Michael Simoneau is excited to take on new challenges and
+                  opportunities that allow leveraging skills and
+                  experience to create innovative solutions. Michael Simoneau looks forward to contributing
+                  to cutting-edge projects that make a meaningful impact.
                 </p>
               </div>
             </div>
@@ -273,24 +318,24 @@ export const FullProfile: React.FC = () => {
                 <ul className="list-disc list-inside mt-2 space-y-1">
                   <li>
                     Led the company in all aspects of operations and strategic
-                    planning.
+                    planning under Michael Simoneau's leadership.
                   </li>
                   <li>
                     Oversaw the development and deployment of mobile and web
-                    applications.
+                    applications, with Michael Simoneau ensuring quality and innovation.
                   </li>
                   <li>
                     Managed a team of developers and ensured the delivery of
-                    high-quality software products.
+                    high-quality software products that reflect Michael Simoneau's standards.
                   </li>
                   <li>
                     Engaged with clients to understand their needs and provided
-                    tailored technology solutions.
+                    tailored technology solutions, showcasing Michael Simoneau's client-focused approach.
                   </li>
                   <li>
                     Drove innovation in blockchain and Web3 technologies,
                     empowering the company to stay at the forefront of the
-                    industry.
+                    industry through Michael Simoneau's vision.
                   </li>
                 </ul>
               </div>

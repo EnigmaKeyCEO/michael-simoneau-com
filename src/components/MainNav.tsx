@@ -54,10 +54,17 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
           <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
           
-          <Link to="/full-profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-            <User size={16} className="mr-1 xl:mr-2" />
-            Profile
-          </Link>
+          {isHomePage ? (
+            <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+              <User size={16} className="mr-1 xl:mr-2" />
+              Profile
+            </button>
+          ) : (
+            <Link to="/profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+              <User size={16} className="mr-1 xl:mr-2" />
+              Profile
+            </Link>
+          )}
           <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <BookOpen size={16} className="mr-2" />
             Blog
@@ -106,10 +113,17 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
             <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
             <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
-            <Link to="/full-profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
-              <User size={18} className="mr-2" />
-              Profile
-            </Link>
+            {isHomePage ? (
+              <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                <User size={18} className="mr-2" />
+                Profile
+              </button>
+            ) : (
+              <Link to="/profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+                <User size={18} className="mr-2" />
+                Profile
+              </Link>
+            )}
             <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
               <BookOpen size={18} className="mr-2" />
               Blog

@@ -64,7 +64,7 @@ export const ServiceOffering: React.FC = () => { // Renamed from SecurityAudit
         }}
       >
         <h2 className="font-bold mb-12 md:mb-16 text-center">
-          <span className="block text-3xl sm:text-4xl md:text-5xl text-cyan-400">Expertise & Service Offerings</span>
+          <span className="block text-3xl sm:text-4xl md:text-5xl text-cyan-400">Expertise & Service Offerings by Michael Simoneau</span>
           <span className="block mt-3 text-xl sm:text-2xl md:text-3xl text-gray-300">Driving Innovation & Resilience</span>
         </h2>
 
