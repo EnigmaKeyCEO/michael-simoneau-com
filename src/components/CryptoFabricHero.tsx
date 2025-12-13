@@ -11,7 +11,7 @@ export const CryptoFabricHero: React.FC = () => {
       style={{ 
         minHeight: 'max-content',
         height: '100vh',
-        scrollMarginTop: '50vh',
+        scrollMarginTop: '-50vh',
         scrollMarginBottom: '50vh',
         scrollSnapAlign: 'start',
       }}
