@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { AnimatedBackground } from "../components/AnimatedBackground";
-import { MainNav } from "../components/MainNav";
-import { Seo } from "../components/Seo";
+import { AnimatedBackground } from "../backgrounds/AnimatedBackground";
+import { MainNav } from "../layout/MainNav";
+import { Seo } from "../foundation/seo/Seo";
 
 export const CryptoFabric: React.FC = () => {
   return (

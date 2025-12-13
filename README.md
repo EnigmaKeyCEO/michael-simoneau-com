@@ -33,6 +33,20 @@ This website is built with a modern, performant tech stack:
 *   **Animations:** [Framer Motion](https://www.framer.com/motion/)
 *   **Deployment:** [Firebase](https://firebase.google.com/)
 
-### A Note on the Current Structure
+## Architecture
 
-The codebase is currently undergoing a significant redesign and refactor. As such, the project structure may appear sporadic. The goal is to evolve this into a much cleaner, more modular architecture that fully represents the best practices I advocate for in my professional work. Thank you for your understanding as this transition is in progress.
+This project follows a **feature-based, domain-driven architecture** that organizes code by business domain rather than technical layer. This structure reflects the sophisticated, thought-provoking nature of the site's content and enables:
+
+- Clear separation of concerns
+- Easy feature discovery
+- Scalable codebase organization
+- Enterprise-grade maintainability
+
+### Key Architectural Principles
+
+- **Feature Modules**: Code organized by domain (blog, portfolio, zero-truth, etc.)
+- **UI Primitives**: Reusable components separated from feature-specific code
+- **Layout Components**: Shared layout and navigation components
+- **Foundation**: Core infrastructure (SEO, etc.)
+
+See [src/README.md](src/README.md) for detailed architecture documentation.
