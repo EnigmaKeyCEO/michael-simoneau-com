@@ -10,21 +10,6 @@ import { z } from 'zod';
  * @interface AppConfig
  */
 export interface AppConfig {
-  /** Firebase configuration */
-  firebase: {
-    /** Firebase API key */
-    apiKey: string;
-    /** Firebase auth domain */
-    authDomain: string;
-    /** Firebase project ID */
-    projectId: string;
-    /** Firebase storage bucket */
-    storageBucket: string;
-    /** Firebase messaging sender ID */
-    messagingSenderId: string;
-    /** Firebase app ID */
-    appId: string;
-  };
   /** AI-related configuration */
   ai: {
     /** Maximum image size in bytes */
@@ -68,14 +53,6 @@ class ConfigService {
    */
   private initializeConfig(): AppConfig {
     const config: AppConfig = {
-      firebase: {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID,
-      },
       ai: {
         maxImageSize: 5 * 1024 * 1024, // 5MB
         maxPromptLength: 500,
@@ -96,14 +73,6 @@ class ConfigService {
    */
   private validateConfig(config: AppConfig): void {
     const schema = z.object({
-      firebase: z.object({
-        apiKey: z.string().min(1),
-        authDomain: z.string().min(1),
-        projectId: z.string().min(1),
-        storageBucket: z.string().min(1),
-        messagingSenderId: z.string().min(1),
-        appId: z.string().min(1),
-      }),
       ai: z.object({
         maxImageSize: z.number().positive(),
         maxPromptLength: z.number().positive(),
@@ -127,14 +96,6 @@ class ConfigService {
       ConfigService.instance = new ConfigService();
     }
     return ConfigService.instance;
-  }
-
-  /**
-   * Gets the Firebase configuration.
-   * @returns {AppConfig['firebase']} The Firebase configuration
-   */
-  public getFirebaseConfig(): AppConfig['firebase'] {
-    return this.config.firebase;
   }
 
   /**
