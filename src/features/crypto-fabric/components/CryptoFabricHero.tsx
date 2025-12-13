@@ -12,7 +12,7 @@ export const CryptoFabricHero: React.FC = () => {
         minHeight: '100vh',
         flexGrow: 1,
         flexShrink: 0,
-        scrollMarginTop: '50vh',
+        // scrollMarginTop: '50vh',
         scrollMarginBottom: '50vh',
         scrollSnapAlign: 'start',
       }}

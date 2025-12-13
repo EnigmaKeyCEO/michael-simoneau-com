@@ -5,7 +5,7 @@ export const SearchOptimizedSummary = () => (
     id="michael-simoneau-enterprise-architect"
     className="py-16 text-white snap-start"
     style={{
-      scrollMarginTop: '40vh',
+      // scrollMarginTop: '40vh',
       scrollMarginBottom: '40vh',
     }}
     initial={{ opacity: 0 }}
