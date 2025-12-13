@@ -69,11 +69,12 @@ export const ZeroMobileNavigation: React.FC<ZeroMobileNavigationProps> = ({
   if (!activePrinciple) return null;
 
   return (
-    <div className="relative z-40">
+    <div className="relative z-40 w-full max-w-full box-border" style={{ maxWidth: '100%', width: '100%' }}>
       {/* Compact Bar */}
       <motion.button
         onClick={onToggleExpand}
-        className="w-full bg-black/40 backdrop-blur-md border border-cyan-500/20 rounded-lg shadow-lg hover:border-cyan-500/50 transition-all duration-300 px-4 py-3 flex items-center justify-between"
+        className="w-full max-w-full bg-black/40 backdrop-blur-md border border-cyan-500/20 rounded-lg shadow-lg hover:border-cyan-500/50 transition-all duration-300 px-4 py-3 flex items-center justify-between box-border"
+        style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box' }}
         aria-label={isExpanded ? 'Collapse navigation' : 'Expand navigation'}
         aria-expanded={isExpanded}
       >
@@ -109,9 +110,10 @@ export const ZeroMobileNavigation: React.FC<ZeroMobileNavigationProps> = ({
           >
             <div
               ref={containerRef}
-              className="mt-2 bg-black/60 backdrop-blur-md border border-cyan-500/20 rounded-lg shadow-lg overflow-y-auto custom-scrollbar"
+              className="mt-2 bg-black/60 backdrop-blur-md border border-cyan-500/20 rounded-lg shadow-lg overflow-y-auto overflow-x-hidden custom-scrollbar w-full max-w-full box-border"
+              style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box' }}
             >
-              <div ref={listRef} className="pb-4">
+              <div ref={listRef} className="pb-4 w-full max-w-full box-border" style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box' }}>
                 {allPrinciples.map((principle, idx) => {
                   const isActive = idx === activeIndex;
                   return (
@@ -119,11 +121,12 @@ export const ZeroMobileNavigation: React.FC<ZeroMobileNavigationProps> = ({
                       key={principle.id}
                       data-index={idx}
                       onClick={() => handleSelect(idx)}
-                      className={`w-full text-left px-4 py-3 border-b border-cyan-500/10 last:border-b-0 transition-all ${
+                      className={`w-full max-w-full text-left px-4 py-3 border-b border-cyan-500/10 last:border-b-0 transition-all box-border break-words ${
                         isActive
                           ? 'bg-cyan-500/20 text-cyan-300 border-l-4 border-l-cyan-500'
                           : 'text-gray-300 hover:bg-white/5 hover:text-cyan-200'
                       }`}
+                      style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box', wordWrap: 'break-word', overflowWrap: 'break-word' }}
                     >
                       <div className="text-xs font-mono text-cyan-400/70 mb-1">
                         {principle.chapterTitle}
