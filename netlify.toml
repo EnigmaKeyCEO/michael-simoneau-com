@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[redirects]]
+  from = "/zero.txt"
+  to = "/zero.txt"
+  status = 200
+
+[[redirects]]
+  from = "/blog/zero-why"
+  to = "/blog/zero"
+  status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

@@ -1,0 +1,93 @@
+# Deploy to Netlify on PR
+name: Deploy to Netlify on PR
+on: pull_request
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+jobs:
+  build_and_preview:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build application
+        run: yarn build
+      
+      - name: Install Chrome for Selenium
+        uses: browser-actions/setup-chrome@latest
+      
+      - name: Install ChromeDriver
+        run: |
+          # Get Chrome version
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          echo "Chrome version: $CHROME_VERSION"
+          # Get major version
+          CHROME_MAJOR=$(echo $CHROME_VERSION | cut -d. -f1)
+          echo "Chrome major version: $CHROME_MAJOR"
+          # Get matching ChromeDriver version from Chrome for Testing
+          CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_${CHROME_MAJOR}" || echo "")
+          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+            # Fallback: use latest stable
+            CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE")
+          fi
+          echo "ChromeDriver version: $CHROMEDRIVER_VERSION"
+          # Download and install ChromeDriver
+          wget -q "https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip" -O chromedriver.zip
+          unzip -q chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+          rm -rf chromedriver-linux64 chromedriver.zip
+          chromedriver --version
+      
+      - name: Start preview server and run tests
+        run: |
+          # Start preview server in background
+          yarn preview > /dev/null 2>&1 &
+          PREVIEW_PID=$!
+          
+          # Wait for server to be ready
+          echo "Waiting for preview server to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:4173 > /dev/null; then
+              echo "Preview server is ready!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Preview server failed to start"
+              exit 1
+            fi
+            sleep 2
+          done
+          
+          # Run Selenium tests
+          BASE_URL=http://localhost:4173 HEADLESS=true yarn test:selenium
+          TEST_EXIT_CODE=$?
+          
+          # Cleanup: kill preview server
+          kill $PREVIEW_PID 2>/dev/null || true
+          
+          # Exit with test result
+          exit $TEST_EXIT_CODE
+        env:
+          CI: true
+      
+      - name: Deploy to Netlify Preview
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          args: deploy --dir=dist

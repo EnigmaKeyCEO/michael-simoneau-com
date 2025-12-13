@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { AnimatedBackground } from "../components/AnimatedBackground";
-import { MainNav } from "../components/MainNav";
-import { Seo } from "../components/Seo";
+import { AnimatedBackground } from "../backgrounds/AnimatedBackground";
+import { MainNav } from "../layout/MainNav";
+import { Seo } from "../foundation/seo/Seo";
 
 export const FullProfile: React.FC = () => {
   return (
@@ -696,7 +696,6 @@ export const FullProfile: React.FC = () => {
                   <p>✓ Docker Containers</p>
                   <p>✓ Continuous Deployment</p>
                   <p>✓ Heroku</p>
-                  <p>✓ Firebase</p>
                   <p>✓ Azure DevOps Pipelines</p>
                   <p>✓ Google Cloud Platform</p>
                   <p>✓ Agile Software Development</p>
@@ -738,7 +737,6 @@ export const FullProfile: React.FC = () => {
                   <p>✓ MySQL</p>
                   <p>✓ SQLite</p>
                   <p>✓ Oracle</p>
-                  <p>✓ Firebase Firestore</p>
                   <p>✓ SQL Server</p>
                   <p>✓ MongoDB</p>
                   <p>✓ PHP</p>

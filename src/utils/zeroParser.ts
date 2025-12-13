@@ -102,17 +102,15 @@ export const parseZeroContent = (text: string): ZeroContent => {
     if (section === 'content' && line.startsWith('Principle')) {
       flushBuffer();
       
-      const match = line.match(/Principle (\d+):/);
+      // Extract principle number and title from the same line: "Principle X: Title here"
+      const match = line.match(/Principle (\d+): (.+)/);
       if (match && currentChapter) {
-        // Look ahead for title (next line usually)
-        let title = '';
-        // In the text file, the title seems to be the first sentence or line after "Principle X:"
-        // Sometimes "Principle X:" is on its own line.
+        const title = match[2].trim();
         
         currentPrinciple = {
           id: `chap-${currentChapter.number}-principle-${match[1]}`,
           number: parseInt(match[1]),
-          title: '', // Will extract from first line of content
+          title: title,
           content: ''
         };
         currentChapter.principles.push(currentPrinciple);
@@ -130,14 +128,29 @@ export const parseZeroContent = (text: string): ZeroContent => {
       continue;
     }
 
+    // If we're in conclusion but encounter a new chapter, switch back to content mode
+    // This handles cases like Chapter 6 appearing after the conclusion
+    if (section === 'conclusion' && line.startsWith('Chapter') && !line.includes('•')) {
+      flushBuffer(); // Save conclusion content
+      section = 'content'; // Switch back to content mode
+      // Parse the chapter
+      const match = line.match(/Chapter (\d+): (.+)/);
+      if (match) {
+        currentChapter = {
+          id: `chapter-${match[1]}`,
+          number: parseInt(match[1]),
+          title: match[2],
+          principles: []
+        };
+        chapters.push(currentChapter);
+        currentPrinciple = null;
+      }
+      continue;
+    }
+
     // Accumulate content
     if (section !== 'toc') {
       buffer.push(line);
-      
-      // If this is the first line of a principle, treat it as the title/summary
-      if (section === 'content' && currentPrinciple && !currentPrinciple.title && line) {
-        currentPrinciple.title = line;
-      }
     }
   }
 

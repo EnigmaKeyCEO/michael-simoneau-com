@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { AnimatedBackground } from "../components/AnimatedBackground";
-import { MainNav } from "../components/MainNav";
-import { Seo } from "../components/Seo";
+import { AnimatedBackground } from "../backgrounds/AnimatedBackground";
+import { MainNav } from "../layout/MainNav";
+import { Seo } from "../foundation/seo/Seo";
 
 export const CryptoFabric: React.FC = () => {
   return (
@@ -38,7 +38,6 @@ export const CryptoFabric: React.FC = () => {
           "solar-powered crypto infrastructure",
           "profit-sharing model",
           "zero configuration crypto",
-          "Firebase Remote Config",
           "MicroK8s Kubernetes",
           "Google Secret Manager",
         ]}
@@ -198,7 +197,7 @@ export const CryptoFabric: React.FC = () => {
                 </h3>
                 <p className="text-gray-300">
                   Ships white-labeled iOS and Android binaries for both Super Admins and client tenants, 
-                  generated straight from Firebase Remote Config + Expo profiles.
+                  generated straight from Expo profiles.
                 </p>
               </div>
               <div className="rounded-lg bg-gray-900/50 p-6 border border-gray-800">
@@ -238,7 +237,7 @@ export const CryptoFabric: React.FC = () => {
                   Control Plane (Cloud)
                 </h3>
                 <p className="text-gray-300 mb-3">
-                  A cloud-based coordination layer built on Google Firebase that handles:
+                  A cloud-based coordination layer that handles:
                 </p>
                 <ul className="list-disc list-inside text-gray-300 space-y-2">
                   <li>Web portal / UI</li>

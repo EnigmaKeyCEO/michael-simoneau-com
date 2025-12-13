@@ -6,18 +6,18 @@ import './index.css';
 import { ScrollProvider } from './contexts/ScrollContext';
 
 // Import page/route components
-import { NotFound } from "./components/NotFound";
-import { Blog } from "./components/Blog";
-import { BlogPost } from "./components/BlogPost";
-import { Interview } from "./components/Interview";
-import { ZeroTruth } from "./components/ZeroTruth";
+import { NotFound } from "./layout/NotFound";
+import { Blog } from "./features/blog/components/Blog";
+import { BlogPost } from "./features/blog/components/BlogPost";
+import { Interview } from "./features/interview/components/Interview";
+import { ZeroTruth } from "./features/zero-truth/components/ZeroTruth";
 import { FullProfile } from "./pages/FullProfile";
 import { CryptoFabric } from "./pages/CryptoFabric";
 
-// Lazy load NEW main page component
-const LazyNewMainPage = lazy(() => 
-  import("./pages/NewMainPage").then(module => ({
-    default: module.NewMainPage
+// Lazy load main page component
+const LazyMainPage = lazy(() => 
+  import("./pages/MainPage").then(module => ({
+    default: module.MainPage
   }))
 );
 
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white">Initializing Interface...</div>}>
             <ScrollProvider>
-              <LazyNewMainPage />
+              <LazyMainPage />
             </ScrollProvider>
           </Suspense>
         ),

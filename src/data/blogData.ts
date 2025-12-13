@@ -59,7 +59,7 @@ export const blogData: BlogData[] = [
         "CryptoFabric is a hybrid cloud/on-premise platform consisting of two primary components:"
       ),
       createList([
-        "**Control Plane (Cloud):** A cloud-based coordination layer (built on Google Firebase) that handles the user interface, authentication (Google OAuth), orchestration, and marketplace functionality. This is the \"brain\" that tells the system what to deploy and monitors performance.",
+        "**Control Plane (Cloud):** A cloud-based coordination layer that handles the user interface, authentication (Google OAuth), orchestration, and marketplace functionality. This is the \"brain\" that tells the system what to deploy and monitors performance.",
         "**Data Plane (Edge Compute):** A localized deployment (MicroK8s Kubernetes cluster on on-prem servers) that runs the actual workloads—trading bots, blockchain nodes, staking validators, etc. By default it runs on a solar-powered server rig, dramatically lowering operating costs.",
       ]),
       createHeading("Key Features & Modules", 2),
@@ -130,7 +130,7 @@ export const blogData: BlogData[] = [
       ]),
       createHeading("Mobile Super Admin Control Center", 2),
       createParagraph(
-        "One of the most exciting developments is the mobile Super Admin control center. Built with Expo and React Native, it ships white-labeled iOS and Android binaries for both Super Admins and client tenants, generated straight from Firebase Remote Config + Expo profiles."
+        "One of the most exciting developments is the mobile Super Admin control center. Built with Expo and React Native, it ships white-labeled iOS and Android binaries for both Super Admins and client tenants, generated straight from Expo profiles."
       ),
       createParagraph(
         "Key capabilities:"
@@ -138,7 +138,7 @@ export const blogData: BlogData[] = [
       createList([
         "**Native Mobile Apps:** Super Admins can promote new configurations and trigger branded builds directly from their phones, keeping releases in lockstep with profitability guardrails.",
         "**Real-Time Dashboards:** Mobile dashboards surface the same profitability, burn, and guardrail scores as the web Control Center, so field teams can pivot strategies with current margins instead of lagging reports.",
-        "**Firebase-Native Distribution:** Teams can schedule over-the-air config pushes, queue App Store / Play Store submissions, and roll back missteps instantly—eliminating expensive mobile DevOps cycles.",
+        "**Native Distribution:** Teams can schedule over-the-air config pushes, queue App Store / Play Store submissions, and roll back missteps instantly—eliminating expensive mobile DevOps cycles.",
       ]),
       createHeading("Two-Speed Delivery", 2),
       createParagraph(
@@ -217,7 +217,7 @@ export const blogData: BlogData[] = [
         "Crypto Fabric is a hybrid cloud/on-premise platform with two main components:"
       ),
       createList([
-        "**Control Plane (Cloud):** Built on Google Firebase, handles the web portal, authentication, orchestration, and marketplace functionality.",
+        "**Control Plane (Cloud):** Handles the web portal, authentication, orchestration, and marketplace functionality.",
         "**Data Plane (Edge Compute):** A MicroK8s Kubernetes cluster that runs the actual workloads. By default, it runs on solar-powered servers, dramatically lowering operating costs.",
       ]),
       createHeading("Why Now?", 2),
@@ -441,7 +441,7 @@ function updateCryptography(newConfig: CryptoConfig) {
         "**Monorepo Structure:** Utilizing a monorepo (e.g., using Yarn Workspaces or Lerna) to manage the core application and client-specific packages in one place.",
         "**Modular Sub-Packages:** Each client customization or distinct feature set was encapsulated in its own package. These packages could then be selectively included per client.",
         "**TypeScript Aliasing & Path Mapping:** TypeScript's path mapping feature was crucial. We defined aliases that could resolve to different underlying modules based on the current client build. For example, `@theme/colors` might point to `client-a-theme/colors.ts` for one build and `client-b-theme/colors.ts` for another.",
-        "**Remote Configuration:** A robust remote configuration system (like Firebase Remote Config) allowed us to toggle features, adjust UI elements, and set client-specific parameters at runtime and build time.",
+        "**Remote Configuration:** A robust remote configuration system allowed us to toggle features, adjust UI elements, and set client-specific parameters at runtime and build time.",
         "**Layered Configuration:** We implemented a layered configuration system: a base configuration, overridden by client-specific configurations, and finally, by remote configurations.",
         "**Dynamic Feature Loading:** For larger optional modules, we explored mechanisms for dynamic loading to keep initial bundle sizes small.",
         "**Robust Build & CI/CD Pipeline:** The build pipeline was a critical component. It was responsible for assembling the correct set of packages, applying the correct configurations, and building the app for each specific client. This involved scripting and tight integration with our CI/CD system.",
