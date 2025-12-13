@@ -4,40 +4,40 @@ overview: Move all components from the flat structure into their new feature-bas
 todos:
   - id: move-blog-components
     content: Move Blog.tsx, BlogPost.tsx, BlogTeaser.tsx to features/blog/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-portfolio-components
     content: Move JPMorganProject.tsx, StoneXProject.tsx to features/portfolio/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-zero-truth-components
     content: Move ZeroTruth.tsx, ZeroNavigation.tsx to features/zero-truth/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-crypto-fabric-components
     content: Move CryptoFabricHero.tsx to features/crypto-fabric/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-interview-components
     content: Move Interview.tsx, InterviewButton.tsx to features/interview/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-profile-components
     content: Move AboutMeSection.tsx, ServiceOffering.tsx, CTOTriage.tsx, SearchOptimizedSummary.tsx, NewHeroSection.tsx to features/profile/components/ and update internal imports
-    status: pending
+    status: completed
   - id: move-ui-buttons
     content: Move InteractiveButton.tsx to ui/buttons/ and update internal imports
-    status: pending
+    status: completed
   - id: move-ui-icons
     content: Move XIcon.tsx to ui/icons/ and update internal imports
-    status: pending
+    status: completed
   - id: move-ui-players
     content: Move SpeechPlayer.tsx, UniversalPlayer.tsx to ui/players/ and update internal imports
-    status: pending
+    status: completed
   - id: move-layout-components
     content: Move MainNav.tsx, ContactFooter.tsx, NotFound.tsx, CookieNotice.tsx to layout/ and update internal imports
-    status: pending
+    status: completed
   - id: move-background-components
     content: Move AnimatedBackground.tsx, NebulaStormBackground.tsx, QuantumBackground.tsx to backgrounds/ and update internal imports
-    status: pending
+    status: completed
   - id: move-foundation-components
     content: Move Seo.tsx to foundation/seo/ and update internal imports
-    status: pending
+    status: completed
 ---
 
 # Phase 2: Move and Reorganize Components

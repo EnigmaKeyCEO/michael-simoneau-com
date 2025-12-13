@@ -4,40 +4,40 @@ overview: Rename components to remove "New" prefix and use consistent, descripti
 todos:
   - id: rename-hero-section-file
     content: Rename NewHeroSection.tsx to HeroSection.tsx in features/profile/components/
-    status: pending
+    status: completed
   - id: update-hero-section-export
     content: Update export name from NewHeroSection to HeroSection in HeroSection.tsx
-    status: pending
+    status: completed
   - id: find-hero-section-references
     content: Search codebase for all references to NewHeroSection (imports, usage, comments)
-    status: pending
+    status: completed
   - id: update-hero-section-imports
     content: Update all import statements for HeroSection to use new path and name
-    status: pending
+    status: completed
   - id: update-hero-section-usage
     content: Update all JSX usage of NewHeroSection to HeroSection
-    status: pending
+    status: completed
   - id: rename-main-page-file
     content: Rename NewMainPage.tsx to MainPage.tsx in pages/
-    status: pending
+    status: completed
   - id: update-main-page-export
     content: Update export name from NewMainPage to MainPage in MainPage.tsx
-    status: pending
+    status: completed
   - id: update-main-page-imports
     content: Update lazy import in main.tsx to use MainPage
-    status: pending
+    status: completed
   - id: update-main-page-usage
     content: Update LazyNewMainPage variable and usage to LazyMainPage
-    status: pending
+    status: completed
   - id: check-css-references
     content: Check and update any CSS classes, IDs, or data attributes referencing old names
-    status: pending
+    status: completed
   - id: update-test-files
     content: Update test files that reference old component names
-    status: pending
+    status: completed
   - id: verify-naming-consistency
     content: Verify all components follow consistent PascalCase naming without prefixes
-    status: pending
+    status: completed
 ---
 
 # Phase 3: Rename Components

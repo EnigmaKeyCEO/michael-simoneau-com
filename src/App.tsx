@@ -1,5 +1,5 @@
 import { SpeechProvider } from "./contexts/SpeechContext";
-import { CookieNotice } from "./components/CookieNotice";
+import { CookieNotice } from "./layout/CookieNotice";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 
 function App() {
