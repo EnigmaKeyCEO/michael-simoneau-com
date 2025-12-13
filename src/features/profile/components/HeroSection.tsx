@@ -10,6 +10,10 @@ export const HeroSection: React.FC = () => {
     <section 
       id="new-hero"
       className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-16 relative overflow-hidden snap-start"
+      style={{
+        scrollMarginTop: '40vh',
+        scrollMarginBottom: '40vh',
+      }}
     >
       {/* Background Styling - more abstract and futuristic */}
       <div className="absolute inset-0 -z-10 pointer-events-none">

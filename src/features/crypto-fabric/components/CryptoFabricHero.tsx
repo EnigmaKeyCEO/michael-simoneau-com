@@ -12,8 +12,8 @@ export const CryptoFabricHero: React.FC = () => {
         minHeight: '100vh',
         flexGrow: 1,
         flexShrink: 0,
-        scrollMarginTop: '50vh',
-        scrollMarginBottom: '50vh',
+        scrollMarginTop: '40vh',
+        scrollMarginBottom: '40vh',
         scrollSnapAlign: 'start',
       }}
       initial={{ opacity: 0 }}

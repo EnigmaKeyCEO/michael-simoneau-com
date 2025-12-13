@@ -221,7 +221,13 @@ export const MainPage: React.FC = () => {
       >
         <MainNav scrollContainerId="new-main-page-scroll-container" />
 
-        <section className="snap-start">
+        <section 
+          className="snap-start"
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
+        >
           <HeroSection />
         </section>
 
@@ -233,6 +239,10 @@ export const MainPage: React.FC = () => {
           <motion.section
             id="about-me-section"
             className={`${sectionWrapperClasses}`}
+            style={{
+              scrollMarginTop: '40vh',
+              scrollMarginBottom: '40vh',
+            }}
             initial={{opacity: 0}}
             whileInView={{opacity: 1}} 
             viewport={{once: true, amount: 0.2}}
@@ -245,6 +255,10 @@ export const MainPage: React.FC = () => {
         <motion.section 
           id="expertise-section" 
           className={`${sectionWrapperClasses} bg-gray-900/40`}
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -262,6 +276,10 @@ export const MainPage: React.FC = () => {
         <motion.section 
           id="service-offerings-section"
           className={`${sectionWrapperClasses}`}
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -273,6 +291,10 @@ export const MainPage: React.FC = () => {
         <motion.section 
           id="cto-triage-section"
           className={`${sectionWrapperClasses} bg-gray-900/40`}
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -284,6 +306,10 @@ export const MainPage: React.FC = () => {
         <motion.section 
           id="blog-teaser-section" 
           className={`${sectionWrapperClasses}`}
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -292,7 +318,13 @@ export const MainPage: React.FC = () => {
           <BlogTeaser />
         </motion.section>
         
-        <section className="snap-start">
+        <section 
+          className="snap-start"
+          style={{
+            scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
+        >
           <ContactFooter />
         </section>
       </div>
