@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 import { NebulaStormBackground } from './NebulaStormBackground';
 import { MainNav } from './MainNav';
 import { Seo } from './Seo';
@@ -50,6 +50,26 @@ export const ZeroTruth: React.FC = () => {
       }
     }
   }, [activePrincipleId, allPrinciples]);
+
+  const handleNext = () => {
+    if (allPrinciples.length === 0) return;
+
+    const currentIndex = allPrinciples.findIndex(p => p.id === activePrincipleId);
+    if (currentIndex < allPrinciples.length - 1) {
+      const next = allPrinciples[currentIndex + 1];
+      setActivePrincipleId(next.id);
+      
+      // Update active chapter if next principle is in a different chapter
+      if (content) {
+        const chap = content.chapters.find(c => c.principles.some(p => p.id === next.id));
+        if (chap) setActiveChapterId(chap.id);
+      }
+      
+      if (isMobile) {
+        setMobileIndex(currentIndex + 1);
+      }
+    }
+  };
 
   const handlePrev = () => {
     if (allPrinciples.length === 0) return;
@@ -114,8 +134,8 @@ export const ZeroTruth: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 md:mb-12 text-center flex-shrink-0"
         >
-          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 mb-2 md:mb-4 tracking-tighter">
-            ZERO
+          <h1 className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 mb-2 md:mb-4 tracking-tighter break-words w-full">
+            ZEROTH THEORY
           </h1>
           <p className="text-cyan-200/60 uppercase tracking-[0.5em] text-xs md:text-sm">
             The Numerical Trinity
@@ -143,6 +163,7 @@ export const ZeroTruth: React.FC = () => {
               setActiveChapterId={setActiveChapterId}
               activePrincipleId={activePrincipleId}
               setActivePrincipleId={setActivePrincipleId}
+              onNext={handleNext}
             />
           </div>
         )}
@@ -204,20 +225,20 @@ const MobileView: React.FC<{
                scale: idx === activeIndex ? 1 : 0.95
              }}
              transition={{ duration: 0.5 }}
-             className={`bg-black/40 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full ${idx === activeIndex ? 'border-cyan-500/50' : ''}`}
+             className={`bg-black/20 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full ${idx === activeIndex ? 'border-cyan-500/50' : ''}`}
            >
              <div className="mb-4 flex-shrink-0">
-                <span className="text-xs font-mono text-cyan-400/80 mb-1 block">
+                <span className="text-xs font-mono text-cyan-400 mb-1 block drop-shadow-md">
                   {principle.chapterTitle}
                 </span>
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h3 className="text-xl font-bold text-white mb-2 drop-shadow-md">
                   Principle {principle.number}
                 </h3>
-                <h4 className="text-lg text-cyan-200 font-light italic mb-2 leading-tight">
+                <h4 className="text-lg text-cyan-100 font-light italic mb-2 leading-tight drop-shadow-md">
                   {principle.title}
                 </h4>
              </div>
-             <div className="text-gray-300 leading-relaxed text-sm flex-grow overflow-y-auto pr-2 custom-scrollbar">
+             <div className="text-gray-100 leading-relaxed text-sm flex-grow overflow-y-auto pr-2 custom-scrollbar drop-shadow-sm font-medium">
                {principle.content.split('\n').map((para, i) => para.trim() && (
                  <p key={i} className="mb-4">{para}</p>
                ))}
@@ -241,7 +262,8 @@ const DesktopView: React.FC<{
   setActiveChapterId: (id: string | null) => void;
   activePrincipleId: string | null;
   setActivePrincipleId: (id: string | null) => void;
-}> = ({ content, activeChapterId, setActiveChapterId, activePrincipleId, setActivePrincipleId }) => {
+  onNext: () => void;
+}> = ({ content, activeChapterId, setActiveChapterId, activePrincipleId, setActivePrincipleId, onNext }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
       {/* Left Column: Bubbly TOC */}
@@ -254,17 +276,17 @@ const DesktopView: React.FC<{
                }}
                className={`w-full text-left p-4 rounded-2xl backdrop-blur-sm border transition-all duration-300 ${
                  activeChapterId === chapter.id 
-                   ? 'bg-cyan-900/40 border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,136,0.2)]' 
-                   : 'bg-black/40 border-white/10 hover:border-cyan-500/30'
+                   ? 'bg-cyan-900/20 border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,136,0.2)]' 
+                   : 'bg-black/20 border-white/10 hover:border-cyan-500/30'
                }`}
              >
                <div className="flex justify-between items-center">
-                 <span className={`font-bold ${activeChapterId === chapter.id ? 'text-cyan-400' : 'text-gray-300'}`}>
+                 <span className={`font-bold drop-shadow-md ${activeChapterId === chapter.id ? 'text-cyan-400' : 'text-gray-200'}`}>
                    Chapter {chapter.number}
                  </span>
                  {activeChapterId === chapter.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                </div>
-               <div className="text-sm text-gray-400 mt-1 truncate">{chapter.title}</div>
+               <div className="text-sm text-gray-300 mt-1 truncate drop-shadow-sm font-medium">{chapter.title}</div>
              </motion.button>
 
              <AnimatePresence>
@@ -300,52 +322,12 @@ const DesktopView: React.FC<{
       <div className="lg:col-span-8 h-full overflow-hidden">
          <AnimatePresence mode="wait">
            {activePrincipleId ? (
-             <motion.div
+             <DesktopContent 
                key={activePrincipleId}
-               initial={{ opacity: 0, x: 20 }}
-               animate={{ opacity: 1, x: 0 }}
-               exit={{ opacity: 0, x: -20 }}
-               transition={{ duration: 0.4 }}
-               className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl relative h-full flex flex-col"
-             >
-                {/* Decorative quantum elements */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
-                
-                {(() => {
-                  let activePrinciple: Principle | undefined;
-                  let activeChapter: Chapter | undefined;
-                  
-                  for (const c of content.chapters) {
-                    const p = c.principles.find(p => p.id === activePrincipleId);
-                    if (p) {
-                      activePrinciple = p;
-                      activeChapter = c;
-                      break;
-                    }
-                  }
-
-                  if (!activePrinciple || !activeChapter) return <div>Select a principle</div>;
-
-                  return (
-                    <>
-                      <div className="flex items-center space-x-2 text-cyan-500/60 font-mono text-sm mb-6 uppercase tracking-widest flex-shrink-0">
-                        <span>Principle {activePrinciple.number}</span>
-                        <span>/</span>
-                        <span>Chapter {activeChapter.number}</span>
-                      </div>
-                      
-                      <div className="prose prose-invert prose-lg max-w-none text-gray-300 leading-loose overflow-y-auto custom-scrollbar pr-4 flex-grow min-h-0">
-                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-tight">
-                           {activePrinciple.title}
-                         </h2>
-                         {activePrinciple.content.split('\n').map((paragraph, i) => (
-                           paragraph.trim() && <p key={i} className="mb-6">{paragraph}</p>
-                         ))}
-                      </div>
-                    </>
-                  );
-                })()}
-             </motion.div>
+               activePrincipleId={activePrincipleId}
+               content={content}
+               onNext={onNext}
+             />
            ) : (
              <div className="flex items-center justify-center h-full text-gray-500 italic">
                Select a principle to begin transmission...
@@ -354,5 +336,121 @@ const DesktopView: React.FC<{
          </AnimatePresence>
       </div>
     </div>
+  );
+};
+
+const DesktopContent: React.FC<{
+  activePrincipleId: string;
+  content: ZeroContent;
+  onNext: () => void;
+}> = ({ activePrincipleId, content, onNext }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [overscrollAmount, setOverscrollAmount] = useState(0);
+  const [isTriggered, setIsTriggered] = useState(false);
+  const triggerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const activeData = useMemo(() => {
+    for (const c of content.chapters) {
+      const p = c.principles.find(p => p.id === activePrincipleId);
+      if (p) return { principle: p, chapter: c };
+    }
+    return null;
+  }, [activePrincipleId, content]);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!scrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    
+    // Check if we are at bottom
+    const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 2;
+    
+    if (isAtBottom && e.deltaY > 0) {
+      // Accumulate overscroll
+      setOverscrollAmount(prev => Math.min(prev + e.deltaY, 200));
+    } else {
+      // Reset if scrolling back up or not at bottom
+      setOverscrollAmount(0);
+      if (triggerRef.current) {
+        clearTimeout(triggerRef.current);
+        triggerRef.current = null;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (overscrollAmount > 100 && !triggerRef.current && !isTriggered) {
+      // Start trigger timer
+      triggerRef.current = setTimeout(() => {
+        setIsTriggered(true);
+        onNext();
+      }, 1500);
+    } else if (overscrollAmount <= 100 && triggerRef.current) {
+      // Cancel trigger if user stops pulling
+      clearTimeout(triggerRef.current);
+      triggerRef.current = null;
+    }
+  }, [overscrollAmount, isTriggered, onNext]);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+       if (triggerRef.current) clearTimeout(triggerRef.current);
+    };
+  }, []);
+
+  if (!activeData) return null;
+  const { principle, chapter } = activeData;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.4 }}
+      className="bg-transparent backdrop-blur-none border-none p-8 md:p-12 relative h-full flex flex-col"
+    >
+      {/* Decorative quantum elements */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+      
+      <div className="flex items-center space-x-2 text-cyan-400 font-mono text-sm mb-6 uppercase tracking-widest flex-shrink-0 drop-shadow-md">
+        <span>Principle {principle.number}</span>
+        <span>/</span>
+        <span>Chapter {chapter.number}</span>
+      </div>
+      
+      <div 
+        ref={scrollRef}
+        onWheel={handleWheel}
+        className="prose prose-invert prose-lg max-w-none text-gray-100 leading-loose overflow-y-auto custom-scrollbar pr-4 flex-grow min-h-0 drop-shadow-sm font-medium relative"
+      >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-tight drop-shadow-lg">
+            {principle.title}
+          </h2>
+          {principle.content.split('\n').map((paragraph, i) => (
+            paragraph.trim() && <p key={i} className="mb-6">{paragraph}</p>
+          ))}
+          
+          {/* Overscroll Indicator */}
+          <motion.div 
+             className="h-20 flex items-center justify-center text-cyan-400 mt-8"
+             style={{ opacity: Math.min(overscrollAmount / 150, 1) }}
+          >
+             <div className="flex flex-col items-center animate-pulse">
+                <ChevronDown size={32} />
+                <span className="text-xs font-mono tracking-widest uppercase">
+                  {overscrollAmount > 100 ? "Hold to Proceed..." : "Scroll to Next"}
+                </span>
+                {overscrollAmount > 100 && (
+                   <motion.div 
+                     className="h-1 bg-cyan-400 mt-2 rounded-full"
+                     initial={{ width: 0 }}
+                     animate={{ width: 50 }}
+                     transition={{ duration: 1.5 }}
+                   />
+                )}
+             </div>
+          </motion.div>
+      </div>
+    </motion.div>
   );
 };
