@@ -56,7 +56,7 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           
           <Link to="/full-profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <User size={16} className="mr-1 xl:mr-2" />
-            Full Profile
+            Profile
           </Link>
           <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
             <BookOpen size={16} className="mr-2" />
@@ -108,7 +108,7 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
 
             <Link to="/full-profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
               <User size={18} className="mr-2" />
-              Full Profile
+              Profile
             </Link>
             <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
               <BookOpen size={18} className="mr-2" />
