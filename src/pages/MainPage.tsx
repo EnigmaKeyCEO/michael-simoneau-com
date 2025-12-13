@@ -224,7 +224,7 @@ export const MainPage: React.FC = () => {
         <section 
           className="snap-start"
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
         >
@@ -240,7 +240,7 @@ export const MainPage: React.FC = () => {
             id="about-me-section"
             className={`${sectionWrapperClasses}`}
             style={{
-              scrollMarginTop: '40vh',
+              // scrollMarginTop: '40vh',
               scrollMarginBottom: '40vh',
             }}
             initial={{opacity: 0}}
@@ -256,7 +256,7 @@ export const MainPage: React.FC = () => {
           id="expertise-section" 
           className={`${sectionWrapperClasses} bg-gray-900/40`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -277,7 +277,7 @@ export const MainPage: React.FC = () => {
           id="service-offerings-section"
           className={`${sectionWrapperClasses}`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -292,7 +292,7 @@ export const MainPage: React.FC = () => {
           id="cto-triage-section"
           className={`${sectionWrapperClasses} bg-gray-900/40`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -307,7 +307,7 @@ export const MainPage: React.FC = () => {
           id="blog-teaser-section" 
           className={`${sectionWrapperClasses}`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -321,7 +321,7 @@ export const MainPage: React.FC = () => {
         <section 
           className="snap-start"
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
         >

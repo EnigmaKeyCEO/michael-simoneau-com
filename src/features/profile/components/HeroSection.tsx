@@ -11,7 +11,7 @@ export const HeroSection: React.FC = () => {
       id="new-hero"
       className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-16 relative overflow-hidden snap-start"
       style={{
-        scrollMarginTop: '40vh',
+        // scrollMarginTop: '40vh',
         scrollMarginBottom: '40vh',
       }}
     >
