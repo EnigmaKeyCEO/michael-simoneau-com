@@ -128,7 +128,7 @@ export const ZeroTruth: React.FC = () => {
       <NebulaStormBackground />
       <MainNav />
       
-      <div className="relative min-h-screen text-white pt-24 pb-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col h-screen w-full overflow-hidden">
+      <div className="relative min-h-screen text-white pt-24 pb-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col h-screen w-full max-w-full overflow-hidden box-border">
         {/* Header / Title Area */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -305,9 +305,9 @@ const MobileView: React.FC<{
   };
 
   return (
-    <div className="flex flex-col flex-grow min-h-0 w-full max-w-full overflow-x-hidden">
+    <div className="flex flex-col flex-grow min-h-0 w-full max-w-full overflow-x-hidden box-border" style={{ maxWidth: '100%' }}>
       {/* Mobile Navigation */}
-      <div className="flex-shrink-0 mb-4 w-full max-w-full">
+      <div className="flex-shrink-0 mb-4 w-full max-w-full box-border" style={{ maxWidth: '100%' }}>
         <ZeroMobileNavigation
           allPrinciples={allPrinciples}
           activeIndex={activeIndex}
@@ -322,21 +322,22 @@ const MobileView: React.FC<{
         id="mobile-scroll-container"
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth no-scrollbar min-w-0 w-full"
-        style={{ scrollBehavior: 'smooth' }}
+        className="flex-1 overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth no-scrollbar min-w-0 w-full box-border"
+        style={{ scrollBehavior: 'smooth', maxWidth: '100%', width: '100%' }}
       >
       {allPrinciples.map((principle, idx) => {
         const isActive = idx === activeIndex;
         return (
           <div 
             key={principle.id} 
-            className="snap-start flex flex-col justify-center p-2"
+            className="snap-start flex flex-col justify-center p-2 box-border"
             style={{ 
               height: cardHeight ? `${cardHeight}px` : '100%', 
               minHeight: cardHeight ? `${cardHeight}px` : '100%',
               maxHeight: cardHeight ? `${cardHeight}px` : '100%',
               width: '100%',
-              maxWidth: '100%'
+              maxWidth: '100%',
+              boxSizing: 'border-box'
             }}
           >
              <motion.div
@@ -350,12 +351,38 @@ const MobileView: React.FC<{
                  duration: 0.5,
                  ease: "easeOut"
                }}
-               style={{ willChange: 'opacity, transform' }}
-               className={`bg-black/20 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full w-full ${isActive ? 'border-cyan-500/50' : ''}`}
+               style={{ 
+                 willChange: 'opacity, transform',
+                 width: '100%',
+                 maxWidth: '100%',
+                 boxSizing: 'border-box'
+               }}
+               className={`bg-black/20 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full w-full box-border ${isActive ? 'border-cyan-500/50' : ''}`}
              >
-               <div className="text-gray-100 leading-relaxed text-sm flex-grow overflow-y-auto pr-2 custom-scrollbar drop-shadow-sm font-medium">
+               <div 
+                 className="text-gray-100 leading-relaxed text-sm flex-grow overflow-y-auto overflow-x-hidden pr-2 custom-scrollbar drop-shadow-sm font-medium box-border"
+                 style={{ 
+                   width: '100%',
+                   maxWidth: '100%',
+                   wordWrap: 'break-word',
+                   overflowWrap: 'break-word',
+                   boxSizing: 'border-box'
+                 }}
+               >
                  {principle.content.split('\n').map((para, i) => para.trim() && (
-                   <p key={i} className="mb-4">{para}</p>
+                   <p 
+                     key={i} 
+                     className="mb-4 break-words"
+                     style={{ 
+                       width: '100%',
+                       maxWidth: '100%',
+                       wordWrap: 'break-word',
+                       overflowWrap: 'break-word',
+                       boxSizing: 'border-box'
+                     }}
+                   >
+                     {para}
+                   </p>
                  ))}
                </div>
              </motion.div>
