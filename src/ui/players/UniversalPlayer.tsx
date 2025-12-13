@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
-import { useSpeech } from '../../../contexts/SpeechContext';
+import { useSpeech } from '../../contexts/SpeechContext';
 
 export const UniversalPlayer: React.FC = () => {
   const { 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
@@ -6,6 +6,7 @@ import { NebulaStormBackground } from '../../../backgrounds/NebulaStormBackgroun
 import { MainNav } from '../../../layout/MainNav';
 import { Seo } from '../../../foundation/seo/Seo';
 import { parseZeroContent, ZeroContent, Chapter, Principle } from '../../../utils/zeroParser';
+import { ZeroMobileNavigation } from './ZeroMobileNavigation';
 // @ts-ignore
 import truthText from '/zero.txt?raw';
 
@@ -127,7 +128,7 @@ export const ZeroTruth: React.FC = () => {
       <NebulaStormBackground />
       <MainNav />
       
-      <div className="relative min-h-screen text-white pt-24 pb-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col h-screen">
+      <div className="relative min-h-screen text-white pt-24 pb-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col h-screen w-full overflow-hidden">
         {/* Header / Title Area */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -181,76 +182,192 @@ const MobileView: React.FC<{
   setActiveIndex: (index: number) => void;
 }> = ({ allPrinciples, activeIndex, setActiveIndex }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollTopRef = useRef(0);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
 
   // Sync scroll position when activeIndex changes programmatically (e.g. from nav buttons)
-  useEffect(() => {
-    if (containerRef.current) {
-       const { clientHeight } = containerRef.current;
-       const targetScroll = activeIndex * clientHeight;
-       // Only scroll if significantly different to avoid fighting user scroll
-       if (Math.abs(containerRef.current.scrollTop - targetScroll) > 10) {
-         containerRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
-       }
+  // NOTE: This should NOT run when handleSelectIndex is called, as that function handles scrolling itself
+  useLayoutEffect(() => {
+    // Skip if scroll lock is active (means handleSelectIndex is handling it)
+    if (isScrollingRef.current || !containerRef.current) return;
+    
+    const { clientHeight } = containerRef.current;
+    const targetScroll = activeIndex * clientHeight;
+    const currentScroll = containerRef.current.scrollTop;
+    
+    // Only scroll if significantly different to avoid fighting user scroll
+    // Use a larger threshold to prevent micro-adjustments
+    if (Math.abs(currentScroll - targetScroll) > 20) {
+      isScrollingRef.current = true;
+      containerRef.current.scrollTo({ 
+        top: targetScroll, 
+        behavior: 'smooth' 
+      });
+      
+      // Reset scroll lock after animation completes
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 600);
+    } else if (Math.abs(currentScroll - targetScroll) > 2) {
+      // If we're close to target, ensure we're exactly on it
+      containerRef.current.scrollTop = targetScroll;
     }
   }, [activeIndex]);
 
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-    const { scrollTop, clientHeight } = containerRef.current;
-    // Calculate index based on center of viewport
-    const index = Math.round(scrollTop / clientHeight);
-    if (index !== activeIndex && index >= 0 && index < allPrinciples.length) {
-       setActiveIndex(index);
+  // Throttled scroll handler to prevent excessive state updates
+  const handleScroll = useCallback(() => {
+    // Always respect scroll lock - don't update during programmatic scrolling
+    if (!containerRef.current || isScrollingRef.current) return;
+    
+    // Clear existing timeout
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
     }
+
+    // Throttle scroll updates
+    scrollTimeoutRef.current = setTimeout(() => {
+      // Double-check scroll lock after timeout
+      if (!containerRef.current || isScrollingRef.current) return;
+      
+      const { scrollTop, clientHeight } = containerRef.current;
+      const currentScrollTop = scrollTop;
+      
+      // Use simple, reliable calculation for snap scrolling
+      // Each card should be exactly clientHeight tall, so scrollTop / clientHeight gives us the index
+      const index = Math.round(scrollTop / clientHeight);
+      
+      // Clamp index to valid range
+      const clampedIndex = Math.max(0, Math.min(index, allPrinciples.length - 1));
+      
+      // Only update if index is valid and different, and scroll has actually changed
+      // Also ensure we're not in the middle of a programmatic scroll
+      if (
+        clampedIndex !== activeIndex && 
+        clampedIndex >= 0 && 
+        clampedIndex < allPrinciples.length &&
+        Math.abs(currentScrollTop - lastScrollTopRef.current) > 5 &&
+        !isScrollingRef.current
+      ) {
+        lastScrollTopRef.current = currentScrollTop;
+        setActiveIndex(clampedIndex);
+      }
+    }, 50); // Throttle to ~20fps
+  }, [activeIndex, allPrinciples.length, setActiveIndex]);
+
+  // Calculate card height based on container
+  useEffect(() => {
+    const updateCardHeight = () => {
+      if (containerRef.current) {
+        setCardHeight(containerRef.current.clientHeight);
+      }
+    };
+    
+    updateCardHeight();
+    window.addEventListener('resize', updateCardHeight);
+    
+    return () => {
+      window.removeEventListener('resize', updateCardHeight);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [isNavExpanded]);
+
+  const handleSelectIndex = (index: number) => {
+    if (!containerRef.current) return;
+    
+    // Set scroll lock FIRST to prevent useLayoutEffect from interfering
+    isScrollingRef.current = true;
+    
+    // Set active index to update opacity immediately
+    setActiveIndex(index);
+    
+    // Scroll to the selected index
+    const { clientHeight } = containerRef.current;
+    const targetScroll = index * clientHeight;
+    containerRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    
+    // Reset scroll lock after animation completes
+    setTimeout(() => {
+      if (containerRef.current) {
+        // Ensure exact position
+        const currentScroll = containerRef.current.scrollTop;
+        const expectedScroll = index * containerRef.current.clientHeight;
+        if (Math.abs(currentScroll - expectedScroll) > 1) {
+          containerRef.current.scrollTop = expectedScroll;
+        }
+      }
+      isScrollingRef.current = false;
+    }, 500);
   };
 
   return (
-    <div 
-      id="mobile-scroll-container"
-      ref={containerRef}
-      onScroll={handleScroll}
-      className="flex-grow overflow-y-auto snap-y snap-mandatory scroll-smooth no-scrollbar"
-      style={{ scrollBehavior: 'smooth', height: 'calc(100vh - 200px)' }} // Adjust for header + nav
-    >
-      {allPrinciples.map((principle, idx) => (
-        <div 
-          key={principle.id} 
-          className="h-full snap-start flex flex-col justify-center p-2"
-          style={{ height: 'calc(100vh - 200px)' }}
-        >
-           <motion.div
-             initial={{ opacity: 0, scale: 0.95 }}
-             animate={{ 
-               opacity: idx === activeIndex ? 1 : 0.3,
-               scale: idx === activeIndex ? 1 : 0.95
-             }}
-             transition={{ duration: 0.5 }}
-             className={`bg-black/20 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full ${idx === activeIndex ? 'border-cyan-500/50' : ''}`}
-           >
-             <div className="mb-4 flex-shrink-0">
-                <span className="text-xs font-mono text-cyan-400 mb-1 block drop-shadow-md">
-                  {principle.chapterTitle}
-                </span>
-                <h3 className="text-xl font-bold text-white mb-2 drop-shadow-md">
-                  Principle {principle.number}
-                </h3>
-                <h4 className="text-lg text-cyan-100 font-light italic mb-2 leading-tight drop-shadow-md">
-                  {principle.title}
-                </h4>
-             </div>
-             <div className="text-gray-100 leading-relaxed text-sm flex-grow overflow-y-auto pr-2 custom-scrollbar drop-shadow-sm font-medium">
-               {principle.content.split('\n').map((para, i) => para.trim() && (
-                 <p key={i} className="mb-4">{para}</p>
-               ))}
-             </div>
-           </motion.div>
-        </div>
-      ))}
-      <div className="snap-start flex items-center justify-center text-cyan-500/50 italic pb-20" style={{ height: '200px' }}>
+    <div className="flex flex-col flex-grow min-h-0 w-full max-w-full overflow-x-hidden">
+      {/* Mobile Navigation */}
+      <div className="flex-shrink-0 mb-4 w-full max-w-full">
+        <ZeroMobileNavigation
+          allPrinciples={allPrinciples}
+          activeIndex={activeIndex}
+          onSelectIndex={handleSelectIndex}
+          isExpanded={isNavExpanded}
+          onToggleExpand={() => setIsNavExpanded(!isNavExpanded)}
+        />
+      </div>
+
+      {/* Scroll Container */}
+      <div 
+        id="mobile-scroll-container"
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth no-scrollbar min-w-0 w-full"
+        style={{ scrollBehavior: 'smooth' }}
+      >
+      {allPrinciples.map((principle, idx) => {
+        const isActive = idx === activeIndex;
+        return (
+          <div 
+            key={principle.id} 
+            className="snap-start flex flex-col justify-center p-2"
+            style={{ 
+              height: cardHeight ? `${cardHeight}px` : '100%', 
+              minHeight: cardHeight ? `${cardHeight}px` : '100%',
+              maxHeight: cardHeight ? `${cardHeight}px` : '100%',
+              width: '100%',
+              maxWidth: '100%'
+            }}
+          >
+             <motion.div
+               key={`${principle.id}-${isActive}`}
+               initial={false}
+               animate={{ 
+                 opacity: isActive ? 1 : 0.3,
+                 scale: isActive ? 1 : 0.95
+               }}
+               transition={{ 
+                 duration: 0.5,
+                 ease: "easeOut"
+               }}
+               style={{ willChange: 'opacity, transform' }}
+               className={`bg-black/20 backdrop-blur-md border border-cyan-500/20 p-6 rounded-2xl shadow-[0_0_30px_rgba(0,255,136,0.1)] flex flex-col h-full w-full ${isActive ? 'border-cyan-500/50' : ''}`}
+             >
+               <div className="text-gray-100 leading-relaxed text-sm flex-grow overflow-y-auto pr-2 custom-scrollbar drop-shadow-sm font-medium">
+                 {principle.content.split('\n').map((para, i) => para.trim() && (
+                   <p key={i} className="mb-4">{para}</p>
+                 ))}
+               </div>
+             </motion.div>
+          </div>
+        );
+      })}
+      <div className="snap-start flex items-center justify-center text-cyan-500/50 italic" style={{ height: cardHeight ? `${cardHeight}px` : '100%' }}>
         <div className="text-center">
           <p className="mb-2">... to be continued ...</p>
           <p className="text-xs opacity-50">Drag up to glimpse the void</p>
         </div>
+      </div>
       </div>
     </div>
   );
