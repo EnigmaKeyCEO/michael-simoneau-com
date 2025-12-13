@@ -9,7 +9,7 @@
     "analyze": "ANALYZE=true vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "pre-deploy-check": "node scripts/pre-deploy-check.js",
+    "pre-deploy-check": "node scripts/pre-deploy-check.cjs",
     "deploy": "npm run pre-deploy-check && bash deploy.sh",
     "firebase:init": "firebase init",
     "firebase:deploy": "firebase deploy --only hosting",
