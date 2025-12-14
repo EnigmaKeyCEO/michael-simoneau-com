@@ -49,7 +49,7 @@ export const CryptoFabric: React.FC = () => {
             name: 'Crypto Fabric',
             applicationCategory: 'FinanceApplication',
             operatingSystem: 'Linux, Kubernetes',
-            description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by EtherHive LLC with 100% solar-powered infrastructure and a unique profit-sharing model.',
+            description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by Michael Simoneau; Hosted by EtherHive, LLC with 100% solar-powered infrastructure and a unique profit-sharing model.',
             url: 'https://www.michaelsimoneau.com/crypto-fabric',
             image: 'https://www.michaelsimoneau.com/crypto-fabric.jpeg',
             publisher: {
@@ -141,7 +141,7 @@ export const CryptoFabric: React.FC = () => {
                 Profitability-First Automation Platform
               </p>
               <p className="text-xl text-gray-400 mb-4">
-                Built by EtherHive LLC
+                Built by Michael Simoneau; Hosted by EtherHive, LLC
               </p>
               <p className="text-lg text-gray-300 max-w-3xl">
                 Crypto Fabric enables anyone to deploy revenue-generating crypto services – 
