@@ -46,8 +46,8 @@ export const CryptoFabricHero: React.FC = () => {
           >
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-cyan-400 shadow-2xl">
               <img
-                src="/EtherHiveLLC.JPEG"
-                alt="EtherHive LLC Logo"
+                src="/crypto-fabric.jpeg"
+                alt="Crypto Fabric Logo"
                 className="object-cover w-full h-full"
               />
             </div>
@@ -62,7 +62,7 @@ export const CryptoFabricHero: React.FC = () => {
             Profitability-First Automation Platform
           </p>
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-            Built by EtherHive LLC
+            Built by Michael Simoneau and supported by EtherHive, LLC
           </p>
           <p className="text-base md:text-lg text-gray-400 max-w-4xl mx-auto mb-8">
             Deploy revenue-generating crypto services – Ethereum staking, automated trading, 

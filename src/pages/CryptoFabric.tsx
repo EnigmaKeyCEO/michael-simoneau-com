@@ -41,7 +41,7 @@ export const CryptoFabric: React.FC = () => {
           "MicroK8s Kubernetes",
           "Google Secret Manager",
         ]}
-        image="https://www.michaelsimoneau.com/EtherHiveLLC.JPEG"
+        image="https://www.michaelsimoneau.com/crypto-fabric.jpeg"
         structuredData={[
           {
             '@context': 'https://schema.org',
@@ -51,7 +51,7 @@ export const CryptoFabric: React.FC = () => {
             operatingSystem: 'Linux, Kubernetes',
             description: 'Profitability-first automation platform for digital-asset operators. Deploy Ethereum staking, AI-driven trading, and DePIN node workloads (Pocket Network, Akash, Storj, Saturn, HOPR, NYM, Lava RPC) with zero configuration through our AI-driven Control Center. Built by EtherHive LLC with 100% solar-powered infrastructure and a unique profit-sharing model.',
             url: 'https://www.michaelsimoneau.com/crypto-fabric',
-            image: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
+            image: 'https://www.michaelsimoneau.com/crypto-fabric.jpeg',
             publisher: {
               '@type': 'Organization',
               name: 'EtherHive LLC',
@@ -97,7 +97,7 @@ export const CryptoFabric: React.FC = () => {
             '@type': 'Organization',
             name: 'EtherHive LLC',
             url: 'https://www.michaelsimoneau.com/crypto-fabric',
-            logo: 'https://www.michaelsimoneau.com/EtherHiveLLC.JPEG',
+            logo: 'https://www.michaelsimoneau.com/crypto-fabric.jpeg',
             founder: {
               '@type': 'Person',
               name: 'Michael Simoneau'
@@ -127,7 +127,7 @@ export const CryptoFabric: React.FC = () => {
             <div className="md:mr-8 mb-6 md:mb-0 flex-shrink-0">
               <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-cyan-400 shadow-lg">
                 <img
-                  src="/EtherHiveLLC.JPEG"
+                  src="/crypto-fabric.jpeg"
                   alt="EtherHive LLC Logo"
                   className="object-cover w-full h-full"
                 />
