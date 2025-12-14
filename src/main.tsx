@@ -13,6 +13,7 @@ import { Interview } from "./features/interview/components/Interview";
 import { ZeroTruth } from "./features/zero-truth/components/ZeroTruth";
 import { FullProfile } from "./pages/FullProfile";
 import { CryptoFabric } from "./pages/CryptoFabric";
+import { Thth } from "./pages/Thth";
 
 // Lazy load main page component
 const LazyMainPage = lazy(() => 
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "crypto-fabric",
         element: <CryptoFabric />,
+      },
+      {
+        path: "thth",
+        element: <Thth />,
       },
       {
         path: "*",
