@@ -13,6 +13,7 @@ import { AnimatedBackground } from '../backgrounds/AnimatedBackground';
 import { useScrollContext } from '../contexts/ScrollContext';
 import { Seo } from '../foundation/seo/Seo';
 import { SearchOptimizedSummary } from '../features/profile/components/SearchOptimizedSummary';
+import { ZeroHero } from '../features/zero-truth/components/ZeroHero';
 import { CryptoFabricHero } from '../features/crypto-fabric/components/CryptoFabricHero';
 import { ThthHero } from '../features/thth/components/ThthHero';
 
@@ -233,6 +234,8 @@ export const MainPage: React.FC = () => {
         </section>
 
         <SearchOptimizedSummary />
+
+        <ZeroHero />
 
         <CryptoFabricHero />
 
