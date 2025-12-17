@@ -6,24 +6,25 @@ import { NebulaStormBackground } from '../../../backgrounds/NebulaStormBackgroun
 
 export const ZeroHero: React.FC = () => {
   return (
-    <>
-      <NebulaStormBackground />
-      <motion.section 
-        id="zero"
-        className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden snap-start"
-        style={{ 
-          minHeight: '100vh',
-          flexGrow: 1,
-          flexShrink: 0,
-          scrollMarginBottom: '50vh',
-          scrollSnapAlign: 'start',
-        }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.7 }}
-      >
-        <div className="container mx-auto max-w-6xl relative z-10 w-full py-8 flex flex-col flex-grow min-h-full">
+    <motion.section 
+      id="zero"
+      className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden snap-start"
+      style={{ 
+        minHeight: '100vh',
+        flexGrow: 1,
+        flexShrink: 0,
+        scrollMarginBottom: '50vh',
+        scrollSnapAlign: 'start',
+      }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7 }}
+    >
+      <div className="absolute inset-0 -z-10">
+        <NebulaStormBackground className="absolute w-full h-full" />
+      </div>
+      <div className="container mx-auto max-w-6xl relative z-10 w-full py-8 flex flex-col flex-grow min-h-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +41,7 @@ export const ZeroHero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-cyan-400 shadow-2xl bg-gradient-to-br from-cyan-500 to-emerald-600 flex items-center justify-center">
-                <span className="text-3xl md:text-4xl font-bold text-white">0</span>
+                <span className="text-3xl md:text-4xl font-bold text-white font-mono slashed-zero">ZER0</span>
               </div>
             </motion.div>
 
@@ -115,6 +116,5 @@ export const ZeroHero: React.FC = () => {
           </motion.div>
         </div>
       </motion.section>
-    </>
   );
 };

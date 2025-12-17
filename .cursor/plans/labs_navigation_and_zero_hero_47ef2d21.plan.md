@@ -1,9 +1,3 @@
----
-name: Labs Navigation and Zero Hero
-overview: "Replace \"Crypto Fabric\" navigation with a futuristic sliding \"Labs\" navigation that transforms to \"MS: LABS:\" and displays \"Zeroth Theory\" | \"Crypto Fabric\" | \"THTH Token\". Create a missing ZeroHero component that uses NebulaStormBackground and links to the /zero page. Ensure all hero components have buttons linking to their full pages."
-todos: []
----
-
 # Labs Navigation and Zero Hero Implementation
 
 ## Overview

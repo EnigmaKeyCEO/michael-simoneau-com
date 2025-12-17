@@ -41,7 +41,8 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
     setIsLabsExpanded(!isLabsExpanded);
   };
 
-  const handleLabsItemClick = (sectionId: string) => {
+  const handleLabsItemClick = (sectionId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     handleSectionLinkClick(sectionId);
     setIsLabsExpanded(false);
     setIsOpen(false); // Close mobile menu if open
@@ -56,8 +57,13 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
     };
 
     if (isLabsExpanded) {
-      document.addEventListener('mousedown', handleClickOutside);
+      // Use a small delay to avoid closing immediately when clicking inside
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 100);
+      
       return () => {
+        clearTimeout(timeoutId);
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
@@ -89,20 +95,24 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="ml-1 uppercase tracking-wider"
+                  className="ml-1 uppercase tracking-wider hidden md:inline-block"
                 >
-                  : LABS:
+                  :: LABS:
                 </motion.span>
               )}
             </AnimatePresence>
           </Link>
         </div>
-        <UniversalPlayer />
+        {!isLabsExpanded && <UniversalPlayer />}
         
         <nav className="hidden md:flex items-center space-x-6 xl:space-x-8 relative" ref={labsRef}>
-          <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
-          <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
-          <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+          {!isLabsExpanded && (
+            <>
+              <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+              <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+              <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+            </>
+          )}
           
           {/* Labs Navigation */}
           <div className="relative">
@@ -131,55 +141,59 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                   className="flex items-center space-x-2"
                 >
                   <button
-                    onClick={() => handleLabsItemClick('zero')}
-                    className="text-gray-300 hover:text-cyan-400 transition-colors"
+                    onClick={(e) => handleLabsItemClick('zero', e)}
+                    className="text-gray-300 hover:text-cyan-400 transition-colors whitespace-nowrap"
                   >
                     Zeroth Theory
                   </button>
                   <span className="text-gray-500">|</span>
                   <button
-                    onClick={() => handleLabsItemClick('crypto-fabric')}
-                    className="text-gray-300 hover:text-cyan-400 transition-colors"
+                    onClick={(e) => handleLabsItemClick('crypto-fabric', e)}
+                    className="text-gray-300 hover:text-cyan-400 transition-colors whitespace-nowrap"
                   >
                     Crypto Fabric
                   </button>
                   <span className="text-gray-500">|</span>
                   <button
-                    onClick={() => handleLabsItemClick('thth')}
-                    className="text-gray-300 hover:text-cyan-400 transition-colors"
+                    onClick={(e) => handleLabsItemClick('thth', e)}
+                    className="text-gray-300 hover:text-cyan-400 transition-colors whitespace-nowrap"
                   >
                     THTH Token
                   </button>
                   <button
                     onClick={handleLabsClick}
-                    className="ml-2 text-gray-500 hover:text-gray-300 transition-colors text-sm"
+                    className="ml-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-colors"
                     aria-label="Close Labs"
                   >
-                    ×
+                    <X size={16} className="text-gray-300" />
                   </button>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-          <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
-          
-          {isHomePage ? (
-            <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-              <User size={16} className="mr-1 xl:mr-2" />
-              Profile
-            </button>
-          ) : (
-            <Link to="/profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-              <User size={16} className="mr-1 xl:mr-2" />
-              Profile
-            </Link>
+          {!isLabsExpanded && (
+            <>
+              <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+              <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+              
+              {isHomePage ? (
+                <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                  <User size={16} className="mr-1 xl:mr-2" />
+                  Profile
+                </button>
+              ) : (
+                <Link to="/profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                  <User size={16} className="mr-1 xl:mr-2" />
+                  Profile
+                </Link>
+              )}
+              <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                <BookOpen size={16} className="mr-2" />
+                Blog
+              </Link>
+            </>
           )}
-          <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-            <BookOpen size={16} className="mr-2" />
-            Blog
-          </Link>
         </nav>
         
         <button 
@@ -198,72 +212,84 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           exit={{ opacity: 0, y: -20 }}
         >
           <nav className="flex flex-col items-center space-y-8 p-6 bg-black/75">
-            {!isHomePage && (
-              <Link 
-                to="/" 
-                onClick={handleHomeClick} 
-                className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
-              >
-                <Home size={18} className="mr-2" />
-                Home
-              </Link>
-            )}
-            
-            <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
-            <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
-            <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-            
-            {/* Labs Navigation - Mobile */}
-            <div className="w-full">
-              <button 
-                onClick={() => setIsLabsExpanded(!isLabsExpanded)}
-                className="text-xl text-gray-300 hover:text-cyan-400 transition-colors w-full text-left flex items-center"
-              >
-                <FlaskConical size={18} className="mr-2" />
-                {isLabsExpanded ? 'Labs ▼' : 'Labs ▶'}
-              </button>
-              {isLabsExpanded && (
-                <div className="ml-4 mt-2 space-y-2">
-                  <button 
-                    onClick={() => handleLabsItemClick('zero')}
-                    className="text-lg text-gray-400 hover:text-cyan-400 transition-colors block w-full text-left"
+            {!isLabsExpanded ? (
+              <>
+                {!isHomePage && (
+                  <Link 
+                    to="/" 
+                    onClick={handleHomeClick} 
+                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
                   >
-                    Zeroth Theory
-                  </button>
+                    <Home size={18} className="mr-2" />
+                    Home
+                  </Link>
+                )}
+                
+                <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+                <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+                <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+                
+                {/* Labs Navigation - Mobile Trigger */}
+                <div className="w-full text-center">
                   <button 
-                    onClick={() => handleLabsItemClick('crypto-fabric')}
-                    className="text-lg text-gray-400 hover:text-cyan-400 transition-colors block w-full text-left"
+                    onClick={() => setIsLabsExpanded(true)}
+                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors inline-flex items-center"
                   >
-                    Crypto Fabric
-                  </button>
-                  <button 
-                    onClick={() => handleLabsItemClick('thth')}
-                    className="text-lg text-gray-400 hover:text-cyan-400 transition-colors block w-full text-left"
-                  >
-                    THTH Token
+                    <FlaskConical size={18} className="mr-2" />
+                    Labs ▶
                   </button>
                 </div>
-              )}
-            </div>
 
-            <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-            <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+                <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+                <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
-            {isHomePage ? (
-              <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-                <User size={18} className="mr-2" />
-                Profile
-              </button>
+                {isHomePage ? (
+                  <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                    <User size={18} className="mr-2" />
+                    Profile
+                  </button>
+                ) : (
+                  <Link to="/profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+                    <User size={18} className="mr-2" />
+                    Profile
+                  </Link>
+                )}
+                <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+                  <BookOpen size={18} className="mr-2" />
+                  Blog
+                </Link>
+              </>
             ) : (
-              <Link to="/profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
-                <User size={18} className="mr-2" />
-                Profile
-              </Link>
+              <div className="w-full flex flex-col items-center space-y-6">
+                <div className="text-2xl font-bold text-white mb-4">MS::LABS:</div>
+                <button 
+                  onClick={(e) => handleLabsItemClick('zero', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  Zeroth Theory
+                </button>
+                <button 
+                  onClick={(e) => handleLabsItemClick('crypto-fabric', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  Crypto Fabric
+                </button>
+                <button 
+                  onClick={(e) => handleLabsItemClick('thth', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  THTH Token
+                </button>
+                
+                <button
+                  onClick={() => setIsLabsExpanded(false)}
+                  className="mt-8 w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-colors"
+                  aria-label="Close Labs"
+                >
+                  <X size={24} className="text-gray-300" />
+                </button>
+              </div>
             )}
-            <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
-              <BookOpen size={18} className="mr-2" />
-              Blog
-            </Link>
           </nav>
         </motion.div>
       )}
