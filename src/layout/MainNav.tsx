@@ -214,67 +214,88 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           exit={{ opacity: 0, y: -20 }}
         >
           <nav className="flex flex-col items-center justify-center h-full space-y-6 p-6 bg-black overflow-y-auto">
-            {!isHomePage && (
-              <Link 
-                to="/" 
-                onClick={handleHomeClick} 
-                className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
-              >
-                <Home size={18} className="mr-2" />
-                Home
-              </Link>
-            )}
-            
-            <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
-            <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
-            <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-            <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-            <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+            {!isLabsExpanded ? (
+              <>
+                {!isHomePage && (
+                  <Link 
+                    to="/" 
+                    onClick={handleHomeClick} 
+                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+                  >
+                    <Home size={18} className="mr-2" />
+                    Home
+                  </Link>
+                )}
+                
+                <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+                <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+                <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+                <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+                <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
-            {isHomePage ? (
-              <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-                <User size={18} className="mr-2" />
-                Profile
-              </button>
+                {isHomePage ? (
+                  <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                    <User size={18} className="mr-2" />
+                    Profile
+                  </button>
+                ) : (
+                  <Link to="/profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+                    <User size={18} className="mr-2" />
+                    Profile
+                  </Link>
+                )}
+                <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
+                  <BookOpen size={18} className="mr-2" />
+                  Blog
+                </Link>
+
+                <div className="w-full text-center mt-2">
+                  <button 
+                    onClick={() => setIsLabsExpanded(true)}
+                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors inline-flex items-center"
+                  >
+                    <FlaskConical size={18} className="mr-2" />
+                    Labs
+                  </button>
+                </div>
+                
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="text-xl text-gray-500 hover:text-cyan-400 transition-colors mt-8"
+                >
+                  Close
+                </button>
+              </>
             ) : (
-              <Link to="/profile" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
-                <User size={18} className="mr-2" />
-                Profile
-              </Link>
+              <div className="w-full flex flex-col items-center space-y-6">
+                <div className="text-2xl font-bold text-white mb-4">MS::LABS:</div>
+                <button 
+                  onClick={(e) => handleLabsItemClick('zero', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  Zeroth Theory
+                </button>
+                <button 
+                  onClick={(e) => handleLabsItemClick('crypto-fabric', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  Crypto Fabric
+                </button>
+                <button 
+                  onClick={(e) => handleLabsItemClick('thth', e)}
+                  className="text-xl text-gray-400 hover:text-cyan-400 transition-colors"
+                >
+                  THTH Token
+                </button>
+                
+                <button
+                  onClick={() => setIsLabsExpanded(false)}
+                  className="text-xl text-gray-500 hover:text-cyan-400 transition-colors mt-8"
+                >
+                  Close Labs
+                </button>
+              </div>
             )}
-            <Link to="/blog" className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center" onClick={() => setIsOpen(false)}>
-              <BookOpen size={18} className="mr-2" />
-              Blog
-            </Link>
-
-            <div className="w-full h-px bg-gray-800 my-2"></div>
-            <div className="text-gray-500 font-bold tracking-widest text-sm">LABS</div>
-
-            <button 
-              onClick={(e) => handleLabsItemClick('zero', e)}
-              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-            >
-              Zeroth Theory
-            </button>
-            <button 
-              onClick={(e) => handleLabsItemClick('crypto-fabric', e)}
-              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-            >
-              Crypto Fabric
-            </button>
-            <button 
-              onClick={(e) => handleLabsItemClick('thth', e)}
-              className="text-xl text-gray-300 hover:text-cyan-400 transition-colors"
-            >
-              THTH Token
-            </button>
-            
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="text-xl text-gray-500 hover:text-cyan-400 transition-colors mt-8 pt-4"
-            >
-              Close
-            </button>
           </nav>
         </motion.div>
       )}
