@@ -113,6 +113,24 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
               <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
               <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
               <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+              <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+              <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+              
+              {isHomePage ? (
+                <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                  <User size={16} className="mr-1 xl:mr-2" />
+                  Profile
+                </button>
+              ) : (
+                <Link to="/profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                  <User size={16} className="mr-1 xl:mr-2" />
+                  Profile
+                </Link>
+              )}
+              <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
+                <BookOpen size={16} className="mr-2" />
+                Blog
+              </Link>
             </>
           )}
           
@@ -178,29 +196,6 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
               )}
             </AnimatePresence>
           </motion.div>
-
-          {!isLabsExpanded && (
-            <>
-              <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-              <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
-              
-              {isHomePage ? (
-                <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-                  <User size={16} className="mr-1 xl:mr-2" />
-                  Profile
-                </button>
-              ) : (
-                <Link to="/profile" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-                  <User size={16} className="mr-1 xl:mr-2" />
-                  Profile
-                </Link>
-              )}
-              <Link to="/blog" onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
-                <BookOpen size={16} className="mr-2" />
-                Blog
-              </Link>
-            </>
-          )}
         </nav>
         
         <button 
@@ -213,12 +208,12 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
       
       {isOpen && (
         <motion.div 
-          className="fixed inset-0 bg-black/95 z-40 pt-20"
+          className="fixed inset-0 bg-black z-[60]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
         >
-          <nav className="flex flex-col items-center space-y-8 p-6 bg-black/75">
+          <nav className="flex flex-col items-center justify-center h-full space-y-8 p-6 bg-black">
             {!isLabsExpanded ? (
               <>
                 {!isHomePage && (
@@ -235,18 +230,6 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                 <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
                 <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
                 <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-                
-                {/* Labs Navigation - Mobile Trigger */}
-                <div className="w-full text-center">
-                  <button 
-                    onClick={() => setIsLabsExpanded(true)}
-                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors inline-flex items-center"
-                  >
-                    <FlaskConical size={18} className="mr-2" />
-                    Labs ▶
-                  </button>
-                </div>
-
                 <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
                 <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
@@ -265,6 +248,24 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                   <BookOpen size={18} className="mr-2" />
                   Blog
                 </Link>
+
+                {/* Labs Navigation - Mobile Trigger */}
+                <div className="w-full text-center">
+                  <button 
+                    onClick={() => setIsLabsExpanded(true)}
+                    className="text-xl text-gray-300 hover:text-cyan-400 transition-colors inline-flex items-center"
+                  >
+                    <FlaskConical size={18} className="mr-2" />
+                    Labs
+                  </button>
+                </div>
+
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="text-xl text-gray-500 hover:text-cyan-400 transition-colors mt-4"
+                >
+                  Close
+                </button>
               </>
             ) : (
               <div className="w-full flex flex-col items-center space-y-6">
@@ -289,11 +290,10 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                 </button>
                 
                 <button
-                  onClick={() => setIsLabsExpanded(false)}
-                  className="mt-8 w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-colors"
-                  aria-label="Close Labs"
+                  onClick={() => setIsOpen(false)}
+                  className="text-xl text-gray-500 hover:text-cyan-400 transition-colors mt-8"
                 >
-                  <X size={24} className="text-gray-300" />
+                  Close
                 </button>
               </div>
             )}
