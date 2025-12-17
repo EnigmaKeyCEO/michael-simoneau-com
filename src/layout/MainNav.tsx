@@ -72,33 +72,35 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-gray-800/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
-        <div className="flex items-center relative min-w-[80px]">
+        <div className="flex items-center relative min-w-[80px] whitespace-nowrap">
           <Link 
             to="/" 
             onClick={(e) => {
               handleHomeClick(e);
               setIsLabsExpanded(false);
             }}
-            className="text-white font-bold text-lg hover:text-cyan-400 transition-colors flex items-center"
+            className="text-white font-bold text-lg hover:text-cyan-400 transition-colors flex items-center whitespace-nowrap min-w-max"
           >
             <motion.span 
               layout
               className="mr-1"
-            >
-              MS
-            </motion.span>
-            <AnimatePresence mode="wait">
+            >{"MS"}</motion.span>
+            <AnimatePresence>
               {isLabsExpanded && (
-                <motion.span
-                  key="labs-label"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="ml-1 uppercase tracking-wider hidden md:inline-block"
-                >
-                  :: LABS:
-                </motion.span>
+                <>
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="ml-1 text-cyan-400 hidden md:inline-block"
+                  >{"::"}</motion.span>
+                  <motion.span
+                    layoutId="labs-logo-text"
+                    className="ml-1 uppercase tracking-wider hidden md:inline-block"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  >{"LABS:"}</motion.span>
+                </>
               )}
             </AnimatePresence>
           </Link>
@@ -115,30 +117,33 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
           )}
           
           {/* Labs Navigation */}
-          <div className="relative">
-            <AnimatePresence mode="wait">
+          <motion.div className="grid items-center relative overflow-hidden" layout>
+            <AnimatePresence>
               {!isLabsExpanded ? (
                 <motion.button
                   key="labs-button"
+                  layout
                   onClick={handleLabsClick}
-                  className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center"
+                  className="col-start-1 row-start-1 text-gray-300 hover:text-cyan-400 transition-colors flex items-center whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0, x: -100 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
                   <FlaskConical size={16} className="mr-1.5" />
-                  Labs
+                  <motion.span layoutId="labs-logo-text" transition={{ type: "spring", stiffness: 350, damping: 30 }}>Labs</motion.span>
                 </motion.button>
               ) : (
                 <motion.div
                   key="labs-items"
+                  layout
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="flex items-center space-x-2"
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="col-start-1 row-start-1 flex items-center space-x-2 whitespace-nowrap overflow-hidden"
                 >
                   <button
                     onClick={(e) => handleLabsItemClick('zero', e)}
@@ -162,15 +167,17 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                   </button>
                   <button
                     onClick={handleLabsClick}
-                    className="ml-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-colors"
+                    className="ml-2 p-1 group"
                     aria-label="Close Labs"
                   >
-                    <X size={16} className="text-gray-300" />
+                    <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-600 group-hover:border-cyan-400 group-hover:bg-gray-700 flex items-center justify-center transition-colors">
+                      <X size={14} className="text-gray-300 group-hover:text-cyan-400" />
+                    </div>
                   </button>
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
 
           {!isLabsExpanded && (
             <>
