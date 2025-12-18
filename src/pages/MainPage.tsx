@@ -59,8 +59,8 @@ export const MainPage: React.FC = () => {
           'Michael Simoneau architects resilient systems for highly regulated industries, blending AI innovation, zero-trust security, and pragmatic leadership.',
         image: 'https://www.michaelsimoneau.com/profile-image.png',
         sameAs: [
-          'https://www.linkedin.com/in/EnigmaKeyCEO',
-          'https://github.com/EnigmaKeyCEO',
+          'https://www.linkedin.com/in/michaelsimoneau',
+          'https://github.com/MichaelSimoneau',
           'https://twitter.com/enigmakeyceo',
         ],
         knowsAbout: [

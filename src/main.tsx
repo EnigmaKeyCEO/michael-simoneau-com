@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App'; // App will become a layout/outlet component
 import './index.css';
 import { ScrollProvider } from './contexts/ScrollContext';
+import { GlobalErrorElement } from './layout/GlobalErrorBoundary';
 
 // Import page/route components
 import { NotFound } from "./layout/NotFound";
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />, // App component will now act as a layout, rendering an Outlet
+    errorElement: <GlobalErrorElement />,
     children: [
       {
         index: true, // This makes it the default child route for "/"
