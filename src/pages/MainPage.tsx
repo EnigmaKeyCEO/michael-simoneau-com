@@ -5,6 +5,7 @@ import { HeroSection } from '../features/profile/components/HeroSection';
 import { StoneXProject } from '../features/portfolio/components/StoneXProject';
 import { JPMorganProject } from '../features/portfolio/components/JPMorganProject';
 import { AboutMeSection } from '../features/profile/components/AboutMeSection';
+import { Testimonials } from '../features/profile/components/Testimonials';
 import { ServiceOffering } from '../features/profile/components/ServiceOffering';
 import { CTOTriage } from '../features/profile/components/CTOTriage';
 import { BlogTeaser } from '../features/blog/components/BlogTeaser';
@@ -13,7 +14,9 @@ import { AnimatedBackground } from '../backgrounds/AnimatedBackground';
 import { useScrollContext } from '../contexts/ScrollContext';
 import { Seo } from '../foundation/seo/Seo';
 import { SearchOptimizedSummary } from '../features/profile/components/SearchOptimizedSummary';
+import { ZeroHero } from '../features/zero-truth/components/ZeroHero';
 import { CryptoFabricHero } from '../features/crypto-fabric/components/CryptoFabricHero';
+import { ThthHero } from '../features/thth/components/ThthHero';
 
 export const MainPage: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -57,8 +60,8 @@ export const MainPage: React.FC = () => {
           'Michael Simoneau architects resilient systems for highly regulated industries, blending AI innovation, zero-trust security, and pragmatic leadership.',
         image: 'https://www.michaelsimoneau.com/profile-image.png',
         sameAs: [
-          'https://www.linkedin.com/in/EnigmaKeyCEO',
-          'https://github.com/EnigmaKeyCEO',
+          'https://www.linkedin.com/in/michaelsimoneau',
+          'https://github.com/MichaelSimoneau',
           'https://twitter.com/enigmakeyceo',
         ],
         knowsAbout: [
@@ -224,7 +227,7 @@ export const MainPage: React.FC = () => {
         <section 
           className="snap-start"
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
         >
@@ -233,14 +236,18 @@ export const MainPage: React.FC = () => {
 
         <SearchOptimizedSummary />
 
+        <ZeroHero />
+
         <CryptoFabricHero />
+
+        <ThthHero />
 
         <div id="profile">
           <motion.section
             id="about-me-section"
             className={`${sectionWrapperClasses}`}
             style={{
-              scrollMarginTop: '40vh',
+              // scrollMarginTop: '40vh',
               scrollMarginBottom: '40vh',
             }}
             initial={{opacity: 0}}
@@ -253,10 +260,25 @@ export const MainPage: React.FC = () => {
         </div>
 
         <motion.section 
+          id="testimonials-section"
+          className={`${sectionWrapperClasses} bg-gray-900/40`}
+          style={{
+            // scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
+          initial={{opacity: 0}}
+          whileInView={{opacity: 1}} 
+          viewport={{once: true, amount: 0.2}}
+          transition={{duration: 0.7}}
+        >
+          <Testimonials />
+        </motion.section>
+
+        <motion.section 
           id="expertise-section" 
           className={`${sectionWrapperClasses} bg-gray-900/40`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -277,7 +299,7 @@ export const MainPage: React.FC = () => {
           id="service-offerings-section"
           className={`${sectionWrapperClasses}`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -292,7 +314,7 @@ export const MainPage: React.FC = () => {
           id="cto-triage-section"
           className={`${sectionWrapperClasses} bg-gray-900/40`}
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -305,9 +327,9 @@ export const MainPage: React.FC = () => {
 
         <motion.section 
           id="blog-teaser-section" 
-          className={`${sectionWrapperClasses}`}
+          className="py-8 md:py-12 px-4 relative snap-start"
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
           initial={{opacity: 0}}
@@ -321,7 +343,7 @@ export const MainPage: React.FC = () => {
         <section 
           className="snap-start"
           style={{
-            scrollMarginTop: '40vh',
+            // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
           }}
         >

@@ -324,9 +324,9 @@ const StormScene: React.FC = () => {
   );
 };
 
-export const NebulaStormBackground: React.FC = () => {
+export const NebulaStormBackground: React.FC<{ className?: string }> = ({ className }) => {
   return (
-    <div className="fixed inset-0 -z-50 w-screen h-screen bg-[#000510]">
+    <div className={`inset-0 -z-50 bg-[#000510] ${className || "fixed w-screen h-screen"}`}>
       <Canvas
         camera={{ position: [0, 0, 15], fov: 60 }}
         style={{

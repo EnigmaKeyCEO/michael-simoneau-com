@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App'; // App will become a layout/outlet component
 import './index.css';
 import { ScrollProvider } from './contexts/ScrollContext';
+import { GlobalErrorElement } from './layout/GlobalErrorBoundary';
 
 // Import page/route components
 import { NotFound } from "./layout/NotFound";
@@ -13,6 +14,7 @@ import { Interview } from "./features/interview/components/Interview";
 import { ZeroTruth } from "./features/zero-truth/components/ZeroTruth";
 import { FullProfile } from "./pages/FullProfile";
 import { CryptoFabric } from "./pages/CryptoFabric";
+import { Thth } from "./pages/Thth";
 
 // Lazy load main page component
 const LazyMainPage = lazy(() => 
@@ -25,11 +27,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />, // App component will now act as a layout, rendering an Outlet
+    errorElement: <GlobalErrorElement />,
     children: [
       {
         index: true, // This makes it the default child route for "/"
         element: (
-          <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white">Initializing Interface...</div>}>
+          <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white text-center px-4">Initializing Interface...</div>}>
             <ScrollProvider>
               <LazyMainPage />
             </ScrollProvider>
@@ -59,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "crypto-fabric",
         element: <CryptoFabric />,
+      },
+      {
+        path: "thth",
+        element: <Thth />,
       },
       {
         path: "*",

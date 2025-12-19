@@ -11,7 +11,7 @@ export const HeroSection: React.FC = () => {
       id="new-hero"
       className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-16 relative overflow-hidden snap-start"
       style={{
-        scrollMarginTop: '40vh',
+        // scrollMarginTop: '40vh',
         scrollMarginBottom: '40vh',
       }}
     >
@@ -22,7 +22,8 @@ export const HeroSection: React.FC = () => {
 
       <motion.div
         initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="text-center z-10"
       >
@@ -40,7 +41,8 @@ export const HeroSection: React.FC = () => {
       <motion.div 
         className="w-full max-w-2xl mx-auto my-8 z-10"
         initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.5 }}
       >
         <InterviewButton />
