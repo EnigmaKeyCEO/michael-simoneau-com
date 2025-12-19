@@ -5,6 +5,7 @@ import { HeroSection } from '../features/profile/components/HeroSection';
 import { StoneXProject } from '../features/portfolio/components/StoneXProject';
 import { JPMorganProject } from '../features/portfolio/components/JPMorganProject';
 import { AboutMeSection } from '../features/profile/components/AboutMeSection';
+import { Testimonials } from '../features/profile/components/Testimonials';
 import { ServiceOffering } from '../features/profile/components/ServiceOffering';
 import { CTOTriage } from '../features/profile/components/CTOTriage';
 import { BlogTeaser } from '../features/blog/components/BlogTeaser';
@@ -259,6 +260,21 @@ export const MainPage: React.FC = () => {
         </div>
 
         <motion.section 
+          id="testimonials-section"
+          className={`${sectionWrapperClasses} bg-gray-900/40`}
+          style={{
+            // scrollMarginTop: '40vh',
+            scrollMarginBottom: '40vh',
+          }}
+          initial={{opacity: 0}}
+          whileInView={{opacity: 1}} 
+          viewport={{once: true, amount: 0.2}}
+          transition={{duration: 0.7}}
+        >
+          <Testimonials />
+        </motion.section>
+
+        <motion.section 
           id="expertise-section" 
           className={`${sectionWrapperClasses} bg-gray-900/40`}
           style={{
@@ -311,7 +327,7 @@ export const MainPage: React.FC = () => {
 
         <motion.section 
           id="blog-teaser-section" 
-          className={`${sectionWrapperClasses}`}
+          className="py-8 md:py-12 px-4 relative snap-start"
           style={{
             // scrollMarginTop: '40vh',
             scrollMarginBottom: '40vh',
