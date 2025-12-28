@@ -171,7 +171,7 @@ export const MainPage: React.FC = () => {
     }
   }, [registerMainScrollContainer]);
 
-  const sectionWrapperClasses = "py-12 md:py-20 px-4 relative snap-start";
+  const sectionWrapperClasses = "py-12 md:py-20 px-4 relative";
 
   return (
     <>
@@ -220,17 +220,11 @@ export const MainPage: React.FC = () => {
       <div
         ref={scrollContainerRef}
         id="new-main-page-scroll-container"
-        className="text-white h-screen flex flex-col overflow-y-auto overflow-x-hidden overscroll-behavior-x-none snap-y snap-mandatory scroll-smooth relative z-10"
+        className="text-white h-screen flex flex-col overflow-y-auto overflow-x-hidden overscroll-behavior-x-none scroll-smooth relative z-10"
       >
         <MainNav scrollContainerId="new-main-page-scroll-container" />
 
-        <section 
-          className="snap-start"
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
-        >
+        <section>
           <HeroSection />
         </section>
 
@@ -244,12 +238,8 @@ export const MainPage: React.FC = () => {
 
         <div id="profile">
           <motion.section
-            id="about-me-section"
+            id="about-me"
             className={`${sectionWrapperClasses}`}
-            style={{
-              // scrollMarginTop: '40vh',
-              scrollMarginBottom: '40vh',
-            }}
             initial={{opacity: 0}}
             whileInView={{opacity: 1}} 
             viewport={{once: true, amount: 0.2}}
@@ -260,12 +250,8 @@ export const MainPage: React.FC = () => {
         </div>
 
         <motion.section 
-          id="testimonials-section"
+          id="testimonials"
           className={`${sectionWrapperClasses} bg-gray-900/40`}
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -275,12 +261,8 @@ export const MainPage: React.FC = () => {
         </motion.section>
 
         <motion.section 
-          id="expertise-section" 
+          id="expertise" 
           className={`${sectionWrapperClasses} bg-gray-900/40`}
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -296,12 +278,8 @@ export const MainPage: React.FC = () => {
         </motion.section>
 
         <motion.section 
-          id="service-offerings-section"
+          id="service-offerings"
           className={`${sectionWrapperClasses}`}
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -311,12 +289,8 @@ export const MainPage: React.FC = () => {
         </motion.section>
 
         <motion.section 
-          id="cto-triage-section"
+          id="cto-triage"
           className={`${sectionWrapperClasses} bg-gray-900/40`}
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
           initial={{opacity: 0}}
           whileInView={{opacity: 1}} 
           viewport={{once: true, amount: 0.2}}
@@ -325,28 +299,9 @@ export const MainPage: React.FC = () => {
           <CTOTriage />
         </motion.section>
 
-        <motion.section 
-          id="blog-teaser-section" 
-          className="py-8 md:py-12 px-4 relative snap-start"
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
-          initial={{opacity: 0}}
-          whileInView={{opacity: 1}} 
-          viewport={{once: true, amount: 0.2}}
-          transition={{duration: 0.7}}
-        >
-          <BlogTeaser />
-        </motion.section>
+        <BlogTeaser />
         
-        <section 
-          className="snap-start"
-          style={{
-            // scrollMarginTop: '40vh',
-            scrollMarginBottom: '40vh',
-          }}
-        >
+        <section>
           <ContactFooter />
         </section>
       </div>

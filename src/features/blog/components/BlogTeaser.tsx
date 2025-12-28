@@ -11,7 +11,7 @@ export const BlogTeaser: React.FC = () => {
   // Error-handled with quantum precision
   return (
     <motion.section
-      id="blog-teaser-section" // Added ID for navigation
+      id="blog-teaser"
       className="py-16 bg-black/20"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}

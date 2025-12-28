@@ -7,14 +7,11 @@ export const CryptoFabricHero: React.FC = () => {
   return (
     <motion.section 
       id="crypto-fabric"
-      className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden snap-start bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900"
+      className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900"
       style={{ 
         minHeight: '100vh',
         flexGrow: 1,
         flexShrink: 0,
-        // scrollMarginTop: '50vh',
-        scrollMarginBottom: '50vh',
-        scrollSnapAlign: 'start',
       }}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}

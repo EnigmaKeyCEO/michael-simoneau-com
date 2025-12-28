@@ -110,11 +110,11 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
         <nav className="hidden md:flex items-center space-x-6 xl:space-x-8 relative" ref={labsRef}>
           {!isLabsExpanded && (
             <>
-              <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
-              <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
-              <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-              <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-              <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+              <button onClick={() => handleSectionLinkClick('about-me')} className="text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+              <button onClick={() => handleSectionLinkClick('expertise')} className="text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+              <button onClick={() => handleSectionLinkClick('service-offerings')} className="text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+              <button onClick={() => handleSectionLinkClick('cto-triage')} className="text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+              <button onClick={() => handleSectionLinkClick('blog-teaser')} className="text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
               
               {isHomePage ? (
                 <button onClick={() => handleSectionLinkClick('profile')} className="text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
@@ -227,11 +227,11 @@ export const MainNav: React.FC<MainNavProps> = ({ scrollContainerId }) => {
                   </Link>
                 )}
                 
-                <button onClick={() => handleSectionLinkClick('about-me-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
-                <button onClick={() => handleSectionLinkClick('expertise-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
-                <button onClick={() => handleSectionLinkClick('service-offerings-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
-                <button onClick={() => handleSectionLinkClick('cto-triage-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
-                <button onClick={() => handleSectionLinkClick('blog-teaser-section')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
+                <button onClick={() => handleSectionLinkClick('about-me')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">About</button>
+                <button onClick={() => handleSectionLinkClick('expertise')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Expertise</button>
+                <button onClick={() => handleSectionLinkClick('service-offerings')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Services</button>
+                <button onClick={() => handleSectionLinkClick('cto-triage')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Consulting</button>
+                <button onClick={() => handleSectionLinkClick('blog-teaser')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors">Insights</button>
 
                 {isHomePage ? (
                   <button onClick={() => handleSectionLinkClick('profile')} className="text-xl text-gray-300 hover:text-cyan-400 transition-colors flex items-center">
