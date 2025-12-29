@@ -1,0 +1,565 @@
+﻿MASTER_PLAN.plan.md
+Zeroth Language + Protocol0 Implementation Master Plan
+Prime Directives (your words)
+* “observation being its own history… [and] eventually get taken into consideration in the collapse function… injecting potential spawn until convergence (0) is met (within tolerance defined by system engineer, writer of .zero file).”
+* “latent unless observed… but be fully able to be visible at ANY ‘TIME’… so it needs the observability layer to be real-time and constant.”
+* “-1:0:1 understanding the value AND position… negative is potential vs actual… left vs right, down vs up… all 3 at the same time!”
+* “they’re hex. it’s easily both.” (machine dense + human readable)
+* “use BOTH … and proxy between with OUR module that is efficient and doesn’t have miners (not needed)… ‘it IS a validator! (No fees, it runs locally…)’”
+* “i like the git fashion… ‘git + my hashing theory… would be the crypto security and chaining i need.’”
+Outcome Targets
+1. Zeroth Language runtime: .zero interpreted + .z compiled
+2. “Living” website: localhost:101, evolves via iteration, retains memory, decays naturally via convergence/derivative rewriting
+3. Observability always on: can view projection at any time; observation events become history
+4. DNA Hash system: position-aware, signed-ternary -1/0/1, hex encoded, lineage preserving, self-verifying
+5. Observation signing: produces signed events; identity binds observer→history
+6. Protocol0: local validator (no miners, no fees) that verifies plausibility/causality and can bridge Ed25519 + secp256k1
+________________
+
+
+Execution Model
+* Work is broken into numbered phases.
+* Each phase has its own file: PHASE_N.plan.md
+* You complete phases in order; later phases assume earlier ones exist.
+Phase Index
+* PHASE 1 — Repository + Module Skeleton (foundation)
+* PHASE 2 — Zeroth Runtime Core (loop, memory, convergence, decay)
+* PHASE 3 — .zero Front-End (AST) + .z binary format (ZIR)
+* PHASE 4 — Robust Runner + Watch Mode + Hot-Swap
+* PHASE 5 — Observability Layer (web + CLI hooks) and observation-as-history
+* PHASE 6 — Ledger (append-only) + Git-style chaining
+* PHASE 7 — DNA Hashes (hex, positional, signed-ternary)
+* PHASE 8 — Observation Signing (Ed25519 + secp256k1 via Protocol0 proxy)
+* PHASE 9 — Protocol0 Validator (plausibility verification + negative space checks)
+* PHASE 10 — Test Suite + Packaging + Release Checklist
+________________
+
+
+How the Phase Files Link Together
+* PHASE 1 builds the directory structure and contract surfaces.
+* PHASE 2 builds the “outermost process (iteration) calls itself” loop and memory decay.
+* PHASE 3 locks program representation: .zero and .z.
+* PHASE 4 makes zeroth <file> a long-running daemon/runtime (by extension).
+* PHASE 5 ensures “latent unless observed” but observable “at ANY time”.
+* PHASE 6 creates an immutable, append-only ledger in the “git fashion”.
+* PHASE 7 adds your “hex, positional meaning, signed ternary” DNA backbone.
+* PHASE 8 makes observations cryptographic and identity-bound (both key types).
+* PHASE 9 implements “no miners… it IS a validator… runs locally” Protocol0 verifier.
+* PHASE 10 makes it robust: tests, docs, packaging, smoke runs.
+________________
+
+
+Repo Naming + File Naming Conventions
+* Plans: PHASE_N.plan.md, MASTER_PLAN.plan.md
+* Specs: SPEC_*.md (e.g., SPEC_Z_FORMAT.md, SPEC_PROTOCOL0.md)
+* Tests: tests/test_*.py
+* Binaries: *.z (compiled)
+* Sources: *.zero (interpreted/compiled)
+* Logs/Ledger: ledger/*.log or ledger/*.p0
+________________
+
+
+Non-Negotiable Invariants
+1. No reset of living state during normal running; memory is derivative.
+2. Forgetting is convergence (“becomes CONVERGED… close enough to 0=TRUE again”).
+3. Observation is history; history participates in collapse.
+4. Hex DNA hashes are positional + self-verifying.
+5. Protocol0 has no miners/fees; it validates plausibility only.
+________________
+
+
+Deliverables Checklist
+When all phases are complete, you will have:
+* zeroth command with subcommands (run/observe/history/state/align/converge/potential/dimension/compile/status/stop)
+* .zero and .z dual-mode runtime by extension
+* localhost:101 living page + /history
+* ledger: append-only, chain-hashed
+* DNA: 64-bit+ (extensible) positional hex hash engine
+* signing: Ed25519 + secp256k1 supported; Protocol0 proxy normalizes them
+* Protocol0 validator: replay + plausibility checks + negative-space constraints
+* full test suite + packaged install
+________________
+
+
+Start Here
+Proceed to: PHASE_1.plan.md
+________________
+
+
+PHASE_1.plan.md
+Phase 1 — Repository + Module Skeleton (Foundation)
+Goal
+Create the complete project skeleton with explicit module boundaries so every later phase plugs in cleanly.
+Definition of Done
+* Repo contains all directories and placeholder modules listed below
+* python3.11 -m zeroth --help works (even if stub)
+* zeroth entrypoint exists (dev-mode script or package console_script)
+* Plan + spec files committed
+________________
+
+
+TODOs
+1.1 Create directory layout
+Create:
+* zeroth/ package
+* zeroth/compiler/
+* zeroth/vm/
+* zeroth/web/
+* zeroth/observe/
+* zeroth/ledger/
+* zeroth/crypto/
+* zeroth/protocol0/
+* tests/
+* examples/
+* docs/
+1.2 Create module stubs (empty but importable)
+* zeroth/__init__.py
+* zeroth/__main__.py
+* zeroth/cli.py
+* zeroth/runner.py
+* zeroth/compiler/{parser.py,ast.py,compiler.py,serializer.py,deserializer.py}
+* zeroth/vm/{vm.py,memory.py,decay.py,tokenizer.py,loader.py}
+* zeroth/web/{server.py,renderer.py}
+* zeroth/observe/{observer.py}
+* zeroth/ledger/{ledger.py,format.py}
+* zeroth/crypto/{dna.py,keys.py,sign.py}
+* zeroth/protocol0/{event.py,validator.py,proxy.py,export.py,import.py,spec.py}
+1.3 Define CLI surface (stubs)
+Add subcommands as placeholders:
+* run, compile, observe, history, status, stop (others come in later phases)
+1.4 Decide dev install path
+* Option A: python -m zeroth during development
+* Option B: install with pip install -e . and zeroth command
+(Implement both; B is the target.)
+________________
+
+
+Notes (Invariant reminders)
+* Future phases require: “observation is its own history” and “latent unless observed”.
+* Protocol0 will be “no miners… it IS a validator… runs locally”.
+________________
+
+
+Outputs
+* All modules importable
+* Minimal zeroth command dispatch works
+* Proceed to PHASE_2.plan.md
+________________
+
+
+PHASE_2.plan.md
+Phase 2 — Zeroth Runtime Core (Loop, Memory, Convergence, Decay)
+Goal
+Implement the living VM core:
+* continuous iteration loop
+* memory retention + natural decay (“everything has limits”)
+* convergence detection with tolerance ε
+* potential injection: 0 + -1 triggers continued existence
+Definition of Done
+* VM runs iterations deterministically
+* Memory persists across observations
+* Forgetting is derivative of convergence/iteration (not deletion)
+* Convergence triggers truth record + potential reinjection
+________________
+
+
+TODOs
+2.1 Implement Memory
+* Store divergence vector D for states
+* Normalize to enforce “truth is 0” equilibrium
+* Provide inject/perturb method
+2.2 Implement Decay
+* Decay as gradual exhaustion (e.g., multiply by <1)
+* Ensure “forgotten… but only when rewritten by derivative memory via iterations”
+2.3 Implement Convergence
+* Define convergence metric (max|D|, entropy proxy, etc.)
+* Implement epsilon threshold from .zero program (“tolerance defined by system engineer”)
+2.4 Implement potential injection rule
+Your words to encode:
+* “truth IS 0”
+* “0 + -1 (potential) is inherently introduced in every system”
+* “if it’s 0.. then it’s GOING to start 0+-1…”
+So: when convergence within ε:
+* record truth event
+* inject -1 potential impulse
+* continue
+2.5 Implement iteration loop hooks
+* Step function: one iteration
+* Loop function: continuous stepping (used by runner)
+________________
+
+
+Outputs
+* zeroth/vm/vm.py, memory.py, decay.py functional
+* Proceed to PHASE_3.plan.md
+________________
+
+
+PHASE_3.plan.md
+Phase 3 — .zero Front-End + .z Binary Format
+Goal
+Support both:
+* .zero interpreted compilation pipeline
+* .z compiled binary pipeline (no JSON; binary ZIR)
+Definition of Done
+* .zero parses to AST
+* AST compiles to ZIR
+* ZIR serializes to .z and back
+* .z runner can load without parsing .zero
+________________
+
+
+TODOs
+3.1 Define .zero minimal grammar (EBNF-lite)
+Support initially:
+* state NAME
+* align A B strength X
+* observe convergence epsilon E
+3.2 Implement parser → AST
+* Strict validation and helpful errors
+* Preserve source positions (for future diagnostics)
+3.3 Implement compiler → ZIR
+ZIR contains:
+* states + mapping
+* alignments
+* epsilon
+* seed_potential (boot impulse)
+3.4 Implement .z binary format
+* Magic, version, counts, epsilon
+* State table (len+utf8 bytes)
+* Alignment table (i,j,strength)
+* Seed block
+3.5 Implement serializer/deserializer
+* Deterministic
+* Forward-extensible sections (future: ledger pointers, optimizer blocks)
+________________
+
+
+Outputs
+* zeroth/compiler/* functional
+* .zero -> .z compile works
+* Proceed to PHASE_4.plan.md
+________________
+
+
+PHASE_4.plan.md
+Phase 4 — Robust Runner + Watch Mode + Hot Swap
+Goal
+A real runtime command:
+* zeroth program.z → runs compiled daemon
+* zeroth program.zero → runs interpreted + auto-compiles .z + watches file + hot-reloads Behavior determined “simply by the parameter file extension”.
+Definition of Done
+* zeroth foo.z starts daemon, prints PID, continues after terminal closes
+* zeroth foo.zero starts daemon, prints PID, compiles .z, watches .zero, hot-swaps program topology on edits
+* Hot swap does NOT reset: memory, observation history, lineage
+________________
+
+
+TODOs
+4.1 Implement daemonization (macOS-compatible)
+* PID reporting
+* signal handling (SIGTERM/SIGINT)
+4.2 Implement loader
+* .z → load binary
+* .zero → compile + emit .z sidecar
+4.3 Implement watcher (polling is fine initially)
+* detect file change
+* recompile
+* hot swap safely
+4.4 Implement VM hot-swap method
+* allow topology update
+* preserve “living” aspects:
+   * memory D
+   * observation history
+   * ledger pointer
+4.5 Port management
+* default localhost:101
+* ensure single instance binds correctly
+* plan multi-instance later (not now)
+________________
+
+
+Outputs
+* runtime is long-running and interactive through observation endpoints
+* Proceed to PHASE_5.plan.md
+________________
+
+
+PHASE_5.plan.md
+Phase 5 — Observability Layer + Observation-as-History
+Goal
+Implement “latent unless observed” + “visible at ANY time” by making observation:
+* always available
+* real-time
+* recorded as history
+* fed back into convergence/collapse
+Definition of Done
+* Web server serves projection at / and history at /history
+* Observation events append to observation history
+* Observation pressure participates in convergence evaluation
+* You can refresh and later see “Hello Universe” + trace how it got there
+________________
+
+
+TODOs
+5.1 Implement Observer
+* Snapshot without mutating field state immediately
+* Append observation record (iteration, projection, dominant state, convergence)
+5.2 Integrate observation into convergence
+Your words to encode:
+* “observation is part of the loop… taken into consideration in the collapse function” So:
+* effective_convergence = field_convergence + observation_pressure(history)
+5.3 Web endpoints
+* / → triggers observation + renders current projection
+* /history → renders recent observation + collapse + merge lineage references
+5.4 CLI observe/history (local)
+* zeroth observe asks the running process for snapshot
+* zeroth history explain prints causal path
+(Protocol plumbing comes later; start with local file/log view if needed.)
+________________
+
+
+Outputs
+* always-on observability, observation is history
+* Proceed to PHASE_6.plan.md
+________________
+
+
+PHASE_6.plan.md
+Phase 6 — Ledger (Append-Only) + Git-Style Chaining
+Goal
+Create the immutable ledger in the “git fashion”:
+* append-only records
+* parent references
+* content-addressed chaining
+* deterministic replay
+Definition of Done
+* every observation event appends to ledger
+* every collapse/merge appends to ledger
+* ledger is tamper-evident via hash chaining
+* ledger can be replayed to validate plausibility later (Protocol0)
+________________
+
+
+TODOs
+6.1 Define ledger record format
+Include:
+* record_type: OBSERVE/COLLAPSE/MERGE/POTENTIAL
+* iteration
+* program DNA or program hash
+* parent record hash
+* payload hash
+* payload (compact)
+6.2 Implement append-only storage
+* file-based log (single writer)
+* fsync / durability decisions (configurable)
+6.3 Implement chain hashing
+* each record hashes: prev_hash + record_bytes
+* produces a DAG-like chain (linear at first; later allow branches only via explicit merge events)
+6.4 Implement replay
+* read ledger
+* verify chain
+* reconstruct event sequence
+________________
+
+
+Outputs
+* zeroth/ledger/* functional
+* Proceed to PHASE_7.plan.md
+________________
+
+
+PHASE_7.plan.md
+Phase 7 — DNA Hashes (Hex, Positional, Signed-Ternary)
+Goal
+Implement your DNA concept in Zeroth:
+* “hash as Public Key” with positional categorical markers
+* “ledger as Value Store”
+* “hash design must balance information density with usability”
+* “they’re hex. it’s easily both.”
+Definition of Done
+* DNA hashes are hex
+* position encodes class/field/orientation/parent
+* signed ternary -1/0/1 pack/unpack works
+* hashes self-verify (checksum)
+* ledger keys are DNA hashes
+________________
+
+
+TODOs
+7.1 Implement DNA hash spec v1
+* layout segments
+* class codes (STATE/DIMENSION/OBSERVATION/COLLAPSE/POTENTIAL)
+* field/regime byte
+* orientation 8×2-bit cells mapping (-1/0/+1)
+* checksum
+7.2 Bind DNA hashes to runtime entities
+* each observation record includes DNA event id
+* collapse creates new DNA hash with parent lineage
+* merge produces composite lineage DNA
+7.3 Ensure “composite lineage”
+Your words: “composite lineage… collapse of wave functions… history is collection of truth” So merge events:
+* include both parent DNA refs
+* produce new composite DNA
+________________
+
+
+Outputs
+* zeroth/crypto/dna.py complete and integrated
+* Proceed to PHASE_8.plan.md
+________________
+
+
+PHASE_8.plan.md
+Phase 8 — DNA-Backed Observation Signing (Ed25519 + secp256k1)
+Goal
+Support a third option (“Protocol0”) that uses both:
+* Ed25519 for local-first fast signing
+* secp256k1 for Ethereum-style compatibility
+* but avoids miners/fees because “it IS a validator… runs locally”
+Definition of Done
+* observations become signed events: “observation → signed DNA event (YES)”
+* ledger stores signature + public key + event bytes hash
+* Protocol0 proxy normalizes both signature schemes into one internal verification API
+________________
+
+
+TODOs
+8.1 Key management
+* generate/store Ed25519 keys (local identity)
+* optionally load secp256k1 (bridge identity)
+* key rotation + metadata
+8.2 Canonical event encoding
+Define canonical bytes for signing:
+* dna_hash
+* iteration
+* projection digest
+* parent record hash
+* optional nonce/replay guard
+8.3 Implement signing + verification
+* sign(event_bytes, scheme) → signature
+* verify(event_bytes, signature, pubkey, scheme) → bool
+8.4 Ledger integration
+* append signed observation record with proof fields:
+   * scheme
+   * pubkey
+   * signature
+   * event_hash
+8.5 Policy: observation affects convergence
+Optionally weight observation pressure by:
+* known key
+* trust policy (later)
+________________
+
+
+Outputs
+* signed observations, verifiable locally
+* Proceed to PHASE_9.plan.md
+________________
+
+
+PHASE_9.plan.md
+Phase 9 — Protocol0 Validator (No Miners, Plausibility Verifier)
+Goal
+Implement “protocol0”:
+* “use BOTH” key systems
+* proxy between them
+* “efficient and doesn’t have miners”
+* “it IS a validator! (No fees, it runs locally…)”
+* uses negative space/potential to “fill the gaps of an otherwise nearly complete but seemingly fractured system”
+Definition of Done
+* Protocol0 reads ledger + signed events
+* verifies signatures (Ed25519/secp256k1)
+* verifies chain integrity (git-style)
+* replays events and checks plausibility constraints:
+   * no impossible jump in convergence
+   * orientation/ternary packing valid
+   * merges obey composite lineage rules
+   * potential injection occurs when truth within tolerance
+* outputs VALID/INVALID with reasons
+________________
+
+
+TODOs
+9.1 Protocol0 event types
+* OBSERVE, COLLAPSE, MERGE, POTENTIAL, META
+9.2 Validator core
+* load ledger
+* verify chain hashes
+* verify signatures
+* run plausibility checks against Zeroth invariants
+9.3 Negative-space checks
+* ensure unobserved truth remains latent
+* ensure observation creates history
+* ensure forgetting is derivative (no deletions)
+9.4 Proxy module
+* unify verification results under one API:
+   * protocol0.verify(event) independent of signature scheme
+9.5 Export/import
+* export proof bundles (ledger slice + keys + hashes)
+* import and validate elsewhere (still local-first)
+________________
+
+
+Outputs
+* zeroth/protocol0/* functional
+* Proceed to PHASE_10.plan.md
+________________
+
+
+PHASE_10.plan.md
+Phase 10 — Tests + Packaging + Release Checklist
+Goal
+Make the system robust and shippable:
+* repeatable tests
+* clear documentation
+* packaged runner
+* smoke demo: “living HTML page served on localhost:101”
+Definition of Done
+* pytest passes
+* packaged zeroth command works after install
+* demo scripts produce deterministic behavior given same seed/config
+* protocol0 validates ledgers produced by runtime
+________________
+
+
+TODOs
+10.1 Unit tests
+* DNA pack/unpack/verify
+* .z serializer/deserializer round-trip
+* ledger chain integrity
+* signature verification for both schemes
+* convergence + potential injection loop invariants
+10.2 Integration tests
+* run .zero watch mode; edit file; hot swap; memory persists
+* run .z compiled mode; serve localhost:101
+* observation creates history; history affects convergence
+10.3 Protocol0 validation tests
+* valid ledger passes
+* tampered record fails
+* signature mismatch fails
+* missing parent fails
+* invalid ternary/orientation fails
+10.4 Packaging
+* pyproject.toml / console_scripts entrypoint: zeroth
+* versioning scheme
+* minimal docs:
+   * Quickstart
+   * Runtime model
+   * Protocol0 overview
+   * Ledger + DNA spec references
+10.5 Release checklist
+* tag release
+* publish to GitHub
+* optional PyPI
+* demo recording instructions
+________________
+
+
+Outputs
+* complete, usable system
+* ready for optimizer and advanced features
+________________
+
+
+Want me to also generate the folder tree + empty files and a “Phase 1 bootstrap checklist” you can literally tick off line-by-line?

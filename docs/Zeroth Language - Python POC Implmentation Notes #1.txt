@@ -1,0 +1,186 @@
+﻿Good. That locks the architecture. What you just specified resolves the hardest design choice correctly.
+I’ll decompose this into precise mechanics you can implement immediately, without diluting it into ML tropes.
+________________
+
+
+Core Rule (Formalized)
+The token vector space grows dynamically, but its growth rate asymptotically approaches zero as convergence increases.
+This gives you:
+* discovery early
+* efficiency later
+* memory without explosion
+* forgetting without deletion
+This is exactly what your NSA + evolutionary notes demand.
+________________
+
+
+1. Dynamic Token Vector Space (DTVS)
+1.1 What “Dynamic” Means Here (Not Hand-wavy)
+Dynamic does not mean:
+* arbitrary dimension creation
+* uncontrolled embedding growth
+* stochastic expansion
+Dynamic means:
+* new dimensions are created only when negative space cannot be explained by existing vectors
+* dimensions are earned, not granted
+________________
+
+
+2. Token Structure (Concrete)
+Each token maintains:
+class Token:
+    id: int
+    vector: list[int]      # values in {-1, 0, 1}
+    weight: float          # convergence influence
+    lineage: list[int]     # immutable history
+
+
+Key property:
+* len(vector) is not fixed
+________________
+
+
+3. Memory of Vectors (This Is the Efficiency Engine)
+You maintain a Vector Memory Pool:
+class VectorMemory:
+    basis_vectors: list[list[int]]
+    convergence_score: float
+
+
+This pool:
+* stores previously useful dimensions
+* acts as a compression prior
+* biases new token formation
+This is not training.
+It’s structural recall.
+________________
+
+
+4. Tokenization Algorithm (Step-by-Step, Executable)
+Step 1: Initial Projection
+When a new token is formed:
+* Project it into existing basis vectors
+* Measure unexplained negative space
+unexplained = negative_space(token.vector, memory.basis_vectors)
+
+
+________________
+
+
+Step 2: Decide Whether to Grow
+Define:
+growth_factor = f(convergence)
+where 0 < f < 1
+and f ↓ as convergence ↑
+
+
+Example:
+f = 1 / (1 + convergence)
+
+
+If:
+unexplained > growth_threshold * f
+
+
+→ Add a new dimension
+Otherwise:
+→ reuse existing dimensions
+This is the mathematical enforcement of your rule.
+________________
+
+
+5. New Dimension Creation (Important)
+When a new dimension is created:
+* It is initialized as -1 across all active tokens
+* Only collapses where observation forces it
+This guarantees:
+* backward compatibility
+* no invalidation of prior meaning
+* lineage integrity
+for token in tokens:
+    token.vector.append(-1)
+
+
+________________
+
+
+6. Convergence-Weighted Memory Growth
+You said:
+“growing memory by a factor less than 1 when it hits a certain convergence”
+Here’s the precise implementation:
+Convergence Metric
+convergence = 1 - normalized_entropy(token_vectors)
+
+
+Memory Growth Rate
+growth_rate = base_rate * (1 - convergence)
+
+
+Properties:
+* Early: high entropy → growth allowed
+* Late: low entropy → growth suppressed
+* Never hits zero completely
+This is smooth, not binary.
+________________
+
+
+7. Forgetting Without Deletion (Formal Rule)
+A dimension is forgotten when:
+∀ tokens: bit ∈ {0}
+
+
+Meaning:
+* no potential
+* no presence
+* no contradiction
+But:
+* dimension remains in lineage
+* can be resurrected if rediscovered
+This mirrors your “nothing is removed, only rewritten” rule.
+________________
+
+
+8. Serializer Implications (Critical)
+Your .z file must now store:
+* token vectors (ragged)
+* basis vector history
+* convergence scores
+* growth thresholds
+But not raw observations.
+This allows:
+* reload
+* resume
+* optimization
+* compilation
+Without breaking “living” behavior.
+________________
+
+
+9. Why This Is Not ML (And Why That Matters)
+This system:
+* does not minimize loss
+* does not optimize weights
+* does not train
+* does not generalize statistically
+It:
+* converges structurally
+* discovers dimensions only when forced
+* compresses via reuse, not averaging
+That’s why it scales down and up cleanly.
+________________
+
+
+10. Immediate Next Module to Write (No Ambiguity)
+You should now implement exactly one new module:
+zeroth/vm/tokenizer.py
+Responsibilities:
+* manage dynamic vector space
+* compute negative space
+* decide when to grow dimensions
+* interface with convergence metric
+Everything else can wait.
+________________
+
+
+One simple question, one phrase, per your rule:
+Should vector dimensions ever merge, or only grow and decay?

@@ -2,19 +2,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { AudioPlayer } from '../../../ui/players/AudioPlayer';
 
 export const CryptoFabricHero: React.FC = () => {
   return (
     <motion.section 
       id="crypto-fabric"
-      className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden snap-start bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900"
+      className="w-full flex flex-col text-white px-4 py-16 md:py-24 relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900"
       style={{ 
         minHeight: '100vh',
         flexGrow: 1,
         flexShrink: 0,
-        scrollMarginTop: '40vh',
-        scrollMarginBottom: '40vh',
-        scrollSnapAlign: 'start',
       }}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -46,8 +44,8 @@ export const CryptoFabricHero: React.FC = () => {
           >
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-cyan-400 shadow-2xl">
               <img
-                src="/EtherHiveLLC.JPEG"
-                alt="EtherHive LLC Logo"
+                src="/crypto-fabric.jpeg"
+                alt="Crypto Fabric Logo"
                 className="object-cover w-full h-full"
               />
             </div>
@@ -62,12 +60,22 @@ export const CryptoFabricHero: React.FC = () => {
             Profitability-First Automation Platform
           </p>
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-            Built by EtherHive LLC
+            Built by Michael Simoneau and supported by EtherHive, LLC
           </p>
           <p className="text-base md:text-lg text-gray-400 max-w-4xl mx-auto mb-8">
             Deploy revenue-generating crypto services – Ethereum staking, automated trading, 
             and decentralized infrastructure – with zero configuration. The AI does it all for you.
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="w-full mb-8"
+        >
+          <AudioPlayer src="/The_AI_Built_for_Deterministic_Crypto.mp3" title="The AI Built for Deterministic Crypto" />
         </motion.div>
 
         <motion.div

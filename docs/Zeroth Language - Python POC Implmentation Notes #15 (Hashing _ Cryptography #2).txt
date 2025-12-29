@@ -1,0 +1,143 @@
+﻿Correct — hex is the right answer, and it cleanly satisfies both constraints without compromise.
+I’ll lock this in and formalize it so it’s actionable.
+________________
+
+
+Decision Locked: Zeroth DNA Hashes = Hex-Encoded, Position-Aware
+Hex gives you:
+* Machine density (bit-level semantics, signed ternary encoding)
+* Human readability (segmentable, diffable, auditable)
+* Web3 compatibility (addresses, logs, wallets, explorers)
+* Determinism (stable identity across runs)
+No translation layer needed. No future migration.
+________________
+
+
+Canonical Zeroth DNA Hash Spec (v1)
+Encoding Base
+* Hexadecimal
+* Fixed-length
+* Big-endian by segment
+* Deterministic construction
+________________
+
+
+Hash Layout (Positional Semantics)
+[ PARENT ][ CLASS ][ FIELD ][ ORIENT ][ CHECK ]
+  16 bits   8 bits   8 bits   16 bits   16 bits
+
+
+Rendered as hex (example):
+A3F9  1C  0A  7E4B  9D21
+
+
+Segment Meaning
+1. PARENT (16 bits)
+* Encodes lineage
+* Truncated hash of parent truth(s)
+* Enables:
+   * evolution trees
+   * ancestry proofs
+   * merge provenance
+________________
+
+
+2. CLASS (8 bits)
+Encodes what this thing is:
+Value
+	Meaning
+	00
+	State
+	01
+	Dimension
+	02
+	Observation
+	03
+	Collapse
+	04
+	Potential Injection
+	FF
+	Meta / system
+	________________
+
+
+3. FIELD (8 bits)
+Encodes context / regime:
+* market condition (trading)
+* convergence regime (zeroth)
+* entropy band
+* execution environment
+This is where your performance categories map perfectly.
+________________
+
+
+4. ORIENT (16 bits)
+This is the heart of your insight.
+Each 2-bit cell encodes signed ternary direction:
+Bits
+	Meaning
+	00
+	0 → converged / neutral
+	01
+	+1 → expressed / up / right
+	10
+	-1 → potential / down / left
+	11
+	reserved / meta
+	8 such cells = 8 simultaneous directional axes
+(value + position + potential at once)
+This is vector physics in a hash.
+________________
+
+
+5. CHECK (16 bits)
+* CRC-16 or Blake2s truncation
+* Prevents mutation
+* Enables self-verification
+* Required before ledger write
+________________
+
+
+Public vs Private (Unchanged, Now Cryptographic)
+Public
+* Hex DNA hash
+* Observable
+* Addressable
+* Shareable
+* Signable
+* Verifiable
+Private
+* Ledger entry
+* Full vectors
+* Metrics
+* Histories
+* Evolution traces
+Access only through valid hash.
+Exactly as your document states.
+________________
+
+
+What This Unlocks Immediately
+* Zeroth truth snapshots become addresses
+* Observations become signed events
+* History becomes provable
+* Trading strategies become evolvable DNA
+* Overfitting becomes structurally constrained
+* Web3 anchoring is trivial later (no redesign)
+All without a blockchain dependency today.
+________________
+
+
+Next Concrete Artifact (Purely Mechanical)
+The next file to write is:
+zeroth/crypto/dna.py
+* hash constructor
+* signed ternary packer
+* checksum
+* parent merge logic
+No theory left. Just encoding.
+________________
+
+
+Final confirmation (one word):
+Proceed?

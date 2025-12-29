@@ -1,0 +1,213 @@
+﻿That’s the right instinct.
+“Web3-forward compatible” doesn’t mean on-chain now — it means cryptographically native, addressable, and portable without rewriting the system later.
+Here is the clean, future-proof decision and how it maps exactly onto Zeroth’s primitives.
+________________
+
+
+The Decision (Clear + Correct)
+Use a local TCP control port with a cryptographically signed message protocol.
+Not Unix sockets. Not REST. Not JSON-RPC as-is.
+This gives you:
+* Local-first today
+* Remote-capable tomorrow
+* Chain-anchorable later
+* No rewrite of semantics
+________________
+
+
+Why Unix Sockets Are the Wrong Choice (Long-Term)
+Unix sockets:
+* ❌ OS-specific
+* ❌ not addressable
+* ❌ not signable in a portable way
+* ❌ cannot cross machine boundaries
+* ❌ dead-end for Web3
+They are fine for tools.
+They are wrong for protocols.
+________________
+
+
+Why Plain TCP Alone Is Not Enough
+TCP alone:
+* ❌ no identity
+* ❌ no verifiability
+* ❌ no replay protection
+* ❌ no notion of “who observed”
+Zeroth cares about observation and history.
+So identity must be part of the message.
+________________
+
+
+The Correct Architecture
+Control Plane = Signed Control Messages over TCP
+zeroth CLI
+   |
+   |  (signed messages)
+   v
+Zeroth Control Port (localhost:4040)
+   |
+   |  (feeds observation + history)
+   v
+Zeroth VM
+
+
+This mirrors:
+* Ethereum JSON-RPC
+* libp2p messaging
+* wallet signing flows
+But remains local-first.
+________________
+
+
+Control Port (Concrete)
+* Port: localhost:4040
+* Protocol: length-prefixed binary frames
+* Transport: TCP
+* Auth: Ed25519 signatures (lightweight, modern)
+* Payload: canonical structured messages
+No HTTP.
+No REST.
+No GraphQL.
+________________
+
+
+Message = Observation (This Is the Key)
+In Zeroth terms:
+Every CLI command is an observation event.
+So the control protocol is not “admin commands”.
+It is observational interaction.
+That means:
+* commands leave history
+* commands affect convergence
+* commands are first-class truth inputs
+This aligns perfectly with your theory.
+________________
+
+
+Message Structure (Canonical)
+This is the minimal viable Web3-compatible envelope:
+[ LENGTH (uint32) ]
+[ MESSAGE BYTES ]
+
+
+Message Bytes (CBOR or canonical JSON)
+{
+  "id": "uuid",
+  "timestamp": 182938123,
+  "sender": "ed25519:ABC123...",
+  "command": "observe",
+  "target": "state:HELLO",
+  "params": {},
+  "signature": "0xdeadbeef..."
+}
+
+
+Key points:
+* sender = identity
+* signature = cryptographic proof
+* command = Zeroth primitive
+* timestamp = replay defense + time-as-history
+Later:
+* sender can be a wallet
+* signature can be verified on-chain
+* messages can be mirrored to IPFS / logs
+No redesign needed.
+________________
+
+
+Mapping CLI Commands → Protocol (Examples)
+zeroth observe
+{
+  "command": "observe",
+  "target": "projection"
+}
+
+
+zeroth history explain
+{
+  "command": "history",
+  "target": "explain"
+}
+
+
+zeroth potential inject -1
+{
+  "command": "potential",
+  "target": "inject",
+  "params": { "value": -1 }
+}
+
+
+All of these:
+* are observations
+* get signed
+* get logged
+* affect convergence indirectly
+________________
+
+
+Why This Is Web3-Forward Compatible (Explicit)
+This design allows, later:
+* 🔐 Wallet-based identity (MetaMask, hardware keys)
+* 📜 Signed observation history as proofs
+* 🌐 Remote Zeroth nodes
+* 🔁 State replication via signed logs
+* 🧾 On-chain anchoring of truth snapshots
+* 🤝 Multi-observer convergence
+Without changing:
+* Zeroth Language
+* Zeroth VM
+* Tokenizer
+* Observer logic
+Only the transport layer evolves.
+________________
+
+
+Important: No Blockchain Dependency
+This is not “blockchain-first”.
+* No gas
+* No chain
+* No contracts
+* No latency
+But:
+* cryptographic identity is native
+* messages are verifiable
+* history is portable
+That’s the correct order.
+________________
+
+
+What This Enables Immediately
+On day one, on your MacBook:
+zeroth observe
+zeroth history explain
+zeroth state HELLO
+
+
+Behind the scenes:
+* each command is signed
+* each command is logged
+* each command is an observation
+* convergence adapts
+You don’t just inspect the system.
+You participate in it.
+________________
+
+
+Next Engineering Artifact (When You’re Ready)
+The next file to write — and it’s purely mechanical — is:
+zeroth/control/server.py
+* TCP listener
+* signature verification
+* command dispatch
+* observer integration
+After that:
+* zeroth control client
+* keypair generation
+* wallet adapters (later)
+________________
+
+
+Final single question (literal, one phrase):
+Ed25519 keys or Ethereum-style secp256k1 keys?
+That choice locks the identity layer.

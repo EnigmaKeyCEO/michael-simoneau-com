@@ -3,11 +3,7 @@ import { motion } from 'framer-motion';
 export const SearchOptimizedSummary = () => (
   <motion.section
     id="michael-simoneau-enterprise-architect"
-    className="py-16 text-white snap-start"
-    style={{
-      scrollMarginTop: '40vh',
-      scrollMarginBottom: '40vh',
-    }}
+    className="py-16 text-white"
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     viewport={{ once: true, amount: 0.2 }}

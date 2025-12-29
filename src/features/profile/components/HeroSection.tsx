@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { InterviewButton } from '../../../features/interview/components/InterviewButton'; // Preserving this
+import { AudioPlayer } from '../../../ui/players/AudioPlayer';
 import { ChevronDown } from 'lucide-react';
 
 
@@ -9,11 +10,7 @@ export const HeroSection: React.FC = () => {
   return (
     <section 
       id="new-hero"
-      className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-16 relative overflow-hidden snap-start"
-      style={{
-        scrollMarginTop: '40vh',
-        scrollMarginBottom: '40vh',
-      }}
+      className="min-h-screen flex flex-col items-center justify-center text-white px-4 py-16 relative overflow-hidden"
     >
       {/* Background Styling - more abstract and futuristic */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
@@ -22,7 +19,8 @@ export const HeroSection: React.FC = () => {
 
       <motion.div
         initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="text-center z-10"
       >
@@ -38,9 +36,30 @@ export const HeroSection: React.FC = () => {
       </motion.div>
 
       <motion.div 
+        className="w-full max-w-2xl mx-auto mb-6 z-10"
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      >
+        <AudioPlayer src="/Zeroth-Vision-2025-12-20-09_57-UTC.mp3" title="Zeroth Vision" />
+      </motion.div>
+
+      <motion.div 
+        className="w-full max-w-2xl mx-auto mb-6 z-10"
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.45 }}
+      >
+        <AudioPlayer src="/The_AI_Built_for_Deterministic_Crypto.mp3" title="The AI Built for Deterministic Crypto" />
+      </motion.div>
+
+      <motion.div 
         className="w-full max-w-2xl mx-auto my-8 z-10"
         initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.5 }}
       >
         <InterviewButton />

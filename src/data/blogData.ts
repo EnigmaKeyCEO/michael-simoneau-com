@@ -160,7 +160,7 @@ export const blogData: BlogData[] = [
     id: "crypto-fabric-kickoff",
     title: "Crypto Fabric Kickoff: Profit-First Automation",
     excerpt:
-      "Announcing Crypto Fabric, a profitability-first automation platform that enables anyone to deploy revenue-generating crypto services with zero configuration. Built by EtherHive LLC.",
+      "Announcing Crypto Fabric, a profitability-first automation platform that enables anyone to deploy revenue-generating crypto services with zero configuration. Built by Michael Simoneau; Hosted by EtherHive, LLC.",
     date: "August 1, 2025",
     readTime: "10 min",
     author: "Michael Simoneau",

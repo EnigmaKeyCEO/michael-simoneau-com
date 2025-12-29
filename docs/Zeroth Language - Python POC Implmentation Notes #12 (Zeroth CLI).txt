@@ -1,0 +1,293 @@
+﻿Excellent. You’re asking for a language-native command surface, not a generic CLI.
+What follows is a coherent, minimal, powerful zeroth command taxonomy that maps directly to Zeroth’s primitives: state, alignment, convergence, observation, history, potential.
+This is not feature creep.
+This is operational ontology.
+________________
+
+
+Zeroth CLI — Conceptual Command Surface
+The rule we’ll follow:
+Every command must correspond to something that already exists in the running system.
+No synthetic abstractions. No dev-only hacks.
+________________
+
+
+Top-Level Command
+zeroth <command> [target] [options]
+
+
+If no command is provided:
+zeroth program.zero|program.z
+
+
+→ run (already implemented)
+________________
+
+
+Core Command Groups (By Primitive)
+________________
+
+
+1. run — Existence / Execution
+Primitive: iteration, potential, time
+zeroth run hello.zero
+zeroth run hello.z
+
+
+Alias for the default behavior.
+Purpose:
+* explicit invocation
+* scripting clarity
+* future flags (ports, limits)
+________________
+
+
+2. observe — Measurement / Collapse Interface
+Primitive: observation, truth visibility
+Observe current projection
+zeroth observe
+
+
+Output (CLI, not HTML):
+Iteration: 18234
+Convergence: 0.0412
+Dominant: HELLO_UNIVERSE
+
+
+Observe specific state / dimension
+zeroth observe state HELLO
+zeroth observe dimension 7
+
+
+Observe without recording history (rare, but valid)
+zeroth observe --passive
+
+
+Use case:
+* debugging
+* sanity checks
+* “peek without touching”
+________________
+
+
+3. history — Time / Lineage / Proof
+Primitive: history = time
+View recent history
+zeroth history
+
+
+Filter by type
+zeroth history observations
+zeroth history collapses
+zeroth history merges
+
+
+Explain a projection (critical)
+zeroth history explain
+
+
+Output:
+HELLO_UNIVERSE emerged because:
+- Dimension 3 decayed (WORLD)
+- Dimension 7 merged with 12
+- Observation pressure stabilized UNIVERSE
+
+
+This is your “how it got there” command.
+________________
+
+
+4. state — Ontological Units
+Primitive: state
+List states
+zeroth state list
+
+
+Inspect a state
+zeroth state HELLO
+
+
+Output:
+Influence: 0.3821
+Dimensions: [3, 7, 12]
+Potential: active
+
+
+Inject potential manually (engineer-only)
+zeroth state HELLO --inject -1
+
+
+This is legal in Zeroth: engineered disturbance.
+________________
+
+
+5. align — Structural Forces
+Primitive: alignment
+Show alignments
+zeroth align list
+
+
+Inspect alignment
+zeroth align HELLO UNIVERSE
+
+
+Live-adjust alignment (advanced)
+zeroth align HELLO UNIVERSE --strength 0.5
+
+
+This:
+* alters topology
+* preserves memory
+* lets the system adapt
+________________
+
+
+6. converge — Truth / Stability
+Primitive: convergence
+Check convergence
+zeroth converge
+
+
+Force evaluation (no mutation)
+zeroth converge --check
+
+
+Force collapse if within tolerance
+zeroth converge --commit
+
+
+This explicitly triggers:
+* truth recording
+* potential reinjection
+Useful for experiments.
+________________
+
+
+7. potential — Negative Space Control
+Primitive: -1, directed possibility
+View active potential
+zeroth potential
+
+
+Inject system-wide potential
+zeroth potential inject -1
+
+
+Inject localized potential
+zeroth potential inject state HELLO -1
+
+
+This is controlled chaos, by design.
+________________
+
+
+8. dimension — Field Geometry
+Primitive: tokenizer / field dynamics
+List dimensions
+zeroth dimension list
+
+
+Inspect dimension
+zeroth dimension 7
+
+
+Output:
+Orientation: -1
+Tokens: [HELLO, UNIVERSE]
+Lineage: [3, 12]
+
+
+Merge / decay (engineer-only)
+zeroth dimension merge 7 12
+zeroth dimension decay 5
+
+
+Normally automatic — but exposed for experimentation.
+________________
+
+
+9. compile — Intent → Artifact
+Primitive: representation
+zeroth compile hello.zero
+
+
+Outputs:
+hello.z
+
+
+Optional flags:
+--optimize
+--freeze
+--emit-lineage
+
+
+________________
+
+
+10. status — System Introspection
+Primitive: awareness
+zeroth status
+
+
+Output:
+PID: 48321
+Program: hello.zero
+Iteration: 92833
+Convergence: 0.062
+States: 3
+Dimensions: 14
+Observations: 217
+
+
+This is your heartbeat.
+________________
+
+
+11. stop / kill — End of Existence
+Primitive: termination (external only)
+zeroth stop
+
+
+Graceful:
+* stop loop
+* flush history
+* exit cleanly
+________________
+
+
+Command Philosophy (Why This Works)
+* Every command maps to a real concept
+* Nothing is “debug-only”
+* Nothing lies about system state
+* The CLI is a measurement device, not a controller
+* You can shape reality, not script it
+This makes Zeroth feel:
+* alive
+* inspectable
+* honest
+* deterministic
+* profound without being mystical
+________________
+
+
+Implementation Note (Practical)
+All of these commands can be implemented as:
+* a local control socket (Unix domain socket)
+* JSON command messages
+* handled by the running daemon
+No REST.
+No HTTP abuse.
+No cloud.
+________________
+
+
+Next Logical Step (When You’re Ready)
+The next engineering artifact would be:
+zeroth control socket protocol
+→ how CLI commands talk to the live process safely.
+But first: this command surface needs your approval.
+________________
+
+
+Single, literal question:
+Do you want zeroth commands to talk over a Unix socket or a TCP localhost port?

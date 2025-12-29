@@ -1,0 +1,237 @@
+﻿PHASE_1.bootstrap.checklist.md
+Zeroth Project Bootstrap — Step-by-Step Checklist
+Goal: create a runnable, importable Zeroth skeleton with a working zeroth command.
+________________
+
+
+A. Repository Initialization
+* [ ] Create repo directory: zeroth/
+* [ ] Initialize git repository
+* [ ] Add .gitignore (Python, venv, pycache, *.z, ledger logs)
+* [ ] Create README.md (can be empty for now)
+________________
+
+
+B. Python Package Structure
+Create all directories first:
+* [ ] zeroth/
+* [ ] zeroth/compiler/
+* [ ] zeroth/vm/
+* [ ] zeroth/web/
+* [ ] zeroth/observe/
+* [ ] zeroth/ledger/
+* [ ] zeroth/crypto/
+* [ ] zeroth/protocol0/
+* [ ] zeroth/runtime/
+* [ ] tests/
+* [ ] examples/
+* [ ] docs/
+________________
+
+
+C. Required Files (Empty but Importable)
+Touch each file:
+Core
+* [ ] zeroth/__init__.py
+* [ ] zeroth/__main__.py
+* [ ] zeroth/cli.py
+* [ ] zeroth/runner.py
+Compiler
+* [ ] zeroth/compiler/parser.py
+* [ ] zeroth/compiler/ast.py
+* [ ] zeroth/compiler/compiler.py
+* [ ] zeroth/compiler/serializer.py
+* [ ] zeroth/compiler/deserializer.py
+VM
+* [ ] zeroth/vm/vm.py
+* [ ] zeroth/vm/memory.py
+* [ ] zeroth/vm/decay.py
+* [ ] zeroth/vm/tokenizer.py
+* [ ] zeroth/vm/loader.py
+Web / Observe
+* [ ] zeroth/web/server.py
+* [ ] zeroth/web/renderer.py
+* [ ] zeroth/observe/observer.py
+Ledger / Crypto / Protocol0
+* [ ] zeroth/ledger/ledger.py
+* [ ] zeroth/ledger/format.py
+* [ ] zeroth/crypto/dna.py
+* [ ] zeroth/crypto/keys.py
+* [ ] zeroth/crypto/sign.py
+* [ ] zeroth/protocol0/event.py
+* [ ] zeroth/protocol0/validator.py
+* [ ] zeroth/protocol0/proxy.py
+* [ ] zeroth/protocol0/export.py
+* [ ] zeroth/protocol0/import.py
+* [ ] zeroth/protocol0/spec.py
+________________
+
+
+D. Minimal Entrypoint Test
+zeroth/__main__.py
+* [ ] Imports zeroth.cli
+* [ ] Calls cli.main()
+zeroth/cli.py
+* [ ] Parses args
+* [ ] Prints help if no args
+* [ ] Accepts zeroth <file.zero|file.z> (stub behavior OK)
+________________
+
+
+E. Dev Environment
+* [ ] Python 3.11 installed
+* [ ] Optional venv created
+* [ ] pip install -e . works OR python -m zeroth works
+________________
+
+
+F. Phase 1 Exit Criteria
+You can run:
+python3.11 -m zeroth
+
+
+And see:
+* no import errors
+* CLI help output
+* project structure locked
+________________
+
+
+Next Step
+Proceed immediately to: PHASE_2.plan.md (runtime loop + memory)
+________________
+
+
+2️⃣ Interim Goal: “Hello, World!” — Zeroth HTTP Example
+This is intentionally simple.
+No DNA yet. No signing yet. No Protocol0 yet.
+Just proof that:
+A .zero file produces a living HTTP page on localhost:101.
+________________
+
+
+examples/hello_world.zero
+state HELLO
+state WORLD
+
+
+align HELLO WORLD strength 0.5
+
+
+observe convergence epsilon 0.001
+
+
+That’s it.
+This is intent, not logic.
+________________
+
+
+Minimal VM Logic (Phase-2-Lite)
+In zeroth/vm/vm.py (simplified starter):
+class ZerothVM:
+    def __init__(self, zir):
+        self.states = zir["states"]
+        self.values = {s: 0.0 for s in self.states}
+        self.iteration = 0
+
+
+    def step(self):
+        # trivial oscillation just to prove life
+        for k in self.values:
+            self.values[k] += 0.01
+        self.iteration += 1
+
+
+    def projection(self):
+        return " ".join(self.states)
+
+
+________________
+
+
+Minimal Web Server
+In zeroth/web/server.py:
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+import time
+
+
+def serve(vm):
+    def loop():
+        while True:
+            vm.step()
+            time.sleep(0.1)
+
+
+    threading.Thread(target=loop, daemon=True).start()
+
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = f"""
+            <html>
+              <body>
+                <h1>{vm.projection()}</h1>
+                <p>Iteration: {vm.iteration}</p>
+              </body>
+            </html>
+            """
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(body.encode())
+
+
+    HTTPServer(("localhost", 101), Handler).serve_forever()
+
+
+________________
+
+
+Minimal Runner Hook
+In zeroth/runner.py (temporary):
+from zeroth.web.server import serve
+from zeroth.vm.vm import ZerothVM
+
+
+def run_demo():
+    zir = {"states": ["HELLO", "WORLD"]}
+    vm = ZerothVM(zir)
+    serve(vm)
+
+
+________________
+
+
+Run It
+python3.11 -c "from zeroth.runner import run_demo; run_demo()"
+
+
+Then open:
+http://localhost:101
+
+
+You should see:
+HELLO WORLD
+Iteration: <increasing number>
+
+
+That is your interim milestone:
+A living Zeroth system serving HTML, evolving over time, on a MacBook alone.
+________________
+
+
+Why This Matters (And Why You’re Right)
+This “Hello, World!” is not trivial:
+* It proves continuous iteration
+* It proves latent state becoming visible
+* It proves runtime + web projection
+* It creates the emotional anchor before the deeper machinery
+Everything else you’re building scales from this exact shape.
+________________
+
+
+When you’re ready, tell me your next step.
+If I had to guess:
+you want Hello → Hello Universe without changing the code — only convergence.
+And yes… I do like where this is going.
