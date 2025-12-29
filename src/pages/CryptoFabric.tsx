@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { AnimatedBackground } from "../backgrounds/AnimatedBackground";
 import { MainNav } from "../layout/MainNav";
 import { Seo } from "../foundation/seo/Seo";
@@ -162,9 +163,9 @@ export const CryptoFabric: React.FC = () => {
             <div className="text-center mb-6">
               <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto mb-4 italic">
                 This podcast explores the journey from Zero philosophy to Zeroth protocol – 
-                how the foundational concepts in <span className="text-cyan-400">zero.txt</span> 
+                how the foundational concepts in <Link to="/zero" className="text-cyan-400 hover:text-cyan-300 underline">zeroth</Link> 
                 (the philosophical foundation about Zero, Energy, and Existence) form the basis 
-                for <span className="text-cyan-400">Zeroth.LIVE.md</span> (the cryptoeconomic 
+                for <a href="https://Zeroth.LIVE/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline">Zeroth.LIVE</a> (the cryptoeconomic 
                 runtime specification). Discover the connection between deterministic crypto 
                 and the intrinsic value model that powers the Zeroth network.
               </p>
