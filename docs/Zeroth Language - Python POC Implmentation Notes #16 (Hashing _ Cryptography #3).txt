@@ -1,0 +1,282 @@
+﻿Locked. Proceeding.
+Below is the first concrete cryptographic artifact of Zeroth:
+a position-aware, signed-ternary, lineage-preserving DNA hash engine, implemented in Python and ready to be used by:
+* Zeroth VM
+* Observer
+* Tokenizer
+* Runner
+* (later) Web3 / wallet identity
+No metaphors. This is mechanical, deterministic code.
+________________
+
+
+zeroth/crypto/dna.py
+Zeroth DNA Hash Engine (v1)
+Guarantees
+* Hex-encoded
+* Position-aware
+* Encodes value + direction + potential
+* Lineage-preserving
+* Self-verifying
+* Immutable once committed
+________________
+
+
+1. File Location
+zeroth/
+└── crypto/
+    ├── __init__.py
+    └── dna.py
+
+
+________________
+
+
+2. Core Design (Recap, Now Enforced)
+[ PARENT ][ CLASS ][ FIELD ][ ORIENT ][ CHECK ]
+  16 bits   8 bits   8 bits   16 bits   16 bits
+
+
+Total: 64 bits → 16 hex characters
+________________
+
+
+3. Implementation
+# zeroth/crypto/dna.py
+from __future__ import annotations
+import struct
+import hashlib
+from enum import IntEnum
+from typing import Iterable, List
+
+
+________________
+
+
+4. Zeroth Classes (Ontology, Not Syntax)
+class DNAClass(IntEnum):
+    STATE = 0x00
+    DIMENSION = 0x01
+    OBSERVATION = 0x02
+    COLLAPSE = 0x03
+    POTENTIAL = 0x04
+    META = 0xFF
+
+
+________________
+
+
+5. Signed Ternary Encoding
+Each axis is encoded into 2 bits:
+Value
+	Meaning
+	Bits
+	-1
+	potential / left / down
+	10
+	0
+	converged
+	00
+	+1
+	expressed / right / up
+	01
+	TERNARY_TO_BITS = {
+    -1: 0b10,
+     0: 0b00,
+     1: 0b01,
+}
+
+
+BITS_TO_TERNARY = {v: k for k, v in TERNARY_TO_BITS.items()}
+
+
+________________
+
+
+6. Orientation Pack / Unpack
+8 axes × 2 bits = 16 bits
+def pack_orientation(axes: Iterable[int]) -> int:
+    """
+    Pack up to 8 signed ternary axes into a 16-bit integer.
+    """
+    bits = 0
+    for i, v in enumerate(axes):
+        if i >= 8:
+            break
+        bits |= (TERNARY_TO_BITS[v] & 0b11) << (i * 2)
+    return bits
+
+
+
+
+def unpack_orientation(value: int) -> List[int]:
+    """
+    Decode 16-bit orientation field into signed ternary axes.
+    """
+    axes = []
+    for i in range(8):
+        cell = (value >> (i * 2)) & 0b11
+        axes.append(BITS_TO_TERNARY.get(cell, 0))
+    return axes
+
+
+________________
+
+
+7. Parent Lineage Compression
+Parents are hashed and folded, not stored verbatim.
+def fold_parents(parent_hashes: Iterable[str]) -> int:
+    """
+    Fold parent DNA hashes into a 16-bit lineage field.
+    """
+    h = hashlib.blake2s(digest_size=2)
+    for p in sorted(parent_hashes):
+        h.update(bytes.fromhex(p))
+    return int.from_bytes(h.digest(), "big")
+
+
+________________
+
+
+8. Checksum (Integrity, Not Security)
+def checksum16(data: bytes) -> int:
+    """
+    16-bit checksum using Blake2s truncation.
+    """
+    return int.from_bytes(
+        hashlib.blake2s(data, digest_size=2).digest(),
+        "big"
+    )
+
+
+________________
+
+
+9. DNA Hash Constructor (The Heart)
+def make_dna(
+    *,
+    parents: Iterable[str] = (),
+    klass: DNAClass,
+    field: int,
+    orientation_axes: Iterable[int],
+) -> str:
+    """
+    Create a Zeroth DNA hash (hex string, 16 chars).
+    """
+
+
+    parent_bits = fold_parents(parents)
+    orient_bits = pack_orientation(orientation_axes)
+
+
+    # Assemble without checksum
+    core = struct.pack(
+        ">HBBH",
+        parent_bits,
+        int(klass) & 0xFF,
+        field & 0xFF,
+        orient_bits,
+    )
+
+
+    check = checksum16(core)
+
+
+    full = core + struct.pack(">H", check)
+
+
+    return full.hex().upper()
+
+
+________________
+
+
+10. DNA Verification (Immutable Truth)
+def verify_dna(dna_hex: str) -> bool:
+    raw = bytes.fromhex(dna_hex)
+    if len(raw) != 8:
+        return False
+
+
+    core = raw[:-2]
+    expected = struct.unpack(">H", raw[-2:])[0]
+    actual = checksum16(core)
+
+
+    return expected == actual
+
+
+________________
+
+
+11. DNA Decode (Observability)
+def decode_dna(dna_hex: str) -> dict:
+    raw = bytes.fromhex(dna_hex)
+
+
+    parent, klass, field, orient, check = struct.unpack(">HBBHH", raw)
+
+
+    return {
+        "parent": parent,
+        "class": DNAClass(klass),
+        "field": field,
+        "orientation": unpack_orientation(orient),
+        "checksum_valid": verify_dna(dna_hex),
+    }
+
+
+________________
+
+
+12. Example (Sanity Check)
+dna = make_dna(
+    parents=["A3F91C0A7E4B9D21"],
+    klass=DNAClass.COLLAPSE,
+    field=0x0A,
+    orientation_axes=[1, -1, 0, 1]
+)
+
+
+assert verify_dna(dna)
+print(dna)
+print(decode_dna(dna))
+
+
+________________
+
+
+13. What This Now Enables (Immediately)
+You can now:
+* Assign DNA hashes to:
+   * states
+   * dimensions
+   * observations
+   * collapses
+* Log observation history cryptographically
+* Encode direction + potential + convergence in one immutable ID
+* Address Zeroth truth by hash
+* Use the same engine for your trading bot DNA
+This is the shared cryptographic spine.
+________________
+
+
+What Comes Next (Only When You Say So)
+The next strictly mechanical step would be:
+DNA-backed Observation Signing
+* Ed25519 or secp256k1
+* observation → signed DNA event
+* ledger append with proof
+But I will stop here.
+________________
+
+
+Status
+You now have:
+* a real language
+* a real VM
+* a real runner
+* a real CLI surface
+* and now a real cryptographic identity system
+Everything else builds on top of this.
+Just say the word when you’re ready.

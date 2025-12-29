@@ -1,0 +1,126 @@
+# [HIGHLY CONFIDENTIAL - Enigma Key Co.]
+# [PROPRIETARY & TRADE SECRET]
+# [UNAUTHORIZED ACCESS OR DISCLOSURE STRICTLY PROHIBITED]
+# -----------------------------------------------------------
+# Document Type: HANDOFF
+# Created: Dec 29 03:11:11 2024
+# Last Modified: Dec 29 04:24:19 2024
+# -----------------------------------------------------------
+
+# [HIGHLY CONFIDENTIAL - Enigma Key Co.]
+# [PROPRIETARY & TRADE SECRET]
+# [UNAUTHORIZED ACCESS OR DISCLOSURE STRICTLY PROHIBITED]
+# -----------------------------------------------------------
+# Document Type: HANDOFF
+# Created: 2023-12-29
+# Last Modified: 2023-12-29
+# -----------------------------------------------------------
+
+timestamp: "2023-12-29T08:00:00Z"
+title: "DynamoDB Data Architecture Design"
+description: "Entity relationship and data categorization for comprehensive system state tracking"
+
+data_categories:
+  market_data:
+    description: "Raw numerical and temporal market information"
+    entities:
+      - prices:
+          fields: [symbol, timestamp, open, high, low, close, volume]
+          frequency: "per trade/bar"
+      - indicators:
+          fields: [symbol, timestamp, indicator_type, value, parameters]
+          frequency: "calculated"
+      - aggregates:
+          fields: [symbol, timeframe, start_time, end_time, aggregated_values]
+          frequency: "derived"
+
+  system_state:
+    description: "Internal system configuration and conditions"
+    entities:
+      - configuration:
+          fields: [component_id, timestamp, settings, active_parameters]
+          frequency: "on change"
+      - conditions:
+          fields: [timestamp, component_id, state_type, value, duration]
+          frequency: "on state change"
+      - dna:
+          fields: [timestamp, engine_id, dna_type, parameters, effectiveness]
+          frequency: "on evolution"
+
+  transactions:
+    description: "Inter-component communications and actions"
+    entities:
+      - engine_messages:
+          fields: [timestamp, source_id, target_id, message_type, payload]
+          frequency: "per message"
+      - user_actions:
+          fields: [timestamp, user_id, action_type, parameters, result]
+          frequency: "per action"
+          batch_processing: true
+      - system_events:
+          fields: [timestamp, component_id, event_type, details]
+          frequency: "per event"
+
+relationships:
+  market_data_relationships:
+    - prices_to_indicators:
+        type: "one_to_many"
+        description: "Each price point can generate multiple indicators"
+    - prices_to_aggregates:
+        type: "many_to_one"
+        description: "Multiple price points form one aggregate"
+
+  state_relationships:
+    - configuration_to_conditions:
+        type: "one_to_many"
+        description: "Configuration influences multiple conditions"
+    - dna_to_configuration:
+        type: "one_to_many"
+        description: "DNA parameters affect multiple configuration settings"
+
+  transaction_relationships:
+    - events_to_state:
+        type: "many_to_one"
+        description: "Multiple events can trigger one state change"
+    - actions_to_events:
+        type: "one_to_many"
+        description: "One action can generate multiple system events"
+
+query_patterns:
+  timeframe_construction:
+    description: "Dynamic timeframe aggregation from stored data points"
+    method: "Query by timestamp range and aggregate results"
+    considerations:
+      - "Index on timestamp for efficient range queries"
+      - "Consider partition key design for high-frequency data"
+      - "Balance between query flexibility and performance"
+
+  state_tracking:
+    description: "Track system state changes over time"
+    method: "Query state changes within time window"
+    considerations:
+      - "Maintain state change history"
+      - "Enable point-in-time state reconstruction"
+      - "Track state duration and transitions"
+
+  transaction_analysis:
+    description: "Analyze system interactions and user behavior"
+    method: "Aggregate and analyze transaction patterns"
+    considerations:
+      - "Batch process high-frequency transactions"
+      - "Maintain relationship between actions and resulting events"
+      - "Enable transaction replay for debugging"
+
+implementation_priorities:
+  1: "Design efficient partition and sort key strategy for high-frequency data"
+  2: "Implement comprehensive transaction logging system"
+  3: "Create state tracking and history maintenance system"
+  4: "Develop dynamic timeframe construction queries"
+  5: "Build batch processing for high-frequency transactions"
+
+notes:
+  - "All timestamps should be stored in UTC ISO format"
+  - "Consider TTL for high-frequency data points"
+  - "Use GSIs for flexible querying patterns"
+  - "Implement versioning for state changes"
+  - "Consider compression for high-volume transaction logs"
