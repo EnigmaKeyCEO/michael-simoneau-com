@@ -46,6 +46,16 @@ export const HeroSection: React.FC = () => {
       </motion.div>
 
       <motion.div 
+        className="w-full max-w-2xl mx-auto mb-6 z-10"
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.45 }}
+      >
+        <AudioPlayer src="/The_AI_Built_for_Deterministic_Crypto.mp3" title="The AI Built for Deterministic Crypto" />
+      </motion.div>
+
+      <motion.div 
         className="w-full max-w-2xl mx-auto my-8 z-10"
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}

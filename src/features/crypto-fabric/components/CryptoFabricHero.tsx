@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { AudioPlayer } from '../../../ui/players/AudioPlayer';
 
 export const CryptoFabricHero: React.FC = () => {
   return (
@@ -65,6 +66,16 @@ export const CryptoFabricHero: React.FC = () => {
             Deploy revenue-generating crypto services – Ethereum staking, automated trading, 
             and decentralized infrastructure – with zero configuration. The AI does it all for you.
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="w-full mb-8"
+        >
+          <AudioPlayer src="/The_AI_Built_for_Deterministic_Crypto.mp3" title="The AI Built for Deterministic Crypto" />
         </motion.div>
 
         <motion.div

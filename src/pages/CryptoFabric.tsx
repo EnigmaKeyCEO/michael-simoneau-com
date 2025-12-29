@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { AnimatedBackground } from "../backgrounds/AnimatedBackground";
 import { MainNav } from "../layout/MainNav";
 import { Seo } from "../foundation/seo/Seo";
+import { AudioPlayer } from "../ui/players/AudioPlayer";
 
 export const CryptoFabric: React.FC = () => {
   return (
@@ -150,6 +151,28 @@ export const CryptoFabric: React.FC = () => {
               </p>
             </div>
           </motion.div>
+
+          {/* Podcast Introduction */}
+          <motion.section
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+          >
+            <div className="text-center mb-6">
+              <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto mb-4 italic">
+                This podcast explores the journey from Zero philosophy to Zeroth protocol – 
+                how the foundational concepts in <span className="text-cyan-400">zero.txt</span> 
+                (the philosophical foundation about Zero, Energy, and Existence) form the basis 
+                for <span className="text-cyan-400">Zeroth.LIVE.md</span> (the cryptoeconomic 
+                runtime specification). Discover the connection between deterministic crypto 
+                and the intrinsic value model that powers the Zeroth network.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <AudioPlayer src="/The_AI_Built_for_Deterministic_Crypto.mp3" title="The AI Built for Deterministic Crypto" />
+            </div>
+          </motion.section>
 
           {/* Core Value Proposition */}
           <motion.section
